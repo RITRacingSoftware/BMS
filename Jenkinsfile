@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
+                sh 'git submodule update --init --recursive'
                 sh './build.sh'
             }
         }
