@@ -11,7 +11,7 @@ def TOOL_CMOCK(env):
     """
     Uses cmock.rb to generate cmock headers for a module.
     """
-    CMOCK_SCRIPT_DIR = REPO_ROOT_DIR.Dir('cmock/lib')
+    CMOCK_SCRIPT_DIR = REPO_ROOT_DIR.Dir('libs/cmock/lib')
 
     cmock_builder = SCons.Builder.Builder(action=[
         'cd ' + '${SOURCE.dir.abspath}' + ' &&' +
