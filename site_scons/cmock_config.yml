@@ -1,0 +1,4 @@
+---
+:cmock:
+    :plugins: [ignore, ignore_arg, expect_any_args, return_thru_ptr]
+# Need this plugins arg or we dont get several mock expectation functions

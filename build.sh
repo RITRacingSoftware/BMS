@@ -1,3 +1,3 @@
 #! /bin/bash
 
-scons cmock
+scons
