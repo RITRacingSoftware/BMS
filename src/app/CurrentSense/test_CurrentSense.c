@@ -1,8 +1,12 @@
+// includes for mocking
 #include "unity.h"
+
+// module under test
 #include "CurrentSense.h"
+
+// mocked includes
 #include "MockHAL_CurrentSensor.h"
 #include "MockFaultManager.h"
-#include "FaultManager.h"
 
 /*
  * Purpose: verify current reading from sensor is forwarded to application layer.
