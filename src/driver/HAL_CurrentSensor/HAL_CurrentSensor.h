@@ -3,6 +3,8 @@
 
 #include "FaultManager.h"
 
+// This header just exists for Mocks. TODO- implement this
+
 Fault_t HAL_CurrentSensor_read_current(float* current);
 
 #endif
