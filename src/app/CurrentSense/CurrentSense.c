@@ -5,11 +5,15 @@
 float CurrentSense_get_current(void)
 {
     float latest_current; 
-    Fault_t sensor_fault = HAL_CurrentSensor_read_current(&latest_current);
+    Error_t err = HAL_CurrentSensor_read_current(&latest_current);
 
-    if (sensor_fault.code != NO_FAULT)
+    if (err.active)
     {
-        FaultManager_set_fault_active(sensor_fault, false);
+        FaultManager_set_fault_active(FaultCode_CURRENT_SENSOR_COMM, err.data, false);
+    }
+    else
+    {
+        FaultManager_clear_fault(FaultCode_CURRENT_SENSOR_COMM);
     }
 
     return latest_current;

@@ -18,10 +18,14 @@ void test_CurrentSense_get_current(void)
     // injected current that should be returned
     float TEST_CURRENT = 1.2345;
     // injected fault that should be returned
-    Fault_t fault;
-    fault.code = NO_FAULT;
+    Error_t err;
+    err.active = false;
+
+    // should clear faults since no error returned
+    FaultManager_clear_fault_ExpectAnyArgs();
+
     // mock a nominal response from the current sensor
-    HAL_CurrentSensor_read_current_ExpectAnyArgsAndReturn(fault);
+    HAL_CurrentSensor_read_current_ExpectAnyArgsAndReturn(err);
     // mock the test current to be returned through the out parameter
     HAL_CurrentSensor_read_current_ReturnThruPtr_current(&TEST_CURRENT);
 
