@@ -86,7 +86,7 @@ for mod_name, mod_path in modules:
 linux_comp_env = Environment(
      # 'platform' is a handy argument provided by SCons that automatically sets a ton of env vars
     platform='posix',
-    CPPPATH=module_path_names + mock_modules + tool_paths
+    CPPPATH=module_path_names + mock_modules + tool_paths + [SRC_DIR.Dir('app').abspath, SRC_DIR.abspath]
 )
 
 # instructions to compile every application module
