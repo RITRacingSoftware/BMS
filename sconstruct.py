@@ -3,6 +3,8 @@ import SCons
 import os
 from pathlib import Path
 
+from site_scons import scons_constants
+
 """
 SCons entry point for f29bms project.
 Contains build instructions for everything.
@@ -13,6 +15,10 @@ author: Chris Blust
 SRC_DIR = REPO_ROOT_DIR.Dir('src')
 APP_DIR = SRC_DIR.Dir('app')
 DRIVER_DIR = SRC_DIR.Dir('driver')
+BIN_DIR = REPO_ROOT_DIR.Dir('bin')
+LIBS_DIR = REPO_ROOT_DIR.Dir('libs')
+STM32_LIB_DIR = LIBS_DIR.Dir('stm32libs/STM32F0xx_StdPeriph_Driver')
+STM32_CMSIS_DIR = LIBS_DIR.Dir('stm32libs/CMSIS')
 
 # module names are determined by folder name under app/ or driver/
 # application module directories go under APP_DIR, and driver modules under DRIVER_DIR
@@ -72,14 +78,18 @@ for module_name, module_dir in app_modules:
 Alias('cmock-testrunner-src', cmock_testrunner_src)
 
 """
-Application Module compilation instructions.
-Currently only supports linux compilation.
+Application/Driver Module compilation instructions.
+Supports Linux and stm32 compilation targets.
+Dependency differentiation is based on filename: stm32 objects end in .stm32.o
 """
 
 # set up an environment to compile for linux
 tool_paths = []
 tool_paths.append(REPO_ROOT_DIR.Dir('libs/cmock/vendor/unity/src'))
 tool_paths.append(REPO_ROOT_DIR.Dir('libs/cmock/src'))
+tool_paths.append(STM32_LIB_DIR.Dir('inc'))
+tool_paths.append(STM32_CMSIS_DIR.Dir('Device/ST/STM32F0xx/Include'))
+tool_paths.append(STM32_CMSIS_DIR.Dir('Include'))
 module_path_names = []
 for mod_name, mod_path in modules:
     module_path_names.append(mod_path)
@@ -89,11 +99,44 @@ linux_comp_env = Environment(
     CPPPATH=module_path_names + mock_modules + tool_paths + [SRC_DIR.Dir('app').abspath, SRC_DIR.abspath]
 )
 
-# instructions to compile every application module
-app_objects = {}
+stm32_comp_env = Environment(
+    tools=[TOOL_ARM_ELF_HEX, 'gcc'],
+    CC=scons_constants.ARM_CC,
+    CPPPATH=module_path_names + tool_paths + [SRC_DIR.Dir('app').abspath, SRC_DIR.abspath],
+    CPPDEFINES=['STM32F091', 'USE_STDPERIPH_DRIVER'],
+    CCFLAGS=['-mcpu=cortex-m0']
+)
+
+# instructions to compile every module
+linux_app_objects = {}
+stm32_app_objects = {}
+linux_driver_objects = {}
+stm32_driver_objects = {}
 for module_name, module_dir in app_modules:
-    module_name = module_dir.abspath.split('/')[-1]
-    app_objects[module_name] = linux_comp_env.Object(module_dir.File(module_name + '.c'))
+    # intructions for linux compilation
+    linux_app_objects[module_name] = linux_comp_env.Object(module_dir.File(module_name + '.c'))
+    # instructions for stm32 compilation
+    stm32_app_objects[module_name] = stm32_comp_env.Object(
+        source=module_dir.File(module_name + '.c'),
+        target=module_dir.File('STM32_' + module_name + '.o')
+    )
+    # need this since we use a custom target name
+    Clean(stm32_app_objects[module_name], module_dir.File(module_name + '.stm32.o'))
+
+for module_name, module_dir in driver_modules:
+    linux_driver_objects[module_name] = linux_comp_env.Object(module_dir.File('SIM_' + module_name + '.c'))
+    stm32_driver_objects[module_name] = stm32_comp_env.Object(
+        source=module_dir.File('STM32_' + module_name + '.c'),
+        target=module_dir.File('STM32_' + module_name + '.o')
+    )
+
+    # need this since we use a custom target name
+    Clean(stm32_driver_objects[module_name], module_dir.File('STM32_' + module_name + '.o'))
+
+# Compile stm32 provided hardware libraries
+stm32_lib_objs = []
+for source in Glob(os.path.join(STM32_LIB_DIR.Dir('src').abspath, '*.c')):
+    stm32_lib_objs += stm32_comp_env.Object(source)
 
 """
 Instructions for Unit test compilation.
@@ -137,7 +180,7 @@ for module_name, module_dir in app_modules:
             cmock_libs, 
             req_mocks.values(),
             test_objects[module_name], 
-            app_objects[module_name]]
+            linux_app_objects[module_name]]
     )
     app_test_runners.append(test_runner)
 
@@ -168,5 +211,33 @@ for module_name, module_dir in app_modules:
 Alias('unit-tests', unit_test_results)
 Default(unit_test_results)
 
+"""
+Instructions for compiling driver test applications.
+"""
+
+test_apps = {}
+for module_name, module_dir in driver_modules:
+    # Compilation of test application main
+    test_app_obj = stm32_comp_env.Object(module_dir.File('test_STM32_' + module_name + '.c'))
     
+    # need list of strings not nodes for the next step
+    # Which is to build the elf, which requires all the object files
+    objs = [test_app_obj]
+    for driver_obj in stm32_driver_objects.values():
+        objs.append(driver_obj)
     
+    objs.extend(stm32_lib_objs)
+
+    # stm32 elf generation
+    stm32_elf = stm32_comp_env.BuildElf(
+        source=objs,
+        target=module_dir.File('test_STM32_' + module_name + '.elf')
+    )
+
+    # stm32 hex generation
+    test_apps[module_name] = stm32_comp_env.BuildHex(
+        source=stm32_elf,
+        target=BIN_DIR.File('test_STM32_' + module_name + '.hex')
+    )
+
+Alias('test-apps', test_apps.values())

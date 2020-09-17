@@ -1,4 +1,6 @@
 import SCons
+import scons_constants
+
 """
 Custom build tools for SCons to use.
 author: Chris Blust
@@ -36,3 +38,28 @@ def TOOL_CMOCK(env):
         'GenerateTestRunner' : cmock_testrunner_builder
     })
 
+def TOOL_ARM_ELF_HEX(env):
+    """
+    Uses arm toolchain to generate elf or hex files from compiled code.
+    """
+
+    """
+    Description of command below:
+    -mcpu=cortex-m0: the cortex-m0 is our microprocessor. This tells the compiler to use its instruction set
+    --specs=nosys.specs: this removes a default spec that tries to compile a wrapper layer of sorts for linux debugging 
+    (will get error looking for _exit function if removed)
+
+    SOURCE must be a list of strings
+    """
+    arm_elf_builder = SCons.Builder.Builder(action=[
+        scons_constants.ARM_CC + ' -mcpu=cortex-m0 --specs=nosys.specs ${SOURCE.abspath} -o ${TARGET.abspath}'
+    ])
+
+    arm_hex_builder = SCons.Builder.Builder(action=[
+        scons_constants.ARM_OBJCOPY + ' -O ihex -j .text -j .data ${SOURCE.abspath} ${TARGET.abspath}'
+    ])
+
+    env.Append(BUILDERS = {
+        'BuildElf' : arm_elf_builder,
+        'BuildHex' : arm_hex_builder
+    })
