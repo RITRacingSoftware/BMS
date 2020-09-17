@@ -2,3 +2,6 @@
 **/__pycache__
 .sconsign.dblite
 .vscode
+*.o
+*.hex
+*.elf
