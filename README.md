@@ -34,3 +34,10 @@ Specific targets can also be built using SCons commands from the docker containe
 You can speed up builds with multithreading by adding `-j<number of cores>` to any scons command
 
 See [SCons](https://github.com/SCons/scons/wiki) and our `sconstruct.py` (top level) for more details on the build system.
+
+## Source Code Structure
+Each C module has its own folder where its header (.h), source (.c), and test source (test_\<module name>.c) files are located.
+
+Application logic is implemented in hardware agnostic application modules under src/app. The test source for these modules contains unit tests that run automatically using Unity/CMock.
+
+Driver code is implemented in hardware specific driver modules under src/driver. There are two source files for each driver module: SIM_HAL_\<module name>.c, drivers for interfacing with a simulation running on linux, and STM32_HAL_\<module name>.c, drivers for the stm32 microcontroller. The test source for driver modules is a program made for running on an stm32 evaluation board for testing the drivers.
