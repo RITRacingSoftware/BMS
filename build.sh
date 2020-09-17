@@ -1,3 +1,3 @@
 #! /bin/bash
 
-scons test-apps unit-tests
+scons test-apps unit-tests -j4
