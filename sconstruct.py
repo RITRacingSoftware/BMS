@@ -13,6 +13,7 @@ author: Chris Blust
 """
 # setup static directory structure
 SRC_DIR = REPO_ROOT_DIR.Dir('src')
+COMMON_DIR = SRC_DIR.Dir('common')
 APP_DIR = SRC_DIR.Dir('app')
 DRIVER_DIR = SRC_DIR.Dir('driver')
 BIN_DIR = REPO_ROOT_DIR.Dir('bin')
@@ -35,8 +36,14 @@ for directory in (d for d in Path(str(DRIVER_DIR)).iterdir() if d.is_dir()):
     module_path = REPO_ROOT_DIR.Dir(str(directory))
     module_name = module_path.abspath.split('/')[-1]
     driver_modules.append((module_name, module_path))
+# Get list of tuples for common module: (name, directory path)
+common_modules = []
+for directory in (d for d in Path(str(COMMON_DIR)).iterdir() if d.is_dir()):
+    module_path = REPO_ROOT_DIR.Dir(str(directory))
+    module_name = module_path.abspath.split('/')[-1]
+    common_modules.append((module_name, module_path))
 
-modules = app_modules + driver_modules
+modules = app_modules + driver_modules + common_modules
 
 """
 cmock generation. Generates mocks for each module and unit test runner source for each application module.
@@ -50,7 +57,7 @@ cmock_env = Environment(
 # list of each module's 'mocks' dir (where the mocks are stored)
 mock_modules = []
 cmock_generated_headers = []
-for module_name, module_dir in modules:
+for module_name, module_dir in (app_modules + driver_modules):
     mocks_dir = module_dir.Dir('mocks')
     # later source in this file will need these directories
     mock_modules.append(mocks_dir)
@@ -96,7 +103,7 @@ for mod_name, mod_path in modules:
 linux_comp_env = Environment(
      # 'platform' is a handy argument provided by SCons that automatically sets a ton of env vars
     platform='posix',
-    CPPPATH=module_path_names + mock_modules + tool_paths + [SRC_DIR.Dir('app').abspath, SRC_DIR.abspath]
+    CPPPATH=module_path_names + mock_modules + tool_paths + [APP_DIR.abspath, COMMON_DIR.abspath]
 )
 
 stm32_comp_env = Environment(
@@ -112,6 +119,8 @@ linux_app_objects = {}
 stm32_app_objects = {}
 linux_driver_objects = {}
 stm32_driver_objects = {}
+linux_common_objects = {}
+stm32_common_objects = {}
 for module_name, module_dir in app_modules:
     # intructions for linux compilation
     linux_app_objects[module_name] = linux_comp_env.Object(module_dir.File(module_name + '.c'))
@@ -132,6 +141,16 @@ for module_name, module_dir in driver_modules:
 
     # need this since we use a custom target name
     Clean(stm32_driver_objects[module_name], module_dir.File('STM32_' + module_name + '.o'))
+
+for module_name, module_dir in common_modules:
+    linux_common_objects[module_name] = linux_comp_env.Object(module_dir.File(module_name + '.c'))
+    stm32_common_objects[module_name] = stm32_comp_env.Object(
+        source=module_dir.File(module_name + '.c'),
+        target=module_dir.File('STM32_' + module_name + '.o')
+    )
+
+    # need this since we use a custom target name
+    Clean(stm32_common_objects[module_name], module_dir.File('STM32_' + module_name + '.o'))
 
 # Compile stm32 provided hardware libraries
 stm32_lib_objs = []
@@ -155,7 +174,7 @@ Clean(cmock_libs, CMOCK_ROOT_DIR.Dir('build'))
 
 # instructions to compile every mock module
 mock_objects = {}
-for module_name, module_dir in modules:
+for module_name, module_dir in (app_modules + driver_modules):
     mock_objects[module_name] = linux_comp_env.Object(module_dir.File('mocks/Mock{}.c'.format(module_name)))
 
 # instructions for compiling each module's unit test source
@@ -179,6 +198,7 @@ for module_name, module_dir in app_modules:
             mocks_dir.File('testrunner_' + module_name + '.c'), 
             cmock_libs, 
             req_mocks.values(),
+            linux_common_objects.values(),
             test_objects[module_name], 
             linux_app_objects[module_name]]
     )
@@ -225,6 +245,8 @@ for module_name, module_dir in driver_modules:
     objs = [test_app_obj]
     for driver_obj in stm32_driver_objects.values():
         objs.append(driver_obj)
+    for common_obj in stm32_common_objects.values():
+        objs.append(common_obj)
     
     objs.extend(stm32_lib_objs)
 
