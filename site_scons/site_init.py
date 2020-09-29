@@ -73,13 +73,11 @@ def TOOL_DBCC(env):
     """
 
     """
-    -k for only generating pack code- BMS does not have a need to read CAN data
-
     SOURCE - dbc file node
     TARGET - c file node that will be generated. The directory of this file will be used in the command.
     """
     dbcc_builder = SCons.Builder.Builder(action=[
-        DBCC_DIR.abspath + '/dbcc -o ${TARGET.dir.abspath} -k ${SOURCE}'
+        DBCC_DIR.abspath + '/dbcc -o ${TARGET.dir.abspath} ${SOURCE}'
     ])
 
     env.Append(BUILDERS = {

@@ -19,7 +19,7 @@ void SlaveInterface_read_cell_info(BatteryModel_t* battery_model)
     // check for comm errors
     if (err.active)
     {
-        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_CELLS, err.data, false);
+        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_CELLS, err.data);
     }  
     else
     {
@@ -48,7 +48,7 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
     // check for communication errors
     if (err.active)
     {
-        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_TEMPS, err.data, false);
+        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_TEMPS, err.data);
     }
     else
     {
@@ -79,7 +79,7 @@ void SlaveInterface_request_cell_draining(BatteryModel_t* battery_model)
 
     if (err.active)
     {
-        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_DRAIN_REQUEST, err.data, false);
+        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_DRAIN_REQUEST, err.data);
     }
     else
     {

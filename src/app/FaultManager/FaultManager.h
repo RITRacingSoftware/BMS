@@ -6,7 +6,7 @@
 /**
  * Handles setting and clearing faults. 
  * Additionally transmits CAN alerts on setting faults and provides information for CAN fault vectors. 
- * Provides functionality for latching faults. Some faults are latched by default.
+ * Fault statuses are stored as bits (1 for active, 0 for inactive) in a 64 bit value called the 'fault vector'.
  */
 
 #define ERROR_DATA_LEN 7
@@ -19,10 +19,10 @@ typedef struct
 } Error_t;
 
 // Different fault types
+// these must be in the same order on the DBC (without NO_FAULT and FaultCode_NUM)
+// any addition to this must be reflected in the DBC
 typedef enum
 {
-    // Used to indicate there is no fault
-    NO_FAULT,
     // Problem communicating with slave boards for voltages/drain states
     FaultCode_SLAVE_COMM_CELLS,
     // Problem communicating with slave boards for thermistor readings
@@ -38,13 +38,21 @@ typedef enum
 } FaultCode_e;
 
 /**
+ * Start with a clean fault vector.
+ */
+void FaultManager_init(void);
+
+/**
  * Record a fault as active, and transmit a CAN alert that contains the fault
  * code and associated data.
- * fault [in] - type of fault to set to active, data associated with fault
- * latch [in] - true to lock fault to active until power cycle, false otherwise
+ * code [in] - type of fault to set to active
+ * data [in] - points to relevant data for fault to be sent over CAN
  */
-void FaultManager_set_fault_active(FaultCode_e code, char data[ERROR_DATA_LEN], bool latch);
+void FaultManager_set_fault_active(FaultCode_e code, void* data);
 
+/**
+ * Record a fault as not active in the fault vector.
+ */
 void FaultManager_clear_fault(FaultCode_e code);
 
 /**
@@ -52,5 +60,10 @@ void FaultManager_clear_fault(FaultCode_e code);
  * code [in] - fault code to check if active
  */
 bool FaultManager_is_fault_active(FaultCode_e code);
+
+/**
+ * Return true if any faults are active, false otherwise.
+ */
+bool FaultManager_is_any_fault_active(void);
 
 #endif // FAULT_MANAGER_H
