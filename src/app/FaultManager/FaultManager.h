@@ -31,6 +31,8 @@ typedef enum
     FaultCode_SLAVE_COMM_DRAIN_REQUEST,
     // Current sensor HAL indicated error reading current
     FaultCode_CURRENT_SENSOR_COMM,
+    // Current above overcurrent threshold for too long
+    FaultCode_OVER_CURRENT,
     // Number of enumerations
     FaultCode_NUM
 } FaultCode_e;
