@@ -49,7 +49,7 @@ void CurrentSense_1kHz(void)
     if (err.active)
     {
         did_last_read_error = true;
-        FaultManager_set_fault_active(FaultCode_CURRENT_SENSOR_COMM, err.data, false);
+        FaultManager_set_fault_active(FaultCode_CURRENT_SENSOR_COMM, err.data);
     }
     else
     {

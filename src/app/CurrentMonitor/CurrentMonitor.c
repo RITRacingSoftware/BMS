@@ -19,12 +19,7 @@ void CurrentMonitor_1kHz(float current_A)
     {
         if (counter_incr(&time_overcurrent_ms, OVERCURRENT_HYST_MS))
         {
-            char fault_data[ERROR_DATA_LEN];
-
-            // convert float to incremental value for CAN
-            uint32_t fault_current = (current_A  + 0.0005) / 0.001;
-            STORE_BIG_ENDIAN(fault_data, fault_current, sizeof(uint32_t));
-            FaultManager_set_fault_active(FaultCode_OVER_CURRENT, fault_data, true);
+            FaultManager_set_fault_active(FaultCode_OVER_CURRENT, &current_A);
         }
     }
     else
