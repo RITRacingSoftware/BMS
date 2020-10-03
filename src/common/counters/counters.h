@@ -20,7 +20,7 @@
  * upper_limit [in] - if counter is at or above this limit, don't increment
  * return true if counter is at or above upper_limit, false otherwise
  */
-bool counter_incr(int* counter, int upper_limit);
+bool incr_to_limit(int* counter, int upper_limit);
 
 
 /**
@@ -29,6 +29,6 @@ bool counter_incr(int* counter, int upper_limit);
  * lower_limit [in] - if counter is at or below this limit, don't decrement
  * return true if counter is at or below lower_limit, false otherwise
  */
-bool counter_decr(int* counter, int lower_limit);
+bool decr_to_limit(int* counter, int lower_limit);
 
 #endif // COUNTERS_H

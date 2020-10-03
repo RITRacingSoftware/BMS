@@ -1,6 +1,6 @@
 #include "counters.h"
 
-bool counter_incr(int* counter, int upper_limit)
+bool incr_to_limit(int* counter, int upper_limit)
 {
     bool retval = false;
     (*counter)++;
@@ -14,7 +14,7 @@ bool counter_incr(int* counter, int upper_limit)
     return retval;
 }
 
-bool counter_decr(int* counter, int lower_limit)
+bool decr_to_limit(int* counter, int lower_limit)
 {
     bool retval = false;
     (*counter)--;
