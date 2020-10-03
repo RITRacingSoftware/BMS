@@ -1,0 +1,151 @@
+VERSION ""
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+
+BS_:
+
+BU_: Bms
+
+BO_ 600 BmsStatus: 8  Bms
+ SG_ BmsStatus_SOC : 0|8@1+ (1,0) [0|100] "%" Vector__XXX
+
+BO_ 700 BmsFaultVector: 8 Bms
+ SG_ BmsFaultVector_SLAVE_COMM_CELLS : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_SLAVE_COMM_TEMPS : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_SLAVE_COMM_DRAIN_REQUEST : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_CURRENT_SENSOR_COMM : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_OVER_CURRENT : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 701 BmsFaultAlert: 8 Bms
+ SG_ BmsFaultAlert_code M : 0|6@1+ (1,0) [0|63] "" Vector__XXX
+ SG_ BmsFaultAlert_cell_comm_slave_board_num m0: 6|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BmsFaultAlert_temp_comm_slave_board_num m1: 6|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BmsFaultAlert_drain_comm_slave_board_num m2: 6|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BmsFaultAlert_adc_error_code m3: 6|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BmsFaultAlert_current m4: 6|32@1+ (0.001,0) [0|2000] "A" Vector__XXX
+
+BO_ 702 BmsVoltages: 8 Bms
+ SG_ BmsVoltages_mux M : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BmsVoltages_Cell0 m0 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell1 m0 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell2 m0 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell3 m0 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell4 m0 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell5 m0 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell6 m1 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell7 m1 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell8 m1 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell9 m1 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell10 m1 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell11 m1 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell12 m2 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell13 m2 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell14 m2 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell15 m2 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell16 m2 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell17 m2 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell18 m3 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell19 m3 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell20 m3 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell21 m3 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell22 m3 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell23 m3 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell24 m4 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell25 m4: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell26 m4: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell27 m4: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell28 m4: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell29 m4: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell30 m5: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell31 m5: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell32 m5: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell33 m5: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell34 m5: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell35 m5: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell36 m6: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell37 m6: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell38 m6: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell39 m6: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell40 m6: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell41 m6: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell42 m7: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell43 m7: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell44 m7: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell45 m7: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell46 m7: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell47 m7: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell48 m8: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell49 m8: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell50 m8: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell51 m8: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell52 m8: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell53 m8: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell54 m9: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell55 m9: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell56 m9: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell57 m9: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell58 m9: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell59 m9: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell60 m10: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell61 m10: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell62 m10: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell63 m10: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell64 m10: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell65 m10: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell66 m11: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell67 m11: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell68 m11: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell69 m11: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell70 m11: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell71 m11: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell72 m12: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell73 m12: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell74 m12: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell75 m12: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell76 m12: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell77 m12: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell78 m13: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell79 m13: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell80 m13: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell81 m13: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell82 m13: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell83 m13: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell84 m14: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell85 m14: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell86 m14: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell87 m14: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell88 m14: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsVoltages_Cell89 m14: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+
+BO_ 800 BmsDrainStatusA: 8 Bms
+ SG_ BmsDrainStatus_Cells0to63 : 0|64@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 801 BmsDrainStatusB: 8 Bms
+ SG_ BmsDrainStatus_Cells64to89 : 0|25@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 900 BmsCurrent: 8 Bms
+ SG_ BmsInstCurrentFilt : 0|32@1+ (0.001,0) [0|2000] "A" Vector__XXX
+
+BA_ "BmsFaultCode" SG_ 701 BmsFaultAlert_code "BmsFaultAlert_code";
+
+VAL_ 701 BmsFaultAlert_code 0 "FaultCode_SLAVE_COMM_CELLS" 1 "FaultCode_SLAVE_COMM_TEMPS" 2 "FaultCode_SLAVE_COMM_DRAIN_REQUEST" 3 "FaultCode_CURRENT_SENSOR_COMM" 4 "FaultCode_OVER_CURRENT";

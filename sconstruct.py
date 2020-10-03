@@ -157,6 +157,74 @@ stm32_lib_objs = []
 for source in Glob(os.path.join(STM32_LIB_DIR.Dir('src').abspath, '*.c')):
     stm32_lib_objs += stm32_comp_env.Object(source)
 
+# instructions to compile every mock module
+mock_objects = {}
+for module_name, module_dir in (app_modules + driver_modules):
+    mock_objects[module_name] = linux_comp_env.Object(module_dir.File('mocks/Mock{}.c'.format(module_name)))
+
+"""
+CAN module depends on generated CAN code.
+This section defines this dependency and provides instructions for generating this code
+using the dbcc tool + custom id define generation tool.
+"""
+DBC_DIR = APP_DIR.Dir('CAN')
+DBC_NAME = 'f29bms_dbc'
+
+# first take care of the can id definition
+can_header_script = LIBS_DIR.File('gen_can_header/gen_can_header_from_dbc.py')
+can_header = APP_DIR.File('CAN/can_ids.h')
+
+can_id_header = Command(
+    [can_header],
+    [],
+    ['python3 {} {} {}'.format(can_header_script.abspath, DBC_DIR.File(DBC_NAME + '.dbc'), can_header.abspath) ]
+)
+
+# tell scons to update the id file whenever the dbc changes
+Depends(can_header, DBC_DIR.File(DBC_NAME + '.dbc'))
+
+# first must compile dbcc from source
+dbcc_tool_bin = Command(
+    [DBCC_DIR.File('dbcc')],
+    [],
+    ['cd {} && make'.format(DBCC_DIR.abspath)]
+)
+Clean(dbcc_tool_bin, Glob(DBC_DIR.abspath + "/*.o"))
+
+# instructions to generate can packing source code
+dbcc_env = Environment(
+    tools=[TOOL_DBCC]
+)
+
+generated_dbc_source = dbcc_env.GenerateDbcSource(
+    source=DBC_DIR.File(DBC_NAME + '.dbc'),
+    target=DBC_DIR.File(DBC_NAME + '.c')
+)
+
+# anything that depends on the generated c file depends on the generated h file
+# anything that depends on CAN.h depends on the generated h file
+Depends(DBC_DIR.File(DBC_NAME + '.h'), generated_dbc_source)
+Depends(DBC_DIR.File('CAN.h'), generated_dbc_source)
+
+Clean(DBC_DIR.File(DBC_NAME + '.c'), DBC_DIR.File(DBC_NAME + '.h'))
+
+Clean(generated_dbc_source, DBC_DIR.File(DBC_NAME + 'h'))
+
+# instructions for compiling can packing source code
+linux_dbc_gen_obj = linux_comp_env.Object(DBC_DIR.File(DBC_NAME + '.c'))
+stm32_dbc_gen_obj = stm32_comp_env.Object(
+    source=DBC_DIR.File(DBC_NAME + '.c'),
+    target=DBC_DIR.File('STM32_' + DBC_NAME + '.o')
+)
+
+# tell scons the dbcc program must exist in order to run it
+Depends(generated_dbc_source, dbcc_tool_bin)
+
+# establish explicit dependency of compiled CAN module on generated source
+Depends(linux_app_objects['CAN'], generated_dbc_source)
+Depends(stm32_app_objects['CAN'], generated_dbc_source)
+Depends(mock_objects['CAN'], generated_dbc_source)
+
 """
 Instructions for Unit test compilation.
 For each module, creates a linux binary from the test_<Module Name>.c file
@@ -171,11 +239,6 @@ cmock_libs = Command(
     'cd {} && meson build && cd build && meson compile'.format(CMOCK_ROOT_DIR.abspath)
 )
 Clean(cmock_libs, CMOCK_ROOT_DIR.Dir('build'))
-
-# instructions to compile every mock module
-mock_objects = {}
-for module_name, module_dir in (app_modules + driver_modules):
-    mock_objects[module_name] = linux_comp_env.Object(module_dir.File('mocks/Mock{}.c'.format(module_name)))
 
 # instructions for compiling each module's unit test source
 test_objects = {}
@@ -196,9 +259,10 @@ for module_name, module_dir in app_modules:
         target=module_dir.File('testrunner_' + module_name),
         source=[
             mocks_dir.File('testrunner_' + module_name + '.c'), 
-            cmock_libs, 
+            cmock_libs,
             req_mocks.values(),
             linux_common_objects.values(),
+            linux_dbc_gen_obj,
             test_objects[module_name], 
             linux_app_objects[module_name]]
     )
@@ -249,6 +313,7 @@ for module_name, module_dir in driver_modules:
         objs.append(common_obj)
     
     objs.extend(stm32_lib_objs)
+    objs.append(stm32_dbc_gen_obj)
 
     # stm32 elf generation
     stm32_elf = stm32_comp_env.BuildElf(

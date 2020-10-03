@@ -6,8 +6,9 @@ Custom build tools for SCons to use.
 author: Chris Blust
 """
 
-# First define some useful constants
 REPO_ROOT_DIR = Dir('.')
+
+DBCC_DIR = REPO_ROOT_DIR.Dir('libs/dbcc')
 
 def TOOL_CMOCK(env):
     """
@@ -62,4 +63,25 @@ def TOOL_ARM_ELF_HEX(env):
     env.Append(BUILDERS = {
         'BuildElf' : arm_elf_builder,
         'BuildHex' : arm_hex_builder
+    })
+
+
+def TOOL_DBCC(env):
+    """
+    Uses the dbcc tool to generate C code for setting/getting CAN data
+    from a dbc file.
+    """
+
+    """
+    -k for only generating pack code- BMS does not have a need to read CAN data
+
+    SOURCE - dbc file node
+    TARGET - c file node that will be generated. The directory of this file will be used in the command.
+    """
+    dbcc_builder = SCons.Builder.Builder(action=[
+        DBCC_DIR.abspath + '/dbcc -o ${TARGET.dir.abspath} -k ${SOURCE}'
+    ])
+
+    env.Append(BUILDERS = {
+        'GenerateDbcSource' : dbcc_builder
     })
