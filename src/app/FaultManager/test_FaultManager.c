@@ -35,6 +35,8 @@ void test_FaultManager_fault_and_clear(void)
 {
     float unused_fault_data = 42;
     char err_msg[70];
+    sprintf(err_msg, "is_any_fault_active true at startup");
+    TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == false, err_msg);
 
     // check that each fault sets correctly and the state of faults is consistent
     // this is important since FaultManager uses a bitwise implementation that is prone to overwrite events
@@ -59,11 +61,14 @@ void test_FaultManager_fault_and_clear(void)
             sprintf(err_msg, "Fault code %d was set after setting code %d.", code2, code);
             TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == false, err_msg);
         }
+
+        TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == true, "is_any_fault_true not true when faulted");
     }
     
     // check that each fault clears correctly and the state of faults is consistent
     for (int code = 0; code < FaultCode_NUM; code++)
     {
+        TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == true, "is_any_fault_active not true when not finished clearing");
         FaultManager_clear_fault(code);
         sprintf(err_msg, "Fault code %d failed to clear.", code);
         TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code) == false, err_msg);
@@ -82,4 +87,6 @@ void test_FaultManager_fault_and_clear(void)
             TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == false, err_msg);
         }
     }
+
+    TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == false, "is_any_fault_active true after clearing faults");
 }

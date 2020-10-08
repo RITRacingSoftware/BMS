@@ -6,7 +6,12 @@
 
 can_obj_f29bms_dbc_h_t CAN_BUS;
 
-static bool can_error = false;
+static bool can_error;
+
+void CAN_init(void)
+{
+    can_error = false;
+}
 
 void CAN_send_message(int id)
 {   
@@ -31,6 +36,7 @@ void CAN_send_message(int id)
     else
     {
         // CAN id invalid, dont attempt to send the message
+        can_error = true;
     }
     
 }
