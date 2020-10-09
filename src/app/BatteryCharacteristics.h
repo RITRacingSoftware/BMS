@@ -8,6 +8,10 @@
 #define MIN_ALLOWED_CELL_V 1.2
 #define MIN_CELL_V 0
 
+// maxmimum expected difference in cell voltages
+#define MAX_CELL_DIFF_V 0.5
+#define DIFF_CORRECTION_THRESHOLD_V 0.3
+
 #define NUM_TEMP_RANGES 5
 
 // columns: maximum SOC

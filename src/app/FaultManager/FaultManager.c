@@ -65,6 +65,10 @@ void FaultManager_set_fault_active(FaultCode_e code, void* data)
             case FaultCode_OUT_OF_JUICE:
                 encode_can_0x2bd_BmsFaultAlert_lowest_cell_voltage(&CAN_BUS, *((float*)data));
                 break;
+            
+            case FaultCode_DRAIN_FAILURE:
+                encode_can_0x2bc_BmsFaultVector_DRAIN_FAILURE(&CAN_BUS, *((int*)data));
+                break;
                 
             default:
                 // send garbage data

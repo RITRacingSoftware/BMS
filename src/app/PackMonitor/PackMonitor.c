@@ -104,6 +104,9 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
             FaultManager_clear_fault(FaultCode_CELL_VOLTAGE_DIFF);
         }
     }
+
+    bm->largest_V = largest_V;
+    bm->smallest_V = smallest_V;
 }
 
 

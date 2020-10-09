@@ -43,6 +43,8 @@ typedef enum
     FaultCode_TEMPERATURE_IRRATIONAL,
     // A temperature over the allowable limit has been reported.
     FaultCode_OVER_TEMPERATURE,
+    // Draining was requested for a cell and was not observed.
+    FaultCode_DRAIN_FAILURE,
     // Number of enumerations
     FaultCode_NUM
 } FaultCode_e;

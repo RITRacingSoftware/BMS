@@ -5,9 +5,6 @@
 #include "BatteryCharacteristics.h"
 #include "TempModel.h"
 
-// maxmimum expected difference in cell voltages
-#define MAX_CELL_DIFF_V 0.5
-
 #define MAX_TEMP_DEG_C 100.0
 #define OVER_TEMP_DEG_C 60.0
 #define MIN_TEMP_DEG_C -20.0

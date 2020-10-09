@@ -52,6 +52,7 @@ void DriveMonitor_init(void)
     fault_tolerances[FaultCode_OUT_OF_JUICE]                = 1;
     fault_tolerances[FaultCode_OVER_TEMPERATURE]            = 1;
     fault_tolerances[FaultCode_TEMPERATURE_IRRATIONAL]      = 10000;
+    fault_tolerances[FaultCode_DRAIN_FAILURE]               = NO_SHUTDOWN;
 
     // ideally this would start low, but the FSAE rules say faults must latch
     // at the hardware level so we have to start with the true or the car will never drive
