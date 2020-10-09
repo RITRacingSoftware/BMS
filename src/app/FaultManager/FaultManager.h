@@ -33,6 +33,16 @@ typedef enum
     FaultCode_CURRENT_SENSOR_COMM,
     // Current above overcurrent threshold for too long
     FaultCode_OVER_CURRENT,
+    // A cell voltage is reading of reasonable physical limits
+    FaultCode_CELL_VOLTAGE_IRRATIONAL,
+    // The maximum cell voltage difference is higher than expected.
+    FaultCode_CELL_VOLTAGE_DIFF,
+    // It is unsafe to discharge the cells any further.
+    FaultCode_OUT_OF_JUICE,
+    // An irrational temperature has been reported.
+    FaultCode_TEMPERATURE_IRRATIONAL,
+    // A temperature over the allowable limit has been reported.
+    FaultCode_OVER_TEMPERATURE,
     // Number of enumerations
     FaultCode_NUM
 } FaultCode_e;

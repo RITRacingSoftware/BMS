@@ -35,6 +35,11 @@ BO_ 700 BmsFaultVector: 8 Bms
  SG_ BmsFaultVector_SLAVE_COMM_DRAIN_REQUEST : 2|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ BmsFaultVector_CURRENT_SENSOR_COMM : 3|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ BmsFaultVector_OVER_CURRENT : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_CELL_VOLTAGE_IRRATIONAL : 5|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_CELL_VOLTAGE_DIFF : 6|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_OUT_OF_JUICE : 7|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_TEMPERATURE_IRRATIONAL: 8|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsFaultVector_OVER_TEMPERATURE: 9|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 701 BmsFaultAlert: 8 Bms
  SG_ BmsFaultAlert_code M : 0|6@1+ (1,0) [0|63] "" Vector__XXX
@@ -43,6 +48,11 @@ BO_ 701 BmsFaultAlert: 8 Bms
  SG_ BmsFaultAlert_drain_comm_slave_board_num m2: 6|8@1+ (1,0) [0|255] "" Vector__XXX
  SG_ BmsFaultAlert_adc_error_code m3: 6|8@1+ (1,0) [0|255] "" Vector__XXX
  SG_ BmsFaultAlert_current m4: 6|32@1+ (0.001,0) [0|2000] "A" Vector__XXX
+ SG_ BmsFaultAlert_irrational_voltage m5: 6|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsFaultAlert_voltage_diff m6: 6|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsFaultAlert_lowest_cell_voltage m7: 6|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsFaultAlert_irrational_temperature m8: 6|16@1+ (0.01,0) [-327.68|327.67] "V" Vector__XXX
+ SG_ BmsFaultAlert_over_temperature m9: 6|16@1+ (0.01,0) [-327.68|327.67] "V" Vector__XXX
 
 BO_ 702 BmsVoltages: 8 Bms
  SG_ BmsVoltages_mux M : 0|8@1+ (1,0) [0|255] "" Vector__XXX
@@ -148,4 +158,4 @@ BO_ 900 BmsCurrent: 8 Bms
 
 BA_ "BmsFaultCode" SG_ 701 BmsFaultAlert_code "BmsFaultAlert_code";
 
-VAL_ 701 BmsFaultAlert_code 0 "FaultCode_SLAVE_COMM_CELLS" 1 "FaultCode_SLAVE_COMM_TEMPS" 2 "FaultCode_SLAVE_COMM_DRAIN_REQUEST" 3 "FaultCode_CURRENT_SENSOR_COMM" 4 "FaultCode_OVER_CURRENT";
+VAL_ 701 BmsFaultAlert_code 0 "FaultCode_SLAVE_COMM_CELLS" 1 "FaultCode_SLAVE_COMM_TEMPS" 2 "FaultCode_SLAVE_COMM_DRAIN_REQUEST" 3 "FaultCode_CURRENT_SENSOR_COMM" 4 "FaultCode_OVER_CURRENT" 5 "FaultCode_CELL_VOLTAGE_IRRATIONAL" 6 "FaultCode_CELL_VOLTAGE_DIFF" 7 "Faultcode_OUT_OF_JUICE" 8 "FaultCode_TEMPERATURE_IRRATIONAL" 9 "FaultCode_OVER_TEMP";

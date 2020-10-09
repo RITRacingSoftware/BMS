@@ -4,6 +4,10 @@
 #define CELL_CAPACITY_Ah 6.550
 #define BATTERY_CAPACITY_Ah ((float) NUM_PARALLEL_CELLS * CELL_CAPACITY_Ah)
 
+#define MAX_CELL_V 4.3
+#define MIN_ALLOWED_CELL_V 1.2
+#define MIN_CELL_V 0
+
 #define NUM_TEMP_RANGES 5
 
 // columns: maximum SOC

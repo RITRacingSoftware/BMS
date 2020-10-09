@@ -25,44 +25,60 @@ void FaultManager_init(void)
 // TODO- use mutex around faultvector
 void FaultManager_set_fault_active(FaultCode_e code, void* data)
 {
-    // set the fault
-    fault_vector |= BIT(code);
-
-    // set the CAN alert data field accordingly
-    switch(code)
+    // dont do anything if fault is already sent. Don't need an alert spam.
+    if ((fault_vector & BIT(code)) == 0)
     {
-        case FaultCode_OVER_CURRENT:
-            encode_can_0x2bd_BmsFaultAlert_current(&CAN_BUS, *((float*)data));
-            break;
-        
-        case FaultCode_SLAVE_COMM_CELLS:
-            encode_can_0x2bd_BmsFaultAlert_cell_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
-            break;
-        
-        case FaultCode_SLAVE_COMM_TEMPS:
-            encode_can_0x2bd_BmsFaultAlert_temp_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
-            break;
+        // set the fault
+        fault_vector |= BIT(code);
 
-        case FaultCode_SLAVE_COMM_DRAIN_REQUEST:
-            encode_can_0x2bd_BmsFaultAlert_drain_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
-            break;
+        // set the CAN alert data field accordingly
+        switch(code)
+        {
+            case FaultCode_OVER_CURRENT:
+                encode_can_0x2bd_BmsFaultAlert_current(&CAN_BUS, *((float*)data));
+                break;
+            
+            case FaultCode_SLAVE_COMM_CELLS:
+                encode_can_0x2bd_BmsFaultAlert_cell_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
+                break;
+            
+            case FaultCode_SLAVE_COMM_TEMPS:
+                encode_can_0x2bd_BmsFaultAlert_temp_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
+                break;
 
-        case FaultCode_CURRENT_SENSOR_COMM:
-            encode_can_0x2bd_BmsFaultAlert_adc_error_code(&CAN_BUS, *((uint8_t*)data));
-            break;
-        
-        default:
-            // send garbage data
-            break;
+            case FaultCode_SLAVE_COMM_DRAIN_REQUEST:
+                encode_can_0x2bd_BmsFaultAlert_drain_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
+                break;
+
+            case FaultCode_CURRENT_SENSOR_COMM:
+                encode_can_0x2bd_BmsFaultAlert_adc_error_code(&CAN_BUS, *((uint8_t*)data));
+                break;
+            
+            case FaultCode_CELL_VOLTAGE_IRRATIONAL:
+                encode_can_0x2bd_BmsFaultAlert_irrational_voltage(&CAN_BUS, *((float*)data));
+                break;
+            
+            case FaultCode_CELL_VOLTAGE_DIFF:
+                encode_can_0x2bd_BmsFaultAlert_voltage_diff(&CAN_BUS, *((float*)data));
+                break;
+            
+            case FaultCode_OUT_OF_JUICE:
+                encode_can_0x2bd_BmsFaultAlert_lowest_cell_voltage(&CAN_BUS, *((float*)data));
+                break;
+                
+            default:
+                // send garbage data
+                break;
+        }
+
+        // set the mux of the alert message to the fault code
+        encode_can_0x2bd_BmsFaultAlert_code(&CAN_BUS, (uint8_t)code);
+
+        CAN_send_message(CAN_ID_BmsFaultAlert);
+
+        // update the fault vector CAN message data
+        unpack_message(&CAN_BUS, CAN_ID_BmsFaultVector, fault_vector, 8, 0);
     }
-
-    // set the mux of the alert message to the fault code
-    encode_can_0x2bd_BmsFaultAlert_code(&CAN_BUS, (uint8_t)code);
-
-    CAN_send_message(CAN_ID_BmsFaultAlert);
-
-    // update the fault vector CAN message data
-    unpack_message(&CAN_BUS, CAN_ID_BmsFaultVector, fault_vector, 8, 0);
 }
 
 // TODO- use mutex around faultvector
