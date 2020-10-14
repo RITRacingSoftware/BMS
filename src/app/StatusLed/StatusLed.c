@@ -7,22 +7,20 @@
 
 #include "HAL_Gpio.h"
 
-#define LED_PIN 420
-
 static void turn_led_on(void)
 {
-    HAL_Gpio_write(LED_PIN, true);
+    HAL_Gpio_write(GpioPin_STATUS_LED, true);
 }
 
 static void turn_led_off(void)
 {
-    HAL_Gpio_write(LED_PIN, false);
+    HAL_Gpio_write(GpioPin_STATUS_LED, false);
 }
 
 static void toggle_led(void)
 {
-    bool current_state = HAL_Gpio_read(LED_PIN);
-    HAL_Gpio_write(LED_PIN, current_state ^ 1); // XOR with 1 always yields opposite
+    bool current_state = HAL_Gpio_read(GpioPin_STATUS_LED);
+    HAL_Gpio_write(GpioPin_STATUS_LED, current_state ^ 1); // XOR with 1 always yields opposite
 }
 
 /**

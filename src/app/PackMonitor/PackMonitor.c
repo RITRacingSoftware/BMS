@@ -5,9 +5,11 @@
 
 /**
  * Get the largest and smallest voltages currently in the pack.
+ * Also get the average voltage of the pack
  */
-static void get_boundary_cell_voltages(BatteryModel_t* bm, float* largest_V, float* smallest_V)
+static void get_cell_voltage_info(BatteryModel_t* bm, float* largest_V, float* smallest_V, float* average_V)
 {
+    float total_V = 0;
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
         float cell_V = bm->cells[i].voltage;
@@ -19,7 +21,11 @@ static void get_boundary_cell_voltages(BatteryModel_t* bm, float* largest_V, flo
         {
             *smallest_V = cell_V;
         }
+
+        total_V += cell_V;
     }
+
+    *average_V = total_V / (float) NUM_SERIES_CELLS;
 }
 
 // voltage fault condition timers
@@ -47,13 +53,13 @@ void PackMonitor_init(void)
  * Check for dangerous voltage differences, invalid voltages, etc. in the battery pack.
  * Activate faults if these error conditions are present.
  */
-#include <stdio.h>
 void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 {
     float largest_V = 0;
     float smallest_V = MAX_CELL_V * 2;
+    float average_V = 0;
 
-    get_boundary_cell_voltages(bm, &largest_V, &smallest_V);
+    get_cell_voltage_info(bm, &largest_V, &smallest_V, &average_V);
 
     // check for irrationality
     if ((largest_V > MAX_CELL_V) || (smallest_V < MIN_CELL_V))
@@ -107,6 +113,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 
     bm->largest_V = largest_V;
     bm->smallest_V = smallest_V;
+    bm->average_V = average_V;
 }
 
 
