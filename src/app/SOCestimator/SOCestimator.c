@@ -1,8 +1,10 @@
 #include <stdbool.h>
 
-#include "common_macros.h"
-#include "BatteryCharacteristics.h"
 #include "SOCestimator.h"
+
+#include "common_macros.h"
+#include "TempModel.h"
+#include "BatteryCharacteristics.h"
 #include "HAL_EEPROM.h"
 
 float SOC_raw;
@@ -129,18 +131,15 @@ void SOCestimator_coulomb_count_update_1kHz(float current_A)
  * battery_model [in] - new cell voltages to use in calculating the SOC
  * ambient_temp [in] - ambient temperature
  */
-void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, float ambient_temp_C)
+void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, TempModel_t* tm)
 {
-    // calculate the average series cell voltage
-    float total_V = 0.0;
-    for (int i = 0; i < NUM_SERIES_CELLS; i++)
+    float tot_temp = 0;
+    for (int i = 0; i < NUM_THERMISTOR; i++)
     {
-        total_V += battery_model->cells[i].voltage;
+        tot_temp += tm->temps_C[i];
     }
 
-    float avg_V = total_V / (float) NUM_SERIES_CELLS;
-
-    int new_soc_limit = SOC_limit_from_voltage(avg_V, ambient_temp_C);
+    int new_soc_limit = SOC_limit_from_voltage(battery_model->average_V, tot_temp / NUM_THERMISTOR);
 
     // limit may flicker here
     SOC_limit = new_soc_limit;

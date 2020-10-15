@@ -27,7 +27,7 @@ void SOCestimator_coulomb_count_update_1kHz(float current_A);
  * the highest SOC possible at this voltage.
  * battery_model [in] - new cell voltages to use in calculating the SOC
  */
-void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, float ambient_temp_C);
+void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, TempModel_t* tm);
 
 /**
  * Get the SOC as calculated by coulomb counting without voltage threshold limit.
