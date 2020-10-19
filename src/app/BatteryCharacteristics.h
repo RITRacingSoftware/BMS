@@ -4,7 +4,9 @@
 #define CELL_CAPACITY_Ah 6.550
 #define BATTERY_CAPACITY_Ah ((float) NUM_PARALLEL_CELLS * CELL_CAPACITY_Ah)
 
+// todo - actually define these
 #define MAX_CELL_V 4.3
+#define MAX_ALLOWED_CELL_V 4.1
 #define MIN_ALLOWED_CELL_V 1.2
 #define MIN_CELL_V 0
 

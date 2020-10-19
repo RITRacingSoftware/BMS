@@ -2,6 +2,7 @@
 #define SOC_ESTIMATOR_H
 
 #include "BatteryModel.h"
+#include "TempModel.h"
 
 /**
  * SOC(State Of Charge) is calculated in two ways:

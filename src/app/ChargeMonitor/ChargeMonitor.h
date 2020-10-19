@@ -31,4 +31,9 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm);
  */
 bool ChargeMonitor_charger_available(void);
 
+/**
+ * Return true if charging has been requested, false otherwise.
+ */
+bool ChargeMonitor_is_charging(void);
+
 #endif // CHARGE_MONITOR_H

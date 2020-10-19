@@ -18,7 +18,7 @@ void test_ChargeMonitor_shut_off(void)
     BatteryModel_t bm;
 
     // start out just below charging shut off threshold
-    bm.average_V = CHARGE_SHUTOFF_V - 0.1;
+    bm.largest_V = CHARGE_SHUTOFF_V - 0.1;
     
     // simulate a charger connected condition
     HAL_Gpio_read_ExpectAndReturn(GpioPin_CHARGER_AVAILABLE, false);
@@ -28,7 +28,7 @@ void test_ChargeMonitor_shut_off(void)
 
     TEST_ASSERT_MESSAGE(ChargeMonitor_charger_available() == true, "Charger not detected when GPIO read low");
 
-    bm.average_V = CHARGE_SHUTOFF_V + 0.1;
+    bm.largest_V = CHARGE_SHUTOFF_V + 0.1;
     // simulate a charger connected condition
     HAL_Gpio_read_ExpectAndReturn(GpioPin_CHARGER_AVAILABLE, false);
     // should NOT allow charging since we are fully charged
@@ -36,7 +36,7 @@ void test_ChargeMonitor_shut_off(void)
     ChargeMonitor_1Hz(&bm);
 
     // allow charging based on voltage again
-    bm.average_V = CHARGE_SHUTOFF_V - 0.1;
+    bm.largest_V = CHARGE_SHUTOFF_V - 0.1;
     // simulate a charger NOT connected condition
     HAL_Gpio_read_ExpectAndReturn(GpioPin_CHARGER_AVAILABLE, true);
     // should NOT allow charging since the charger is not connected

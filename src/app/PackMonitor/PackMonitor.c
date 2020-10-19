@@ -1,5 +1,6 @@
 #include "counters.h"
 
+#include "ChargeMonitor.h"
 #include "FaultManager.h"
 #include "PackMonitor.h"
 
@@ -9,6 +10,9 @@
  */
 static void get_cell_voltage_info(BatteryModel_t* bm, float* largest_V, float* smallest_V, float* average_V)
 {
+    *largest_V = -100;
+    *smallest_V = 1000;
+
     float total_V = 0;
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
@@ -26,6 +30,25 @@ static void get_cell_voltage_info(BatteryModel_t* bm, float* largest_V, float* s
     }
 
     *average_V = total_V / (float) NUM_SERIES_CELLS;
+}
+
+static void get_temp_info(TempModel_t* tm, float* largest_deg_C, float* smallest_deg_C)
+{
+    *largest_deg_C = -200;
+    *smallest_deg_C = 1000;
+    for (int i = 0; i < NUM_THERMISTOR; i++)
+    {
+        float temp_deg_C = tm->temps_C[i];
+
+        if (temp_deg_C > *largest_deg_C)
+        {
+            *largest_deg_C = temp_deg_C;
+        }
+        else if (temp_deg_C < *smallest_deg_C)
+        {
+            *smallest_deg_C = temp_deg_C;
+        }
+    }
 }
 
 // voltage fault condition timers
@@ -78,7 +101,8 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
     }
 
     // check for out of charge
-    if (smallest_V <= MIN_ALLOWED_CELL_V)
+    // out of charge should not occur if we're connected to the charger
+    if ((smallest_V <= MIN_ALLOWED_CELL_V) && !ChargeMonitor_charger_available())
     {
         if (incr_to_limit(&low_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
@@ -123,41 +147,49 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
  */
 void PackMonitor_validate_temp_model_10Hz(TempModel_t* tm)
 {
-    for (int i = 0; i < NUM_THERMISTOR; i++)
+    float largest_deg_C, smallest_deg_C;
+
+    get_temp_info(tm, &largest_deg_C, &smallest_deg_C);
+
+    // check for irrational temp
+    if ((largest_deg_C > MAX_TEMP_DEG_C) || (smallest_deg_C < MIN_TEMP_DEG_C))
     {
-        float temp_C = tm->temps_C[i];
+        if (incr_to_limit(&irrational_temp_ms, TEMPERATURE_FAULT_HYSTERESIS_MS, 100))
+        {
+            float bad_temp;
+            if (largest_deg_C > MAX_TEMP_DEG_C)
+            {
+                bad_temp = largest_deg_C;
+            }
+            else
+            {
+                bad_temp = smallest_deg_C;
+            }
+            
+            FaultManager_set_fault_active(FaultCode_TEMPERATURE_IRRATIONAL, &bad_temp);
+        }
+    }
+    else
+    {
+        if (decr_to_limit(&irrational_temp_ms, 0, 100))
+        {
+            FaultManager_clear_fault(FaultCode_TEMPERATURE_IRRATIONAL);
+        }
+    }
 
-        // check for irrational temp
-        if ((temp_C > MAX_TEMP_DEG_C) || (temp_C < MIN_TEMP_DEG_C))
+    // check for overtemperature
+    if (largest_deg_C > OVER_TEMP_DEG_C)
+    {
+        if (incr_to_limit(&over_temp_ms, TEMPERATURE_FAULT_HYSTERESIS_MS, 100))
         {
-            if (incr_to_limit(&irrational_temp_ms, TEMPERATURE_FAULT_HYSTERESIS_MS, 100))
-            {
-                FaultManager_set_fault_active(FaultCode_TEMPERATURE_IRRATIONAL, &temp_C);
-            }
+            FaultManager_set_fault_active(FaultCode_OVER_TEMPERATURE, &largest_deg_C);
         }
-        else
+    }
+    else
+    {
+        if (decr_to_limit(&over_temp_ms, 0, 100))
         {
-            if (decr_to_limit(&irrational_temp_ms, 0, 100))
-            {
-                FaultManager_clear_fault(FaultCode_TEMPERATURE_IRRATIONAL);
-            }
+            FaultManager_clear_fault(FaultCode_OVER_TEMPERATURE);
         }
-
-        // check for overtemperature
-        if (temp_C > OVER_TEMP_DEG_C)
-        {
-            if (incr_to_limit(&over_temp_ms, TEMPERATURE_FAULT_HYSTERESIS_MS, 100))
-            {
-                FaultManager_set_fault_active(FaultCode_OVER_TEMPERATURE, &temp_C);
-            }
-        }
-        else
-        {
-            if (decr_to_limit(&over_temp_ms, 0, 100))
-            {
-                FaultManager_clear_fault(FaultCode_OVER_TEMPERATURE);
-            }
-        }
-        
     }
 }

@@ -1,4 +1,5 @@
 #include "CellBalancer.h"
+#include "ChargeMonitor.h"
 #include "FaultManager.h"
 
 // used to keep track of drain status.
@@ -31,6 +32,11 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
         if (cell_diff_V > DIFF_CORRECTION_THRESHOLD_V)
         {
             // cell is falling behind, request drain
+            bm->cells[i].is_draining = true;
+        }
+        else if (ChargeMonitor_charger_available() && (bm->cells[i].voltage >= MAX_ALLOWED_CELL_V))
+        {
+            // charging is supposed to happen, but this cell needs to be drained first
             bm->cells[i].is_draining = true;
         }
         else

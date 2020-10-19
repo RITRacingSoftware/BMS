@@ -2,6 +2,7 @@
 
 #include "PackMonitor.h"
 
+#include "MockChargeMonitor.h"
 #include "MockFaultManager.h"
 
 static BatteryModel_t bm;
@@ -17,6 +18,8 @@ void setUp(void)
         bm.cells[i].is_draining = false;
         bm.cells[i].voltage = MIN_ALLOWED_CELL_V + 0.1;
     }   
+    // not testing charging
+    ChargeMonitor_charger_available_IgnoreAndReturn(false);
 }
 
 /**

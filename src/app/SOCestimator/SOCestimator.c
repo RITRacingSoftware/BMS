@@ -3,7 +3,6 @@
 #include "SOCestimator.h"
 
 #include "common_macros.h"
-#include "TempModel.h"
 #include "BatteryCharacteristics.h"
 #include "HAL_EEPROM.h"
 
@@ -79,7 +78,7 @@ static float read_saved_soc(void)
  */
 static inline float calculate_dSOC(float current_A, unsigned int time_elapsed_ms)
 {
-    return (current_A * ((float) time_elapsed_ms) * 0.001) / BATTERY_CAPACITY_Ah;
+    return (current_A * ((float) time_elapsed_ms) * 0.001 * MS_TO_HR) / BATTERY_CAPACITY_Ah;
 }
 
 // SOC waits for an average voltage reading to determine starting SOC.
@@ -139,7 +138,7 @@ void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, T
         tot_temp += tm->temps_C[i];
     }
 
-    int new_soc_limit = SOC_limit_from_voltage(battery_model->average_V, tot_temp / NUM_THERMISTOR);
+    int new_soc_limit = SOC_limit_from_voltage(battery_model->average_V, tot_temp / (float) NUM_THERMISTOR);
 
     // limit may flicker here
     SOC_limit = new_soc_limit;

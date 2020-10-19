@@ -11,7 +11,7 @@
 
 
 // how long a voltage fault condition must be present to trigger a fault
-#define VOLTAGE_FAULT_HYSTERESIS_MS 1000
+#define VOLTAGE_FAULT_HYSTERESIS_MS 500
 
 // how long a temperature fault condition must be present to trigger a fault
 #define TEMPERATURE_FAULT_HYSTERESIS_MS 1000
