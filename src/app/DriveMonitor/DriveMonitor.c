@@ -12,7 +12,10 @@
  * 
  * This could be set statically, but its nice to define things at runtime in case FaultCode_e changes.
  */
-static uint32_t fault_tolerances[FaultCode_NUM];
+static int fault_tolerances[FaultCode_NUM];
+
+// value a fault tolerance should have if the fault does not cause the car to shutdown
+#define NO_SHUTDOWN -1
 
 /**
  * How long each fault has been active in milliseconds.
@@ -44,6 +47,12 @@ void DriveMonitor_init(void)
     fault_tolerances[FaultCode_SLAVE_COMM_DRAIN_REQUEST]    = 10000;
     fault_tolerances[FaultCode_CURRENT_SENSOR_COMM]         = 10;
     fault_tolerances[FaultCode_OVER_CURRENT]                = 1;
+    fault_tolerances[FaultCode_CELL_VOLTAGE_IRRATIONAL]     = 10000;
+    fault_tolerances[FaultCode_CELL_VOLTAGE_DIFF]           = NO_SHUTDOWN;
+    fault_tolerances[FaultCode_OUT_OF_JUICE]                = 1;
+    fault_tolerances[FaultCode_OVER_TEMPERATURE]            = 1;
+    fault_tolerances[FaultCode_TEMPERATURE_IRRATIONAL]      = 10000;
+    fault_tolerances[FaultCode_DRAIN_FAILURE]               = NO_SHUTDOWN;
 
     // ideally this would start low, but the FSAE rules say faults must latch
     // at the hardware level so we have to start with the true or the car will never drive
@@ -64,10 +73,13 @@ void DriveMonitor_1kHz(void)
         // if the fault is active or there is no tolerance for it
         if (FaultManager_is_fault_active(code) || (fault_tolerances[code] == 0))
         {
-            // fault is active, increment counter + check for expiration
-            if (incr_to_limit(&active_fault_timers[code], fault_tolerances[code]))
+            if (fault_tolerances[code] != NO_SHUTDOWN)
             {
-                driving_allowed = false;
+                // fault is active, increment counter + check for expiration
+                if (incr_to_limit(&active_fault_timers[code], fault_tolerances[code], 1))
+                {
+                    driving_allowed = false;
+                }
             }
         }
         else

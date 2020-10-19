@@ -17,7 +17,7 @@ void CurrentMonitor_1kHz(float current_A)
 {
     if ((current_A >= OVERCURRENT_A) || (current_A <= OVERCURRENT_CHG_A))
     {
-        if (incr_to_limit(&time_overcurrent_ms, OVERCURRENT_HYST_MS))
+        if (incr_to_limit(&time_overcurrent_ms, OVERCURRENT_HYST_MS, 1))
         {
             FaultManager_set_fault_active(FaultCode_OVER_CURRENT, &current_A);
         }
@@ -26,7 +26,7 @@ void CurrentMonitor_1kHz(float current_A)
     {
         // clear fault if the overcurrent condition has been gone
         // for the time hysteresis
-        if (decr_to_limit(&time_overcurrent_ms, 0))
+        if (decr_to_limit(&time_overcurrent_ms, 0, 1))
         {
             FaultManager_clear_fault(FaultCode_OVER_CURRENT);
         }

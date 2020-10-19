@@ -20,6 +20,11 @@
 extern can_obj_f29bms_dbc_h_t CAN_BUS;
 
 /**
+ * Initialize error status to none.
+ */
+void CAN_init(void);
+
+/**
  * Attempt to send a CAN message with a given id.
  * Data is automatically retrieved from CAN_BUS.
  * id [in] - 11 bit CAN id- use the generated definitions in can_ids.h

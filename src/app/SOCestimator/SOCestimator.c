@@ -1,8 +1,9 @@
 #include <stdbool.h>
 
+#include "SOCestimator.h"
+
 #include "common_macros.h"
 #include "BatteryCharacteristics.h"
-#include "SOCestimator.h"
 #include "HAL_EEPROM.h"
 
 float SOC_raw;
@@ -77,7 +78,7 @@ static float read_saved_soc(void)
  */
 static inline float calculate_dSOC(float current_A, unsigned int time_elapsed_ms)
 {
-    return (current_A * ((float) time_elapsed_ms) * 0.001) / BATTERY_CAPACITY_Ah;
+    return (current_A * ((float) time_elapsed_ms) * 0.001 * MS_TO_HR) / BATTERY_CAPACITY_Ah;
 }
 
 // SOC waits for an average voltage reading to determine starting SOC.
@@ -129,18 +130,15 @@ void SOCestimator_coulomb_count_update_1kHz(float current_A)
  * battery_model [in] - new cell voltages to use in calculating the SOC
  * ambient_temp [in] - ambient temperature
  */
-void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, float ambient_temp_C)
+void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, TempModel_t* tm)
 {
-    // calculate the average series cell voltage
-    float total_V = 0.0;
-    for (int i = 0; i < NUM_SERIES_CELLS; i++)
+    float tot_temp = 0;
+    for (int i = 0; i < NUM_THERMISTOR; i++)
     {
-        total_V += battery_model->cells[i].voltage;
+        tot_temp += tm->temps_C[i];
     }
 
-    float avg_V = total_V / (float) NUM_SERIES_CELLS;
-
-    int new_soc_limit = SOC_limit_from_voltage(avg_V, ambient_temp_C);
+    int new_soc_limit = SOC_limit_from_voltage(battery_model->average_V, tot_temp / (float) NUM_THERMISTOR);
 
     // limit may flicker here
     SOC_limit = new_soc_limit;
