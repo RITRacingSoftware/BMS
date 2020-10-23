@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/sl_modelref_info/R2020a http://schema.mathworks.com/mf0/slexec_mm_sto/R2019b_201902271317">
+  <ModelRefInfoRepo.ModelRefInfoRoot type="ModelRefInfoRepo.ModelRefInfoRoot" uuid="c11f7ccd-79d8-4b4c-8c4a-12c67aef9627">
+    <autoSolverStatusFlags>327</autoSolverStatusFlags>
+    <childModelRefInfo type="ModelRefInfoRepo.ChildModelRefInfo" uuid="b7dbb8fd-c9b7-4ba8-b233-82e233fc601b">
+      <modelName>AccumulatorModel</modelName>
+      <modelPath>AccumulatorModel</modelPath>
+    </childModelRefInfo>
+    <dataTransferInfos>AAFJTQAAAAAOAAAAOAAAAAYAAAAIAAAAAgAAAAAAAAAFAAAACAAAAAAAAAABAAAAAQAAAAAAAAAFAAQAAQAAAAEAAAAAAAAA</dataTransferInfos>
+    <defaultsCMapping>{&quot;Inports&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;Outports&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;LocalParameters&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;ParameterArguments&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;GlobalParameters&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;SharedLocalDataStores&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;GlobalDataStores&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;InternalData&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;Constants&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;DataTransfers&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;ModelData&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;InitializeTerminate&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;Execution&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;SharedUtility&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;}</defaultsCMapping>
+    <hasBlockWithPeriodicDiscreteSampleTime>true</hasBlockWithPeriodicDiscreteSampleTime>
+    <hasBwsAccessed>true</hasBwsAccessed>
+    <hasBwsAccessedByAnyModel>true</hasBwsAccessedByAnyModel>
+    <hasContinuousSampleTime>true</hasContinuousSampleTime>
+    <inports type="ModelRefInfoRepo.InportInformation" uuid="bc062ee9-6c65-43f5-8229-619c3d35d47f">
+      <isNotDerivPort>true</isNotDerivPort>
+      <designMax>inf</designMax>
+      <designMin>-inf</designMin>
+      <indexType>2</indexType>
+      <rateInfo type="ModelRefInfoRepo.RateInfo">
+        <compiled>true</compiled>
+        <period>0</period>
+        <priority>40</priority>
+        <rateIdx>0</rateIdx>
+      </rateInfo>
+      <resolvedSignalObject></resolvedSignalObject>
+      <sigNameToEMVCEMap type="ModelRefInfoRepo.SigNameEMVCEInfo" uuid="291a7cbf-425a-4910-969c-5c3dd72a7dfb"/>
+    </inports>
+    <inports type="ModelRefInfoRepo.InportInformation" uuid="e6e477e9-047a-4e5d-b711-86a25ea061c1">
+      <isNotDerivPort>true</isNotDerivPort>
+      <designMax>inf</designMax>
+      <designMin>-inf</designMin>
+      <indexType>2</indexType>
+      <originalPortNumber>1</originalPortNumber>
+      <rateInfo type="ModelRefInfoRepo.RateInfo">
+        <compiled>true</compiled>
+        <period>0</period>
+        <priority>40</priority>
+        <rateIdx>0</rateIdx>
+      </rateInfo>
+      <resolvedSignalObject></resolvedSignalObject>
+      <sigNameToEMVCEMap type="ModelRefInfoRepo.SigNameEMVCEInfo" uuid="648f027e-6573-435b-aaf2-e8384b2a1fb9"/>
+    </inports>
+    <isInlineParamsOn>true</isInlineParamsOn>
+    <isOrigInportVirtualBus>false</isOrigInportVirtualBus>
+    <isOrigInportVirtualBus>false</isOrigInportVirtualBus>
+    <isOrigOutportVirtualBus>false</isOrigOutportVirtualBus>
+    <isOrigOutportVirtualBus>false</isOrigOutportVirtualBus>
+    <loggingSaveFormat>2</loggingSaveFormat>
+    <massMatrixIr>0</massMatrixIr>
+    <massMatrixIr>6</massMatrixIr>
+    <massMatrixIr>1</massMatrixIr>
+    <massMatrixIr>2</massMatrixIr>
+    <massMatrixIr>3</massMatrixIr>
+    <massMatrixIr>4</massMatrixIr>
+    <massMatrixIr>5</massMatrixIr>
+    <massMatrixIr>12</massMatrixIr>
+    <massMatrixIr>7</massMatrixIr>
+    <massMatrixIr>8</massMatrixIr>
+    <massMatrixIr>9</massMatrixIr>
+    <massMatrixIr>10</massMatrixIr>
+    <massMatrixIr>11</massMatrixIr>
+    <massMatrixIr>13</massMatrixIr>
+    <massMatrixIr>14</massMatrixIr>
+    <massMatrixIr>15</massMatrixIr>
+    <massMatrixIr>16</massMatrixIr>
+    <massMatrixIr>17</massMatrixIr>
+    <massMatrixIr>18</massMatrixIr>
+    <massMatrixIr>24</massMatrixIr>
+    <massMatrixIr>19</massMatrixIr>
+    <massMatrixIr>20</massMatrixIr>
+    <massMatrixIr>21</massMatrixIr>
+    <massMatrixIr>22</massMatrixIr>
+    <massMatrixIr>23</massMatrixIr>
+    <massMatrixIr>30</massMatrixIr>
+    <massMatrixIr>25</massMatrixIr>
+    <massMatrixIr>26</massMatrixIr>
+    <massMatrixIr>27</massMatrixIr>
+    <massMatrixIr>28</massMatrixIr>
+    <massMatrixIr>29</massMatrixIr>
+    <massMatrixIr>31</massMatrixIr>
+    <massMatrixIr>32</massMatrixIr>
+    <massMatrixIr>33</massMatrixIr>
+    <massMatrixIr>34</massMatrixIr>
+    <massMatrixIr>35</massMatrixIr>
+    <massMatrixIr>36</massMatrixIr>
+    <massMatrixIr>42</massMatrixIr>
+    <massMatrixIr>37</massMatrixIr>
+    <massMatrixIr>38</massMatrixIr>
+    <massMatrixIr>39</massMatrixIr>
+    <massMatrixIr>40</massMatrixIr>
+    <massMatrixIr>41</massMatrixIr>
+    <massMatrixIr>48</massMatrixIr>
+    <massMatrixIr>43</massMatrixIr>
+    <massMatrixIr>44</massMatrixIr>
+    <massMatrixIr>45</massMatrixIr>
+    <massMatrixIr>46</massMatrixIr>
+    <massMatrixIr>47</massMatrixIr>
+    <massMatrixIr>49</massMatrixIr>
+    <massMatrixIr>50</massMatrixIr>
+    <massMatrixIr>51</massMatrixIr>
+    <massMatrixIr>52</massMatrixIr>
+    <massMatrixIr>53</massMatrixIr>
+    <massMatrixIr>54</massMatrixIr>
+    <massMatrixIr>60</massMatrixIr>
+    <massMatrixIr>55</massMatrixIr>
+    <massMatrixIr>56</massMatrixIr>
+    <massMatrixIr>57</massMatrixIr>
+    <massMatrixIr>58</massMatrixIr>
+    <massMatrixIr>59</massMatrixIr>
+    <massMatrixIr>66</massMatrixIr>
+    <massMatrixIr>61</massMatrixIr>
+    <massMatrixIr>62</massMatrixIr>
+    <massMatrixIr>63</massMatrixIr>
+    <massMatrixIr>64</massMatrixIr>
+    <massMatrixIr>65</massMatrixIr>
+    <massMatrixIr>67</massMatrixIr>
+    <massMatrixIr>68</massMatrixIr>
+    <massMatrixIr>69</massMatrixIr>
+    <massMatrixIr>70</massMatrixIr>
+    <massMatrixIr>71</massMatrixIr>
+    <massMatrixIr>72</massMatrixIr>
+    <massMatrixIr>78</massMatrixIr>
+    <massMatrixIr>73</massMatrixIr>
+    <massMatrixIr>74</massMatrixIr>
+    <massMatrixIr>75</massMatrixIr>
+    <massMatrixIr>76</massMatrixIr>
+    <massMatrixIr>77</massMatrixIr>
+    <massMatrixIr>84</massMatrixIr>
+    <massMatrixIr>79</massMatrixIr>
+    <massMatrixIr>80</massMatrixIr>
+    <massMatrixIr>81</massMatrixIr>
+    <massMatrixIr>82</massMatrixIr>
+    <massMatrixIr>83</massMatrixIr>
+    <massMatrixIr>85</massMatrixIr>
+    <massMatrixIr>86</massMatrixIr>
+    <massMatrixIr>87</massMatrixIr>
+    <massMatrixIr>88</massMatrixIr>
+    <massMatrixIr>89</massMatrixIr>
+    <massMatrixJc>0</massMatrixJc>
+    <massMatrixJc>1</massMatrixJc>
+    <massMatrixJc>2</massMatrixJc>
+    <massMatrixJc>3</massMatrixJc>
+    <massMatrixJc>4</massMatrixJc>
+    <massMatrixJc>5</massMatrixJc>
+    <massMatrixJc>6</massMatrixJc>
+    <massMatrixJc>7</massMatrixJc>
+    <massMatrixJc>8</massMatrixJc>
+    <massMatrixJc>9</massMatrixJc>
+    <massMatrixJc>10</massMatrixJc>
+    <massMatrixJc>11</massMatrixJc>
+    <massMatrixJc>12</massMatrixJc>
+    <massMatrixJc>13</massMatrixJc>
+    <massMatrixJc>14</massMatrixJc>
+    <massMatrixJc>15</massMatrixJc>
+    <massMatrixJc>16</massMatrixJc>
+    <massMatrixJc>17</massMatrixJc>
+    <massMatrixJc>18</massMatrixJc>
+    <massMatrixJc>19</massMatrixJc>
+    <massMatrixJc>20</massMatrixJc>
+    <massMatrixJc>21</massMatrixJc>
+    <massMatrixJc>22</massMatrixJc>
+    <massMatrixJc>23</massMatrixJc>
+    <massMatrixJc>24</massMatrixJc>
+    <massMatrixJc>25</massMatrixJc>
+    <massMatrixJc>26</massMatrixJc>
+    <massMatrixJc>27</massMatrixJc>
+    <massMatrixJc>28</massMatrixJc>
+    <massMatrixJc>29</massMatrixJc>
+    <massMatrixJc>30</massMatrixJc>
+    <massMatrixJc>31</massMatrixJc>
+    <massMatrixJc>32</massMatrixJc>
+    <massMatrixJc>33</massMatrixJc>
+    <massMatrixJc>34</massMatrixJc>
+    <massMatrixJc>35</massMatrixJc>
+    <massMatrixJc>36</massMatrixJc>
+    <massMatrixJc>37</massMatrixJc>
+    <massMatrixJc>38</massMatrixJc>
+    <massMatrixJc>39</massMatrixJc>
+    <massMatrixJc>40</massMatrixJc>
+    <massMatrixJc>41</massMatrixJc>
+    <massMatrixJc>42</massMatrixJc>
+    <massMatrixJc>43</massMatrixJc>
+    <massMatrixJc>44</massMatrixJc>
+    <massMatrixJc>45</massMatrixJc>
+    <massMatrixJc>46</massMatrixJc>
+    <massMatrixJc>47</massMatrixJc>
+    <massMatrixJc>48</massMatrixJc>
+    <massMatrixJc>49</massMatrixJc>
+    <massMatrixJc>50</massMatrixJc>
+    <massMatrixJc>51</massMatrixJc>
+    <massMatrixJc>52</massMatrixJc>
+    <massMatrixJc>53</massMatrixJc>
+    <massMatrixJc>54</massMatrixJc>
+    <massMatrixJc>55</massMatrixJc>
+    <massMatrixJc>56</massMatrixJc>
+    <massMatrixJc>57</massMatrixJc>
+    <massMatrixJc>58</massMatrixJc>
+    <massMatrixJc>59</massMatrixJc>
+    <massMatrixJc>60</massMatrixJc>
+    <massMatrixJc>61</massMatrixJc>
+    <massMatrixJc>62</massMatrixJc>
+    <massMatrixJc>63</massMatrixJc>
+    <massMatrixJc>64</massMatrixJc>
+    <massMatrixJc>65</massMatrixJc>
+    <massMatrixJc>66</massMatrixJc>
+    <massMatrixJc>67</massMatrixJc>
+    <massMatrixJc>68</massMatrixJc>
+    <massMatrixJc>69</massMatrixJc>
+    <massMatrixJc>70</massMatrixJc>
+    <massMatrixJc>71</massMatrixJc>
+    <massMatrixJc>72</massMatrixJc>
+    <massMatrixJc>73</massMatrixJc>
+    <massMatrixJc>74</massMatrixJc>
+    <massMatrixJc>75</massMatrixJc>
+    <massMatrixJc>76</massMatrixJc>
+    <massMatrixJc>77</massMatrixJc>
+    <massMatrixJc>78</massMatrixJc>
+    <massMatrixJc>79</massMatrixJc>
+    <massMatrixJc>80</massMatrixJc>
+    <massMatrixJc>81</massMatrixJc>
+    <massMatrixJc>82</massMatrixJc>
+    <massMatrixJc>83</massMatrixJc>
+    <massMatrixJc>84</massMatrixJc>
+    <massMatrixJc>85</massMatrixJc>
+    <massMatrixJc>86</massMatrixJc>
+    <massMatrixJc>87</massMatrixJc>
+    <massMatrixJc>88</massMatrixJc>
+    <massMatrixJc>89</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixJc>90</massMatrixJc>
+    <massMatrixNzMax>90</massMatrixNzMax>
+    <massMatrixType>3</massMatrixType>
+    <maxFreqHz>-1</maxFreqHz>
+    <numCStateRecs>325</numCStateRecs>
+    <numContinuousStates>325</numContinuousStates>
+    <numDStateRecs>6</numDStateRecs>
+    <numLoggableCStateRecs>325</numLoggableCStateRecs>
+    <numLoggableDStateRecs>6</numLoggableDStateRecs>
+    <origInportBusType></origInportBusType>
+    <origInportBusType></origInportBusType>
+    <origOutportBusOutputAsStruct>false</origOutportBusOutputAsStruct>
+    <origOutportBusOutputAsStruct>false</origOutportBusOutputAsStruct>
+    <origOutportBusType></origOutportBusType>
+    <origOutportBusType></origOutportBusType>
+    <outports type="ModelRefInfoRepo.OutportInformation" uuid="4f9f479a-8532-4f5c-a865-f92122b28965">
+      <designMax>inf</designMax>
+      <designMin>-inf</designMin>
+      <rateInfo type="ModelRefInfoRepo.RateInfo">
+        <compiled>true</compiled>
+        <period>0</period>
+        <priority>40</priority>
+        <rateIdx>0</rateIdx>
+      </rateInfo>
+      <resolvedSignalObject></resolvedSignalObject>
+      <sigNameToEMVCEMap type="ModelRefInfoRepo.SigNameEMVCEInfo" uuid="6a5c60dc-e0c1-4356-ac7a-081d362caa08"/>
+    </outports>
+    <outports type="ModelRefInfoRepo.OutportInformation" uuid="1b48be03-3420-4663-979c-e3830f5abdde">
+      <designMax>inf</designMax>
+      <designMin>-inf</designMin>
+      <originalPortNumber>1</originalPortNumber>
+      <rateInfo type="ModelRefInfoRepo.RateInfo">
+        <compiled>true</compiled>
+        <period>0</period>
+        <priority>40</priority>
+        <rateIdx>0</rateIdx>
+      </rateInfo>
+      <resolvedSignalObject></resolvedSignalObject>
+      <sigNameToEMVCEMap type="ModelRefInfoRepo.SigNameEMVCEInfo" uuid="cafc31cf-6a0f-4ba8-a39b-9a72e2029624"/>
+    </outports>
+    <removeResetFunc>true</removeResetFunc>
+    <runtimeNonFcnCallRateInfos type="ModelRefInfoRepo.RateInfo">
+      <compiled>true</compiled>
+      <period>0</period>
+      <priority>40</priority>
+      <rateIdx>0</rateIdx>
+    </runtimeNonFcnCallRateInfos>
+    <runtimeNonFcnCallRateInfos type="ModelRefInfoRepo.RateInfo">
+      <compiled>true</compiled>
+      <nonFcnCallPartitionName>Cont</nonFcnCallPartitionName>
+      <period>1</period>
+      <priority>40</priority>
+      <rateIdx>1</rateIdx>
+    </runtimeNonFcnCallRateInfos>
+    <sampleTimeInheritanceRule>2</sampleTimeInheritanceRule>
+    <solverUpdateJacobianAtReset>true</solverUpdateJacobianAtReset>
+    <timingAndTaskingRegistry>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;slexec_sto version=&quot;1.1&quot; packageUris=&quot;http://schema.mathworks.com/mf0/slexec_mm_sto/R2019b_201902271317&quot;&gt;
+  &lt;sto.Registry type=&quot;sto.Registry&quot; uuid=&quot;a922ae49-ea4f-4d71-af4a-a710223e7d09&quot;&gt;
+    &lt;clocks type=&quot;sto.Timer&quot; uuid=&quot;dfd8a06c-470f-4adf-9ee0-2c0751b7fcf8&quot;&gt;
+      &lt;needsToProvideTimeDuringExecution&gt;true&lt;/needsToProvideTimeDuringExecution&gt;
+      &lt;clockTickConstraint&gt;PeriodicWithFixedResolution&lt;/clockTickConstraint&gt;
+      &lt;resolution&gt;1&lt;/resolution&gt;
+      &lt;timeAdvanceMode&gt;FixedStep&lt;/timeAdvanceMode&gt;
+      &lt;clockDomain type=&quot;sto.ClockDomain&quot; uuid=&quot;aba1eb2b-d11e-4cb6-b833-a1d18e49d99a&quot;&gt;
+        &lt;baseTaskID&gt;_task0&lt;/baseTaskID&gt;
+        &lt;computedFundamentalStepSize&gt;1&lt;/computedFundamentalStepSize&gt;
+        &lt;rates type=&quot;sto.Rate&quot; uuid=&quot;1342de91-8a4d-4e07-8787-13d2e2bfb9ef&quot;/&gt;
+        &lt;rates type=&quot;sto.Rate&quot; uuid=&quot;fdf30d90-8f29-485e-a60c-73c7c9b36266&quot;/&gt;
+        &lt;rates type=&quot;sto.Rate&quot; uuid=&quot;0e1eae2e-066c-4fa1-b153-4a9032b8a7e7&quot;/&gt;
+        &lt;rootTaskHierarchyElements type=&quot;sto.Task&quot; uuid=&quot;0985274b-41cd-4efe-8fad-09bcec748c91&quot;&gt;
+          &lt;isExecutable&gt;true&lt;/isExecutable&gt;
+          &lt;orderIndex&gt;1&lt;/orderIndex&gt;
+          &lt;rates type=&quot;sto.Rate&quot; uuid=&quot;1342de91-8a4d-4e07-8787-13d2e2bfb9ef&quot;&gt;
+            &lt;annotation&gt;Cont&lt;/annotation&gt;
+            &lt;description&gt;Continuous&lt;/description&gt;
+            &lt;eventSourceType&gt;UNSPECIFIED_EVENT_SOURCE&lt;/eventSourceType&gt;
+            &lt;registry type=&quot;sto.Registry&quot; uuid=&quot;a922ae49-ea4f-4d71-af4a-a710223e7d09&quot;/&gt;
+            &lt;taskId&gt;_task0&lt;/taskId&gt;
+            &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;32e27335-db74-432e-8402-ed5ee61ac9e6&quot;/&gt;
+          &lt;/rates&gt;
+          &lt;rates type=&quot;sto.Rate&quot; uuid=&quot;fdf30d90-8f29-485e-a60c-73c7c9b36266&quot;&gt;
+            &lt;annotation&gt;FiM&lt;/annotation&gt;
+            &lt;colorIndex&gt;8&lt;/colorIndex&gt;
+            &lt;description&gt;Fixed in Minor Step&lt;/description&gt;
+            &lt;eventSourceType&gt;UNSPECIFIED_EVENT_SOURCE&lt;/eventSourceType&gt;
+            &lt;rateIDX&gt;-1&lt;/rateIDX&gt;
+            &lt;registry type=&quot;sto.Registry&quot; uuid=&quot;a922ae49-ea4f-4d71-af4a-a710223e7d09&quot;/&gt;
+            &lt;taskId&gt;_task0&lt;/taskId&gt;
+            &lt;useForExecution&gt;NotForExecution&lt;/useForExecution&gt;
+            &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;64dbf151-77cd-4801-886d-ff2c72d7bd20&quot;&gt;
+              &lt;offset&gt;1&lt;/offset&gt;
+              &lt;rateType&gt;ZOHContinuous&lt;/rateType&gt;
+            &lt;/rateSpec&gt;
+          &lt;/rates&gt;
+          &lt;rates type=&quot;sto.Rate&quot; uuid=&quot;0e1eae2e-066c-4fa1-b153-4a9032b8a7e7&quot;&gt;
+            &lt;annotation&gt;D1&lt;/annotation&gt;
+            &lt;colorIndex&gt;2&lt;/colorIndex&gt;
+            &lt;description&gt;Discrete 1&lt;/description&gt;
+            &lt;eventSourceType&gt;UNSPECIFIED_EVENT_SOURCE&lt;/eventSourceType&gt;
+            &lt;rateIDX&gt;1&lt;/rateIDX&gt;
+            &lt;registry type=&quot;sto.Registry&quot; uuid=&quot;a922ae49-ea4f-4d71-af4a-a710223e7d09&quot;/&gt;
+            &lt;taskId&gt;_task0&lt;/taskId&gt;
+            &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;912b9c71-1052-47e7-a0b7-4451c74d7aa1&quot;&gt;
+              &lt;period&gt;1&lt;/period&gt;
+              &lt;rateType&gt;ClassicPeriodicDiscrete&lt;/rateType&gt;
+            &lt;/rateSpec&gt;
+          &lt;/rates&gt;
+          &lt;elementType&gt;Task&lt;/elementType&gt;
+          &lt;identifier&gt;_task0&lt;/identifier&gt;
+          &lt;priority&gt;40&lt;/priority&gt;
+        &lt;/rootTaskHierarchyElements&gt;
+      &lt;/clockDomain&gt;
+    &lt;/clocks&gt;
+    &lt;executionSpec&gt;Undetermined&lt;/executionSpec&gt;
+    &lt;taskDependencyGraph type=&quot;sto.SerializedTaskConnectionList&quot; uuid=&quot;90272050-88e3-4c3d-80ce-806e027b16e6&quot;&gt;
+      &lt;taskIdentifier&gt;_task0&lt;/taskIdentifier&gt;
+    &lt;/taskDependencyGraph&gt;
+    &lt;taskPriorityDirection&gt;HighNumberLast&lt;/taskPriorityDirection&gt;
+    &lt;tasks type=&quot;sto.Task&quot; uuid=&quot;0985274b-41cd-4efe-8fad-09bcec748c91&quot;/&gt;
+    &lt;timeAdvanceMode&gt;FixedStep&lt;/timeAdvanceMode&gt;
+  &lt;/sto.Registry&gt;
+&lt;/slexec_sto&gt;</timingAndTaskingRegistry>
+    <zeroInternalMemoryAtStartupUnchecked>true</zeroInternalMemoryAtStartupUnchecked>
+    <FMUBlockMap type="ModelRefInfoRepo.FMUBlockInfo" uuid="724630af-e1ac-4ef3-9edd-256f42862936"/>
+    <codeGenInfo type="ModelRefInfoRepo.CodeGenInformation" uuid="830d0813-ce35-4322-a21b-74aaac12c2a5"/>
+    <configSettingsForConsistencyChecks type="ModelRefInfoRepo.ConfigSettingsForConsistencyChecks" uuid="f6c28631-a179-494f-932b-079b003872b5">
+      <consistentOutportInitialization>true</consistentOutportInitialization>
+      <fixedStepSize>1</fixedStepSize>
+      <frameDiagnosticSetting>2</frameDiagnosticSetting>
+      <hasHybridSampleTime>true</hasHybridSampleTime>
+      <optimizedInitCode>true</optimizedInitCode>
+      <signalLoggingSaveFormat>2</signalLoggingSaveFormat>
+      <solverName>ode14x</solverName>
+      <solverType>SOLVER_TYPE_FIXEDSTEP</solverType>
+      <useDivForNetSlopComp>2</useDivForNetSlopComp>
+      <hardwareSettings type="ModelRefInfoRepo.HardwareSettings" uuid="6c2f0bd9-ead8-426b-a2cb-985d6dd0620c">
+        <prodBitPerChar>8</prodBitPerChar>
+        <prodBitPerDouble>64</prodBitPerDouble>
+        <prodBitPerFloat>32</prodBitPerFloat>
+        <prodBitPerInt>32</prodBitPerInt>
+        <prodBitPerLong>64</prodBitPerLong>
+        <prodBitPerLongLong>64</prodBitPerLongLong>
+        <prodBitPerPointer>64</prodBitPerPointer>
+        <prodBitPerPtrDiffT>64</prodBitPerPtrDiffT>
+        <prodBitPerShort>16</prodBitPerShort>
+        <prodBitPerSizeT>64</prodBitPerSizeT>
+        <prodEndianess>1</prodEndianess>
+        <prodLongLongMode>true</prodLongLongMode>
+        <prodShiftRight>true</prodShiftRight>
+        <prodWordSize>64</prodWordSize>
+      </hardwareSettings>
+    </configSettingsForConsistencyChecks>
+    <controllableInputRatesMap type="ModelRefInfoRepo.VarTsUIDMap" uuid="f6d9eceb-e8f1-482f-b78d-708ef1b84f53"/>
+    <controllableOutputRatesMap type="ModelRefInfoRepo.VarTsUIDMap" uuid="65ac410a-8087-4e15-a802-07f3dafe8864"/>
+    <dataPortGroup type="ModelRefInfoRepo.DataPortGroup" uuid="b5545397-56b1-454a-8bd3-d6e303478155">
+      <dataInputPorts>0</dataInputPorts>
+      <dataInputPorts>1</dataInputPorts>
+      <dataOutputPorts>0</dataOutputPorts>
+      <dataOutputPorts>1</dataOutputPorts>
+    </dataPortGroup>
+    <interfaceParameterInfo type="ModelRefInfoRepo.InterfaceParameterInfo" uuid="9cd2c4fd-ee93-48c6-9b65-96cd99985b51"/>
+    <messageInfo type="ModelRefInfoRepo.MessageInformation" uuid="5a1893da-7abe-4031-8abe-b7d3a814b16d"/>
+    <methodInfo type="ModelRefInfoRepo.MethodExistenceInfo" uuid="beff9017-c1db-44c2-8dd3-71e4447ecce4">
+      <hasDerivMethod>true</hasDerivMethod>
+      <hasForcingFunctionMethod>true</hasForcingFunctionMethod>
+      <hasMassMatrixMethod>true</hasMassMatrixMethod>
+      <hasSystemInitializeMethod>true</hasSystemInitializeMethod>
+      <hasSystemResetMethod>true</hasSystemResetMethod>
+      <hasTerminateMethod>true</hasTerminateMethod>
+      <hasUpdateMethod>true</hasUpdateMethod>
+    </methodInfo>
+    <periodicEventPortUnsupportedBlockInfo type="ModelRefInfoRepo.PeriodicEventPortUnsupportedBlockInfo" uuid="0b930ed3-3ee5-4008-95e2-94c24749b2b2"/>
+    <portGroupsRequireSameRate type="ModelRefInfoRepo.PortGroupsRequireSameRate" uuid="faab3d1b-97be-48fa-9aae-3abac8c6f502">
+      <DSMPortGroups type="ModelRefInfoRepo.NameToPortGroupIdxVectMap" uuid="6f104af6-4757-4ab9-ac26-af02f8cb100a"/>
+      <GlobalDSMPortGroups type="ModelRefInfoRepo.NameToPortGroupIdxVectMap" uuid="a5884f91-b368-4b58-97e7-8592d67afc89"/>
+      <mergedPortGroups type="ModelRefInfoRepo.NameToPortGroupIdxVectMap" uuid="d899a425-7297-4e8a-bfac-bfa7255e6a55"/>
+    </portGroupsRequireSameRate>
+    <rateSpecOfGlobalDSMAccessedByDescExpFcnMdlMap type="ModelRefInfoRepo.GlobalDSMRateSpecMap" uuid="c83497be-e737-46b2-a637-1173dbadbf24"/>
+    <simulinkFunctions type="ModelRefInfoRepo.SimulinkFunctions" uuid="395b2975-fefb-44cf-a233-90fe49a99a2d">
+      <compSimulinkFunctionCatalog></compSimulinkFunctionCatalog>
+      <variantSimulinkFunctions type="ModelRefInfoRepo.VariantSimulinkFunctions" uuid="be36271e-146e-4969-9ee9-2231b9fe5259"/>
+    </simulinkFunctions>
+    <stateWriterToOwnerMap type="ModelRefInfoRepo.StateWriterInfo" uuid="b764fe78-b6bf-4eb4-b49d-ac512503dd99"/>
+    <stoClientDataRegistry type="sto.ClientDataRegistry" uuid="5066a027-5bdc-4ad9-89b6-09bc7fc766de">
+      <dataSets type="sto.ClientClockNamedDataSet" uuid="a14a55bd-bc37-45d4-8953-dd5991f60969">
+        <tag>sltpEvents</tag>
+      </dataSets>
+      <dataSets type="sto.ClientTaskHierarchyElementNamedDataSet" uuid="8aab19eb-9472-4ff0-b046-1ec96ae5e6ef">
+        <tag>sltpTaskGroups</tag>
+      </dataSets>
+      <dataSets type="sto.ClientTaskHierarchyElementNamedDataSet" uuid="aae6fce1-6941-4ede-ae58-dc54d3a4c543">
+        <dSet type="ModelRefInfoRepo.SltpTaskData" uuid="9c1e5398-f8c2-4900-897d-dcb365a3b48a"/>
+        <tSet type="ModelRefInfoRepo.SltpTaskData" uuid="9c1e5398-f8c2-4900-897d-dcb365a3b48a">
+          <dataName>Cont</dataName>
+          <linkedSet type="sto.ClientTaskHierarchyElementNamedDataSet" uuid="aae6fce1-6941-4ede-ae58-dc54d3a4c543"/>
+          <id type="sto.TaskHierarchyElementId">
+            <id>_task0</id>
+          </id>
+        </tSet>
+        <tag>sltpTasks</tag>
+      </dataSets>
+    </stoClientDataRegistry>
+    <varTsUIDMap type="ModelRefInfoRepo.VarTsUIDMap" uuid="131631ce-724f-4285-a380-292d33aefac4"/>
+  </ModelRefInfoRepo.ModelRefInfoRoot>
+</MF0>
