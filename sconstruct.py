@@ -21,6 +21,18 @@ LIBS_DIR = REPO_ROOT_DIR.Dir('libs')
 STM32_LIB_DIR = LIBS_DIR.Dir('stm32libs/STM32F0xx_StdPeriph_Driver')
 STM32_CMSIS_DIR = LIBS_DIR.Dir('stm32libs/CMSIS')
 
+# command line options
+AddOption('--dbg',
+          dest='dbg',
+          action='store_true',
+          help='whether to include -g when compiling linux binaries')
+
+# Need an environment for executing commands on the system
+# This is only needed because the default environment uses sh instead of bash
+command_env = Environment(
+    SHELL='bash'
+)
+
 # module names are determined by folder name under app/ or driver/
 # application module directories go under APP_DIR, and driver modules under DRIVER_DIR
 
@@ -100,10 +112,16 @@ tool_paths.append(STM32_CMSIS_DIR.Dir('Include'))
 module_path_names = []
 for mod_name, mod_path in modules:
     module_path_names.append(mod_path)
+
+linux_comp_flags = []
+if GetOption('dbg'): # set by command line option
+    print("---Compiling linux objects with debug symbols---")
+    linux_comp_flags.append('-g')
+
 linux_comp_env = Environment(
-     # 'platform' is a handy argument provided by SCons that automatically sets a ton of env vars
-    platform='posix',
-    CPPPATH=module_path_names + mock_modules + tool_paths + [APP_DIR.abspath, COMMON_DIR.abspath]
+    CC='gcc',
+    CPPPATH=module_path_names + mock_modules + tool_paths + [APP_DIR.abspath, COMMON_DIR.abspath],
+    CCFLAGS=linux_comp_flags
 )
 
 stm32_comp_env = Environment(
@@ -271,27 +289,38 @@ for module_name, module_dir in app_modules:
 Alias('testrunners', app_test_runners)
 
 """
-Instructions for running unit tests.
+Instructions for running unit tests with/without memory checks.
 If a unit test fails, the build fails.
 """
 
+valgrind_env = Environment(
+    tools=[TOOL_VALGRIND]
+)
+
 # contains scons nodes signifying unit test runs
 unit_test_results = []
+valgrind_test_results = []
 for module_name, module_dir in app_modules:
     # executable to run
     testrunner = module_dir.File('testrunner_' + module_name)
     # results file to print to
     test_result_file = module_dir.File('unit_test_results.txt')
-    unit_test_results += Command(
+    unit_test_results += command_env.Command(
         source=testrunner,
         target=test_result_file,
         # TODO remove janky bash workaround and get Command() to use bash (sh test dont work)
         # Run the executable, tee (split) the output between stdout and the results file,
         # then check the status of the testrunner executable to fail the build if needed.
         # This is necessary if we want result files for unit tests (since the executables dont write to files)
-        action='echo \'{} | tee {} && test $$PIPESTATUS -eq 0\' | bash'.format(testrunner.abspath, test_result_file.abspath)
+        action='{} | tee {} && test $$PIPESTATUS -eq 0'.format(testrunner.abspath, test_result_file.abspath)
     )
 
+    valgrind_test_results += valgrind_env.MemCheck(
+        source=testrunner,
+        target=module_dir.File('memcheck_results.txt')
+    )
+
+Alias('memchecks', valgrind_test_results)
 Alias('unit-tests', unit_test_results)
 Default(unit_test_results)
 

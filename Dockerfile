@@ -10,7 +10,8 @@ RUN apt-get install -y \
 python3.8 \
 python3-pip \ 
 ruby \
-gcc-arm-none-eabi
+gcc-arm-none-eabi \
+valgrind
 
 # 'scons' command uses 'python' not 'python3.8', so make a symlink for it to use
 RUN ln -s /usr/bin/python3.8 /usr/bin/python

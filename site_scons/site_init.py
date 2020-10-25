@@ -83,3 +83,23 @@ def TOOL_DBCC(env):
     env.Append(BUILDERS = {
         'GenerateDbcSource' : dbcc_builder
     })
+
+def TOOL_VALGRIND(env):
+    """
+    Runs a valgrind memory check on a linux program.
+    """
+
+    """
+    SOURCE = binary node
+    TARGET = text results file
+    """
+    env['SHELL'] = 'bash'
+
+
+    valgrind_memcheck_builder = SCons.Builder.Builder(action=[
+        'valgrind --tool=memcheck --leak-check=yes --track-origins=yes ${SOURCE.abspath} 2>&1 | tee ${TARGET} && test $$PIPESTATUS -eq 0'
+    ])
+
+    env.Append(BUILDERS = {
+        'MemCheck' : valgrind_memcheck_builder
+    })

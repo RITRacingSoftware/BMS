@@ -26,12 +26,20 @@ Specific targets can also be built using SCons commands from the docker containe
     -build and run application module unit tests
 - `scons test-apps`
     -build driver module test application hexes for loading onto an stm32 development board
+- `scons memchecks`
+    -run valgrind memcheck tool on unit tests
 - `scons bin/test_STM32_<driver module name>.hex`
     -build a specific driver test application hex
 - `scons src/app/<app module name>/unit_test_results.txt`
     -unit test a specific application module
+- `scons src/app/<app module name>/memcheck_results.txt`
+    -run valgrind memcheck on a specific application unit test runner
 
 You can speed up builds with multithreading by adding `-j<number of cores>` to any scons command
+
+## Custom SCons Build Options
+- `--dbg`
+    -adds `-g` to linux build commands, enabling debugging symbols (helps track valgrind error origins)
 
 See [SCons](https://github.com/SCons/scons/wiki) and our `sconstruct.py` (top level) for more details on the build system.
 

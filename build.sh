@@ -1,3 +1,3 @@
 #! /bin/bash
 
-scons test-apps unit-tests -j4 -s
+scons test-apps unit-tests memchecks -j4 -s
