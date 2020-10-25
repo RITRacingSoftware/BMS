@@ -17,6 +17,18 @@ int test_lut_offset = 100;
 // NTC in series with 10ohm resistor
 int divider_ohm = 10;
 
+static TempModel_t get_tempmodel(float voltage)
+{
+    TempModel_t tm;
+
+    for (int i = 0; i < NUM_THERMISTOR; i++)
+    {
+        tm.tm_readings_V[i] = voltage;
+    }
+
+    return tm;
+}
+
 void setUp(void)
 {
     // use a simple LUT setup to make this easy to test
@@ -31,8 +43,7 @@ void test_TempConverter_at_index(void)
     // Test with a voltage at half of VCC.
     // A voltage at half of VCC indicates NTC resistance = divider resistance
     // And therefore the ntc resitance = 10, which is at index 10 of the LUT
-    TempModel_t tm;
-    tm.tm_readings_V[0] = MCU_VCC / 2;
+    TempModel_t tm = get_tempmodel(MCU_VCC / 2);
 
     TempConverter_convert(&tm);
     const float expected_temp = 110;
@@ -48,8 +59,7 @@ void test_TempConverter_at_index(void)
 void test_TempConverter_linear_interpolate(void)
 {
     // Test with a voltage that solves to 14.5 ohms for the NTC and therefore 105.5 deg C.
-    TempModel_t tm;
-    tm.tm_readings_V[0] = 1.34694;
+    TempModel_t tm = get_tempmodel(1.34694);
 
     TempConverter_convert(&tm);
     const float expected_temp = 105.5;
@@ -64,8 +74,7 @@ void test_TempConverter_linear_interpolate(void)
 void test_TempConverter_upper_limit(void)
 {
     // Test with a voltage that solves to 8 ohms for the NTC and should cap to 110C.
-    TempModel_t tm;
-    tm.tm_readings_V[0] = 1.83333;
+    TempModel_t tm = get_tempmodel(1.83333);
 
     TempConverter_convert(&tm);
     const float expected_temp = 110;
@@ -80,8 +89,7 @@ void test_TempConverter_upper_limit(void)
 void test_TempConverter_lower_limit(void)
 {
     // Test with a voltage that solves to 30 ohms for the NTC and should cap to 100C.
-    TempModel_t tm;
-    tm.tm_readings_V[0] = 0.825;
+    TempModel_t tm = get_tempmodel(0.825);
 
     TempConverter_convert(&tm);
     const float expected_temp = 120;
