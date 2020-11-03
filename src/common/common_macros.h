@@ -2,6 +2,7 @@
 #define COMMON_MACROS_H
 
 #include <float.h>
+#include <math.h>
 
 // units
 #define MS_TO_HR (1.0 / ((float)(1000 * 60 * 60)))

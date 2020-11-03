@@ -71,7 +71,7 @@ typedef struct
 
   uint8_t CAN_BS2;          /*!< Specifies the number of time quanta in Bit Segment 2.
                                  This parameter can be a value of @ref CAN_time_quantum_in_bit_segment_2 */
-  
+  uint32_t whoa;
   FunctionalState CAN_TTCM; /*!< Enable or disable the time triggered communication mode.
                                 This parameter can be set either to ENABLE or DISABLE. */
   

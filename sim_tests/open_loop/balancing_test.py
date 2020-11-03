@@ -14,7 +14,7 @@ def test_balancing(sim):
     sim.set_charger_available(0)
 
     charging = None
-    for i in range(0, 2000):
+    for i in range(0, 3000):
         sim.tick()
         if 'BmsChargeRequest_Control' in sim.signals:
             charging = sim.signals['BmsChargeRequest_Control']

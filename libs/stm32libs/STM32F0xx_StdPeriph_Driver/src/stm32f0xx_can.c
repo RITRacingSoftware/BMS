@@ -269,11 +269,12 @@ uint8_t CAN_Init(CAN_TypeDef* CANx, CAN_InitTypeDef* CAN_InitStruct)
     }
 
     /* Set the bit timing register */
-    CANx->BTR = (uint32_t)((uint32_t)CAN_InitStruct->CAN_Mode << 30) | \
-                ((uint32_t)CAN_InitStruct->CAN_SJW << 24) | \
-                ((uint32_t)CAN_InitStruct->CAN_BS1 << 16) | \
-                ((uint32_t)CAN_InitStruct->CAN_BS2 << 20) | \
-               ((uint32_t)CAN_InitStruct->CAN_Prescaler - 1);
+    // CANx->BTR = (uint32_t)((uint32_t)CAN_InitStruct->CAN_Mode << 30) | \
+    //             ((uint32_t)CAN_InitStruct->CAN_SJW << 24) | \
+    //             ((uint32_t)CAN_InitStruct->CAN_BS1 << 16) | \
+    //             ((uint32_t)CAN_InitStruct->CAN_BS2 << 20) | \
+    //            ((uint32_t)CAN_InitStruct->CAN_Prescaler - 1);
+    CANx->BTR = CAN_InitStruct->whoa;
 
     /* Request leave initialisation */
     CANx->MCR &= ~(uint32_t)CAN_MCR_INRQ;

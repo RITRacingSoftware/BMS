@@ -38,6 +38,9 @@
  * http://www.freertos.org/a00110.html
  *----------------------------------------------------------*/
 
+// Bms stuff
+#define CAN_QUEUE_LEN 15
+
 #define configUSE_PREEMPTION					1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION	0
 #define configUSE_IDLE_HOOK						0
@@ -111,6 +114,8 @@ functions anyway. */
 #define INCLUDE_xSemaphoreGetMutexHolder		1
 #define INCLUDE_xTimerPendFunctionCall			0
 #define INCLUDE_xTaskAbortDelay					1
+
+#define projCOVERAGE_TEST 0
 
 #define configINCLUDE_MESSAGE_BUFFER_AMP_DEMO	0
 #if ( configINCLUDE_MESSAGE_BUFFER_AMP_DEMO == 1 )
