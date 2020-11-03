@@ -58,7 +58,7 @@ void CurrentSense_1kHz(void)
         FaultManager_clear_fault(FaultCode_CURRENT_SENSOR_COMM);
         filter_new_current_reading(raw_current_A);
 
-        encode_can_0x384_BmsInstCurrentFilt(&CAN_BUS, last_current_reading);
+        can_bus.bms_current.bms_inst_current_filt = f29bms_dbc_bms_current_bms_inst_current_filt_encode(last_current_reading);
     }
 }
 

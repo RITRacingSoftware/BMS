@@ -1,37 +1,77 @@
 #include <math.h>
+#include <stdio.h>
 
 #include "CAN.h"
 #include "HAL_Can.h"
 #include "common_macros.h"
 
-can_obj_f29bms_dbc_h_t CAN_BUS;
+#define TICKS_TO_WAIT_QUEUE_CAN_MESSAGE (0) //Will return immediately if queue is full, not sure if this should be different
+
+// can_obj_f29bms_dbc_h_t CAN_BUS;
+CAN_BUS can_bus;
+
 
 static bool can_error;
 
+static QueueHandle_t message_queue;
+
 void CAN_init(void)
 {
+    message_queue = xQueueCreate(CAN_QUEUE_LEN, sizeof(can_message));
     can_error = false;
 }
 
-void CAN_send_message(unsigned long int id)
-{   
-    uint64_t msg_data;
-    
-    // get the message data for the given id
-    if (-1 != pack_message(&CAN_BUS, id, &msg_data))
+static int pack_message(int id, uint8_t* msg_data)
+{
+    switch(id)
     {
-        // dbcc only supports dlc=8 right now
-        Error_t err = HAL_Can_send_message(id, 8, msg_data);
+        case F29BMS_DBC_BMS_STATUS_FRAME_ID:
+             return f29bms_dbc_bms_status_pack(msg_data, &can_bus.bms_status, 8);
+
+        case F29BMS_DBC_BMS_FAULT_VECTOR_FRAME_ID:
+            return f29bms_dbc_bms_fault_vector_pack(msg_data, &can_bus.bms_fault_vector, 8);
+
+        case F29BMS_DBC_BMS_FAULT_ALERT_FRAME_ID:
+            return f29bms_dbc_bms_fault_alert_pack(msg_data, &can_bus.bms_fault_alert, 8);
+
+        case F29BMS_DBC_BMS_VOLTAGES_FRAME_ID:
+            return f29bms_dbc_bms_voltages_pack(msg_data, &can_bus.bms_voltages, 8);
         
-        if (err.active)
-        {
-            can_error = true;
-        }
-        else
-        {
-            can_error = false;
-        }
+        case F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID:
+            return f29bms_dbc_bms_thermistor_voltages_pack(msg_data, &can_bus.bms_thermistor_voltages, 8);
         
+        case F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID:
+            return f29bms_dbc_bms_temperatures_pack(msg_data, &can_bus.bms_temperatures, 8);
+
+        case F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID:
+            return f29bms_dbc_bms_drain_status_a_pack(msg_data, &can_bus.bms_drain_status_a, 8);
+
+        case F29BMS_DBC_BMS_DRAIN_STATUS_B_FRAME_ID:
+            return f29bms_dbc_bms_drain_status_b_pack(msg_data, &can_bus.bms_drain_status_b, 8);
+
+        case F29BMS_DBC_BMS_CURRENT_FRAME_ID:
+            return f29bms_dbc_bms_current_pack(msg_data, &can_bus.bms_current, 8);
+        
+        case F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID:
+            return f29bms_dbc_bms_charge_request_pack(msg_data, &can_bus.bms_charge_request, 8);
+        
+        default:
+            printf("f29bms: unknown CAN id: %d\n", id);
+            break;
+    }
+
+    return -1;
+}
+
+void CAN_send_message(unsigned long int id)
+{
+    uint64_t msg_data;
+
+    // get the message data for the given id
+    if (-1 != pack_message(id, (uint8_t*) &msg_data))
+    {
+        can_message thisMessage = {id, 8, msg_data};
+        xQueueSend(message_queue, &thisMessage, portMAX_DELAY);
     }
     else
     {
@@ -39,7 +79,6 @@ void CAN_send_message(unsigned long int id)
         can_error = true;
         printf("CAN ERROR: %x\n", id);
     }
-    
 }
 
 bool CAN_get_error(void)
@@ -47,9 +86,19 @@ bool CAN_get_error(void)
     return can_error;
 }
 
+void CAN_set_error(void)
+{
+    can_error = true;
+}
+
+void CAN_reset_error(void)
+{
+    can_error = false;
+}
+
 void CAN_1kHz(void)
 {
-    CAN_send_message(CAN_ID_BmsCurrent);    
+    CAN_send_message(F29BMS_DBC_BMS_CURRENT_FRAME_ID);
 }
 
 void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
@@ -73,8 +122,8 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         uint64_t frac_voltage = ROUND_INT((cell_voltage / voltage_granularity)) & voltage_mask;
         msg_data |= (frac_voltage << (voltages_start_bit + i*voltage_len_bits)); 
     }
-    unpack_message(&CAN_BUS, CAN_ID_BmsVoltages, msg_data, 8, 0);
-    CAN_send_message(CAN_ID_BmsVoltages);
+    f29bms_dbc_bms_voltages_unpack(&can_bus.bms_voltages, (uint8_t*)&msg_data, 8);
+    CAN_send_message(F29BMS_DBC_BMS_VOLTAGES_FRAME_ID);
     voltages_mux = (voltages_mux + 1) % 15; // mux limits like this are hardcoded according to the DBC maximum mux values (here its m14)
 
     msg_data = 0;
@@ -101,8 +150,8 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 
         }
     }
-    unpack_message(&CAN_BUS, CAN_ID_BmsThermistorVoltages, msg_data, 8, 0);
-    CAN_send_message(CAN_ID_BmsThermistorVoltages);
+    f29bms_dbc_bms_thermistor_voltages_unpack(&can_bus.bms_thermistor_voltages, (uint8_t*)&msg_data, 8);
+    CAN_send_message(F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID);
     thermistor_mux = (thermistor_mux + 1) % 4;
 
     msg_data = 0;
@@ -135,33 +184,36 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
             msg_data |= (frac_temp << (temp_start_bit + i*temp_len_bits)); 
         }
     }
-    unpack_message(&CAN_BUS, CAN_ID_BmsTemperatures, msg_data, 8, 0);
-    CAN_send_message(CAN_ID_BmsTemperatures);
-    temperature_mux = (temperature_mux + 1) % 3;
-    
-    uint64_t status_a = 0;
-    uint64_t status_b = 0;
-    for (int i = 0; i < NUM_SERIES_CELLS; i++)
-    {
-        int drain_state = bm->cells[i].is_draining;
 
-        if (i < 64)
-        {
-            status_a |= (drain_state) << i;
-        }
-        else
-        {
-            status_b |= (drain_state) << (i - 64);
-        }
-    }
-    unpack_message(&CAN_BUS, CAN_ID_BmsDrainStatusA, status_a, 8, 0);
-    unpack_message(&CAN_BUS, CAN_ID_BmsDrainStatusB, status_b, 8, 0);
-    CAN_send_message(CAN_ID_BmsDrainStatusA);
-    CAN_send_message(CAN_ID_BmsDrainStatusB);
+    f29bms_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&msg_data, 8);
+    CAN_send_message(F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID);
 }
+
+
 
 void CAN_1Hz(void)
 {
-    CAN_send_message(CAN_ID_BmsStatus);
-    CAN_send_message(CAN_ID_BmsFaultVector);
+    CAN_send_message(F29BMS_DBC_BMS_STATUS_FRAME_ID);
+    CAN_send_message(F29BMS_DBC_BMS_FAULT_VECTOR_FRAME_ID);
+}
+
+
+void CAN_send_queued_messages(void)
+{
+    //Check how many mailboxes are free, and put a new message in each empty mailbox, if there are any messages
+    uint8_t num_free_mailboxes = HAL_number_of_empty_mailboxes();
+    can_message dequeued_message;
+    while (num_free_mailboxes > 0) //Fill all empty mailboxes with messages
+    {
+        if (xQueueReceive(message_queue, &dequeued_message, TICKS_TO_WAIT_QUEUE_CAN_MESSAGE) == pdTRUE) //Get next message to send if there is one
+        {
+            Error_t err = HAL_Can_send_message(dequeued_message.id, dequeued_message.dlc, dequeued_message.data);
+            can_error = err.active;
+        }
+        else
+        {
+            break;
+        }   
+        num_free_mailboxes--;
+    }
 }

@@ -75,6 +75,24 @@ void task_1kHz(void *pvParameters)
     }
 }
 
+#define TASK_CAN_NAME "task_CAN"
+#define TASK_CAN_PRIORITY (tskIDLE_PRIORITY + 3) //Not sure about what priority to give
+#define TASK_CAN_PERIOD_MS (1)                   //Need to determine correct period
+#define TASK_CAN_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TICKS_TO_WAIT_FOR_RECIEVE (0) //Not sure if this is what we want
+
+void task_CAN(void *pvParameters)
+{
+    // There are three transmit mailboxes
+    (void)pvParameters;
+    TickType_t next_wake_time;
+    for (;;)
+    {
+        CAN_send_queued_messages();
+        vTaskDelayUntil(&next_wake_time, TASK_CAN_PERIOD_MS);
+    }
+}
+
 #ifdef SIMULATION
 #include <signal.h>
 #include <stdlib.h>
@@ -139,6 +157,13 @@ int main(int argc, char** argv)
         TASK_1kHz_STACK_SIZE_B,
         NULL,
         TASK_1kHz_PRIORITY,
+        NULL);
+
+    xTaskCreate(task_CAN, 
+        TASK_CAN_NAME, 
+        TASK_CAN_STACK_SIZE_B,
+        NULL,
+        TASK_CAN_PRIORITY,
         NULL);
     
     vTaskStartScheduler();

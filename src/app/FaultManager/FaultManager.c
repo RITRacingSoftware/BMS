@@ -19,7 +19,7 @@ void FaultManager_init(void)
     fault_vector = 0;
 
     // initialize the fault vector CAN message
-    unpack_message(&CAN_BUS, CAN_ID_BmsFaultVector, fault_vector, 8, 0);
+    f29bms_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*) &fault_vector, 8);
 }
 
 // TODO- use mutex around faultvector
@@ -35,53 +35,62 @@ void FaultManager_set_fault_active(FaultCode_e code, void* data)
         switch(code)
         {
             case FaultCode_OVER_CURRENT:
-                encode_can_0x2bd_BmsFaultAlert_current(&CAN_BUS, *((float*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_current = f29bms_dbc_bms_fault_alert_bms_fault_alert_current_encode(*((float*)data));
                 break;
             
             case FaultCode_SLAVE_COMM_CELLS:
-                encode_can_0x2bd_BmsFaultAlert_cell_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_cell_comm_slave_board_num = f29bms_dbc_bms_fault_alert_bms_fault_alert_cell_comm_slave_board_num_encode(*((uint8_t*)data));
                 break;
             
             case FaultCode_SLAVE_COMM_TEMPS:
-                encode_can_0x2bd_BmsFaultAlert_temp_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_temp_comm_slave_board_num = f29bms_dbc_bms_fault_alert_bms_fault_alert_temp_comm_slave_board_num_encode(*((uint8_t*)data));
                 break;
 
             case FaultCode_SLAVE_COMM_DRAIN_REQUEST:
-                encode_can_0x2bd_BmsFaultAlert_drain_comm_slave_board_num(&CAN_BUS, *((uint8_t*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_drain_comm_slave_board_num = f29bms_dbc_bms_fault_alert_bms_fault_alert_drain_comm_slave_board_num_encode(*((uint8_t*)data));
                 break;
 
             case FaultCode_CURRENT_SENSOR_COMM:
-                encode_can_0x2bd_BmsFaultAlert_adc_error_code(&CAN_BUS, *((uint8_t*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_adc_error_code = f29bms_dbc_bms_fault_alert_bms_fault_alert_adc_error_code_encode(*((uint8_t*)data));
                 break;
             
             case FaultCode_CELL_VOLTAGE_IRRATIONAL:
-                encode_can_0x2bd_BmsFaultAlert_irrational_voltage(&CAN_BUS, *((float*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_irrational_voltage = f29bms_dbc_bms_fault_alert_bms_fault_alert_irrational_voltage_encode(*((float*)data));
                 break;
             
             case FaultCode_CELL_VOLTAGE_DIFF:
-                encode_can_0x2bd_BmsFaultAlert_voltage_diff(&CAN_BUS, *((float*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_voltage_diff = f29bms_dbc_bms_fault_alert_bms_fault_alert_voltage_diff_encode(*((float*)data));
                 break;
             
             case FaultCode_OUT_OF_JUICE:
-                encode_can_0x2bd_BmsFaultAlert_lowest_cell_voltage(&CAN_BUS, *((float*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_lowest_cell_voltage = f29bms_dbc_bms_fault_alert_bms_fault_alert_lowest_cell_voltage_encode(*((float*)data));
                 break;
             
             case FaultCode_DRAIN_FAILURE:
-                encode_can_0x2bc_BmsFaultVector_DRAIN_FAILURE(&CAN_BUS, *((int*)data));
+                can_bus.bms_fault_alert.bms_fault_alert_failed_drain_cell = f29bms_dbc_bms_fault_alert_bms_fault_alert_failed_drain_cell_encode(*((int*)data));
+                break;
+            
+            case FaultCode_TEMPERATURE_IRRATIONAL: 
+                can_bus.bms_fault_alert.bms_fault_alert_irrational_temperature = f29bms_dbc_bms_fault_alert_bms_fault_alert_irrational_temperature_encode(*((float*)data));
+                break;
+            
+            case FaultCode_OVER_TEMPERATURE:
+                can_bus.bms_fault_alert.bms_fault_alert_over_temperature = f29bms_dbc_bms_fault_alert_bms_fault_alert_over_temperature_encode(*((float*)data));
                 break;
                 
             default:
+                printf("f29bms: invalid fault code: %d\n", code);
                 // send garbage data
                 break;
         }
 
         // set the mux of the alert message to the fault code
-        encode_can_0x2bd_BmsFaultAlert_code(&CAN_BUS, (uint8_t)code);
+        f29bms_dbc_bms_fault_alert_bms_fault_alert_code_encode((uint8_t) code);
 
-        CAN_send_message(CAN_ID_BmsFaultAlert);
+        CAN_send_message(F29BMS_DBC_BMS_FAULT_ALERT_FRAME_ID);
 
         // update the fault vector CAN message data
-        unpack_message(&CAN_BUS, CAN_ID_BmsFaultVector, fault_vector, 8, 0);
+        f29bms_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*)&fault_vector, 8);
     }
 }
 
@@ -98,8 +107,7 @@ void FaultManager_clear_fault(FaultCode_e code)
     fault_vector = temp_fault_vector;
 
     // update the fault vector CAN message data
-    unpack_message(&CAN_BUS, CAN_ID_BmsFaultVector, fault_vector, 8, 0);
-}
+    f29bms_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*)&fault_vector, 8);}
 
 bool FaultManager_is_fault_active(FaultCode_e code)
 {

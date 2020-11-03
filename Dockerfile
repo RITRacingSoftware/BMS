@@ -22,7 +22,8 @@ valgrind \
 git \
 python3.8-dev \
 cmake \
-doxygen
+doxygen \
+gdb-multiarch
 
 # 'scons' command uses 'python' not 'python3.8', so make a symlink for it to use
 RUN ln -s /usr/bin/python3.8 /usr/bin/python
