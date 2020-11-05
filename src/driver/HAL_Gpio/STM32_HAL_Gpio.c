@@ -60,10 +60,28 @@ static void get_GPIO_TypeDef(GpioPin_e thisPin, struct PIN_Typedef *thisGPIO)
     }
 }
 
+static void populate_Init_Struct(GPIO_InitTypeDef *thisInit, uint32_t pin, GPIOMode_TypeDef mode, GPIOSpeed_TypeDef speed, GPIOOType_TypeDef Otype, GPIOPuPd_TypeDef pupd)
+{
+    thisInit->GPIO_Pin = pin;
+    thisInit->GPIO_Mode = mode;
+    thisInit->GPIO_Speed = speed;
+    thisInit->GPIO_OType = Otype;
+    thisInit->GPIO_PuPd = pupd;
+}
+
 void HAL_Gpio_init(void)
 {
-    //RCC_AHBPeriphClockCmd();
-    //To do
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+    GPIO_InitTypeDef gpioInit;
+    //Init STATUS_LED pin
+    populate_Init_Struct(&gpioInit, STATUS_LED_PIN, GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL); //Not sure about speed, otype and pupd
+    GPIO_Init(GPIOA, &gpioInit);
+    //Init CHARGE_ENABLE pin
+    populate_Init_Struct(&gpioInit, CHARGE_ENABLE_PIN, GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL); //Not sure about speed, otype, and pupd
+    GPIO_Init(GPIOA, &gpioInit);
+    //Init CHARGE_AVAILABLE
+    populate_Init_Struct(&gpioInit, CHARGE_AVAILABLE_PIN, GPIO_Mode_IN, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_UP);
+    GPIO_Init(GPIOA, &gpioInit);
 }
 
 bool HAL_Gpio_read(GpioPin_e pin)
@@ -75,12 +93,14 @@ bool HAL_Gpio_read(GpioPin_e pin)
 
 void HAL_Gpio_write(GpioPin_e pin, bool state)
 {
-    BitAction thisState = Bit_RESET;
-    if (state)
-    {
-        thisState = Bit_SET;
-    }
     struct PIN_Typedef thisGPIO;
     get_GPIO_TypeDef(pin, &thisGPIO);
-    GPIO_WriteBit(thisGPIO.GPIOx, thisGPIO.GPIO_Pin, thisState);
+    if (state)
+    {
+        GPIO_SetBits(thisGPIO.GPIOx, thisGPIO.GPIO_Pin);
+    }
+    else
+    {
+        GPIO_ResetBits(thisGPIO.GPIOx, thisGPIO.GPIO_Pin);
+    }
 }
