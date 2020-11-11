@@ -1,3 +1,3 @@
 #! /bin/bash
 
-docker run -it -v $PWD:/f29bms f29bms
+docker run -it -v $PWD:/f29bms:delegated f29bms

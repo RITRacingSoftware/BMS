@@ -5,7 +5,8 @@
 
 #include "DriveMonitor.h"
 #include "FaultManager.h"
-#include "ShutdownLine.h"
+
+#include "HAL_Gpio.h"
 
 /**
  * How many milliseconds each fault type is allowed to be active before triggering a shutdown.
@@ -27,6 +28,15 @@ static int active_fault_timers[FaultCode_NUM];
  */
 static bool is_driving_allowed;
 
+static void indicate_fault(void)
+{
+    HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, false);
+}
+
+static void indicate_nominal(void)
+{
+    HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, true);
+}
 
 void DriveMonitor_init(void)
 {
@@ -57,6 +67,8 @@ void DriveMonitor_init(void)
     // ideally this would start low, but the FSAE rules say faults must latch
     // at the hardware level so we have to start with the true or the car will never drive
     is_driving_allowed = true;
+    // make the shutdown line agree with this
+    indicate_nominal();
 }
 
 /**
@@ -93,12 +105,12 @@ void DriveMonitor_1kHz(void)
     {
         // no timers are expired
         // therefore an unsafe driver condition is not present
-        ShutdownLine_nominal();
+        indicate_nominal();
     }
     else
     {
         // unsafe driver condition is present
-        ShutdownLine_indicate_fault();
+        indicate_fault();
     }
 
     is_driving_allowed = driving_allowed;

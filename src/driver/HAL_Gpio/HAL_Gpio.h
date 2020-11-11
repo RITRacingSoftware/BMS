@@ -7,7 +7,8 @@ typedef enum
 {
     GpioPin_STATUS_LED,
     GpioPin_CHARGE_ENABLE,
-    GpioPin_CHARGER_AVAILABLE
+    GpioPin_CHARGER_AVAILABLE,
+    GpioPin_SHUTDOWN_LINE
 } GpioPin_e;
 // TODO - implement these
 void HAL_Gpio_init(void);
