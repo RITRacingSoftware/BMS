@@ -3,7 +3,7 @@ function blkStruct = slblocks
 		% in the Library Browser
 		% and be cached in the browser repository
 
-		Browser.Library = 'LibGen_lib';
+		Browser.Library = 'AccCellGroup';
 		% 'mylib' is the name of the library
 
 		Browser.Name = 'Cell Library';

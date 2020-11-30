@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'LogicalAccumulatorModel'.
  *
- * Model version                  : 1.9
+ * Model version                  : 1.55
  * Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
- * C/C++ source code generated on : Wed Oct 21 00:11:49 2020
+ * C/C++ source code generated on : Wed Oct 28 03:34:48 2020
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -35,9 +35,6 @@
  * your application needs.  This example simply sets an error status in the
  * real-time model and returns from rt_OneStep.
  */
-
-ExtY rtY;
-
 void rt_OneStep(void);
 void rt_OneStep(void)
 {
@@ -84,34 +81,14 @@ int_T main(int_T argc, const char *argv[])
   /* Initialize model */
   LogicalAccumulatorModel_initialize();
 
-  /* Attach rt_OneStep to a timer or interrupt service routine with
-   * period 0.001 seconds (the model's base sample time) here.  The
-   * call syntax for rt_OneStep is
-   *
-   *  rt_OneStep();
+  /* Simulating the model step behavior (in non real-time) to
+   *  simulate model behavior at stop time.
    */
-  //printf("Warning: The simulation will run forever. "
-//         "Generated ERT main won't simulate model step behavior. "
-  //       "To change this behavior select the 'MAT-file logging' option.\n");
-  fflush((NULL));
-  //while (1) {
-  //  /*  Perform other application tasks here */
-  //  rt_OneStep();
-  //}
-	for (int i = 0; i < 1000000; i++)
-	{
-		rt_OneStep();
-    printf("%d %lf\n", i, rtY.VoltageOut);
-	}
-
-  /* The option 'Remove error status field in real-time model data structure'
-   * is selected, therefore the following code does not need to execute.
-   */
-#if 0
+  while ((((void*) 0) == (NULL)) && !rtmGetStopRequested(rtM)) {
+    rt_OneStep();
+  }
 
   /* Disable rt_OneStep() here */
-#endif
-
   return 0;
 }
 

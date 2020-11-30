@@ -7,9 +7,9 @@
  *
  * Code generated for Simulink model 'LogicalAccumulatorModel'.
  *
- * Model version                  : 1.9
+ * Model version                  : 1.55
  * Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
- * C/C++ source code generated on : Wed Oct 21 00:11:49 2020
+ * C/C++ source code generated on : Wed Oct 28 03:34:48 2020
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Linux 64)
