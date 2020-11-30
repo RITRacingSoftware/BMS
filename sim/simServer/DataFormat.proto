@@ -1,0 +1,12 @@
+syntax = "proto2"
+
+// declare fields coming from BMS to sim
+message SimInputs {
+    repeated uint8_t discharge_request = 1;
+}
+
+// organize fields going to BMS from sim
+message SimOutputs {
+    required float current_value = 1;
+    repeated uint16_t voltages = 2;
+}
