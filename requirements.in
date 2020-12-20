@@ -1,3 +1,6 @@
 scons
 meson
 ninja
+grpcio-tools
+protobuf
+pytest

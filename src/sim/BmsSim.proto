@@ -1,0 +1,53 @@
+syntax = "proto3";
+import "nanopb.proto";
+
+message BmsMetaData {
+    int32 messages_incoming = 1;
+}
+
+message BmsData {
+    oneof data{
+        BmsIn bmsIn = 1;
+        BmsOut bmsOut = 2;
+        CellList cell_list = 3;
+        ThermList therm_list = 4;
+        CanMessage can = 5;
+    }
+}
+
+message BmsIn {
+    float current = 1;
+    bool charger_available = 2;
+}
+
+message ThermList {
+    // need these options so nanopb statically allocates an array instead of just giving us a callback to implement and maintain
+    repeated Therm therms = 1 [(nanopb).max_count = 24];
+}
+
+message Therm {
+    int32 index = 1;
+    float voltage = 2;
+}
+
+message BmsOut {
+    bool status_led = 1;
+    bool charge_enable = 2;
+    bool shutdown_line = 3;
+}
+
+// messages that can be sent either direction
+message CanMessage {
+    int32 id = 1;
+    int64 data = 2;
+}
+
+message CellList {
+    repeated Cell cells = 1 [(nanopb).max_count = 90];
+}
+
+message Cell {
+    int32 index = 1;
+    float voltage = 2;
+    float is_draining = 3;
+}

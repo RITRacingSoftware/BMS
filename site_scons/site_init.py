@@ -103,3 +103,32 @@ def TOOL_VALGRIND(env):
     env.Append(BUILDERS = {
         'MemCheck' : valgrind_memcheck_builder
     })
+    
+def TOOL_PROTOC(env):
+    """
+    Uses nanopb protoc compiler to generate pb-h.h and pb-c.c files.
+    """
+
+    NANOPB_DIR = REPO_ROOT_DIR.Dir('libs/nanopb/generator')
+
+    protoc_builder = SCons.Builder.Builder(action=[
+        #'cd ${SOURCE.dir.abspath} ' + 
+        scons_constants.PYTHON + ' ' + NANOPB_DIR.abspath + '/nanopb_generator.py ${SOURCE} --strip-path'
+    ])
+
+    env.Append(BUILDERS = {
+        'GeneratePbSource' : protoc_builder
+    })
+
+def TOOL_PYTEST(env):
+    """
+    Uses pytest module to run pytests
+    """
+
+    pytest_builder = SCons.Builder.Builder(action=[
+        scons_constants.PYTHON + ' -m pytest -s ${SOURCE.abspath}'
+    ])
+
+    env.Append(BUILDERS = {
+        'RunTestFile' : pytest_builder
+    })

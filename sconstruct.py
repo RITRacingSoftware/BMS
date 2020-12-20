@@ -20,6 +20,9 @@ BIN_DIR = REPO_ROOT_DIR.Dir('bin')
 LIBS_DIR = REPO_ROOT_DIR.Dir('libs')
 STM32_LIB_DIR = LIBS_DIR.Dir('stm32libs/STM32F0xx_StdPeriph_Driver')
 STM32_CMSIS_DIR = LIBS_DIR.Dir('stm32libs/CMSIS')
+SIM_DIR = SRC_DIR.Dir('sim')
+OPEN_LOOP_TESTS_DIR = REPO_ROOT_DIR.Dir('sim_tests/open_loop/')
+CMOCK_ROOT_DIR = REPO_ROOT_DIR.Dir('libs/cmock/')
 
 # command line options
 AddOption('--dbg',
@@ -54,6 +57,14 @@ for directory in (d for d in Path(str(COMMON_DIR)).iterdir() if d.is_dir()):
     module_path = REPO_ROOT_DIR.Dir(str(directory))
     module_name = module_path.abspath.split('/')[-1]
     common_modules.append((module_name, module_path))
+# Posix Simulation related modules
+sim_modules = []
+sim_includes = []
+for directory in (d for d in Path(str(SIM_DIR)).iterdir() if d.is_dir()):
+    module_path = REPO_ROOT_DIR.Dir(str(directory))
+    sim_includes.append(module_path)
+    module_name = module_path.abspath.split('/')[-1]
+    sim_modules.append((module_name, module_path))
 
 modules = app_modules + driver_modules + common_modules
 
@@ -109,6 +120,7 @@ tool_paths.append(REPO_ROOT_DIR.Dir('libs/cmock/src'))
 tool_paths.append(STM32_LIB_DIR.Dir('inc'))
 tool_paths.append(STM32_CMSIS_DIR.Dir('Device/ST/STM32F0xx/Include'))
 tool_paths.append(STM32_CMSIS_DIR.Dir('Include'))
+tool_paths.append('libs/nanopb/')
 module_path_names = []
 for mod_name, mod_path in modules:
     module_path_names.append(mod_path)
@@ -120,7 +132,7 @@ if GetOption('dbg'): # set by command line option
 
 linux_comp_env = Environment(
     CC='gcc',
-    CPPPATH=module_path_names + mock_modules + tool_paths + [APP_DIR.abspath, COMMON_DIR.abspath],
+    CPPPATH=module_path_names + mock_modules + sim_modules + tool_paths + [APP_DIR.abspath, COMMON_DIR.abspath, SIM_DIR.abspath],
     CCFLAGS=linux_comp_flags
 )
 
@@ -258,6 +270,8 @@ cmock_libs = Command(
 )
 Clean(cmock_libs, CMOCK_ROOT_DIR.Dir('build'))
 
+#cmock_libs = [CMOCK_ROOT_DIR.File('build/meson-out/libcmock.a.p/cmock.c.o'), CMOCK_ROOT_DIR.File('build/meson-out/libunity.a.p/unity.c.o')]
+
 # instructions for compiling each module's unit test source
 test_objects = {}
 for module_name, module_dir in app_modules:    
@@ -357,3 +371,117 @@ for module_name, module_dir in driver_modules:
     )
 
 Alias('test-apps', test_apps.values())
+
+
+"""
+Instructions for building the Posix FreeRTOS program.
+"""
+
+# First need instructions for building FreeRTOS
+FREERTOS_DIR = LIBS_DIR.Dir("FreeRTOS")
+
+freertos_include = [
+    SRC_DIR, # (FreeRTOSConfig.h is located here)
+    FREERTOS_DIR,
+    FREERTOS_DIR.Dir('Source/include'),
+    FREERTOS_DIR.Dir('Source/portable/ThirdParty/GCC/Posix'),
+    FREERTOS_DIR.Dir('Source/portable/ThirdParty/GCC/Posix/utils'),
+]
+
+freertos_source = []
+freertos_source += Glob(FREERTOS_DIR.Dir('Source').abspath + '/*.c')
+freertos_source.append(FREERTOS_DIR.File('Source/portable/MemMang/heap_3.c'))
+freertos_source.append(FREERTOS_DIR.File('Source/portable/ThirdParty/GCC/Posix/utils/wait_for_event.c'))
+freertos_source.append(FREERTOS_DIR.File('Source/portable/ThirdParty/GCC/Posix/port.c'))
+
+for module_name, module_dir in sim_modules:
+    freertos_source.append(module_dir.File(module_name + '.c'))
+
+
+freertos_comp_env = Environment(
+    CC='gcc',
+    CPPPATH=[sim_includes, freertos_include, module_path_names, APP_DIR.abspath, tool_paths, SIM_DIR.abspath, COMMON_DIR.abspath],
+    CPPDEFINES=['projCOVERAGE_TEST=0', 'SIMULATION'],
+    CPPFLAGS=['-O0'],
+    LINKFLAGS=['-pthread']
+)
+
+# use the protobuf compiler to generate .pb.c and .pb.h files from the .proto file
+# this is just like generating encoding/decoding code from a dbc
+protoc_env = Environment(
+    TOOLS=[TOOL_PROTOC]
+)
+
+bms_sim_proto = SIM_DIR.File('BmsSim.proto')
+
+bms_sim_pb_source = protoc_env.GeneratePbSource(
+    source=bms_sim_proto,
+    target=SIM_DIR.File('BmsSim.pb.c')
+)
+Clean(bms_sim_pb_source, SIM_DIR.File('BmsSim.pb.h'))
+
+freertos_objs = []
+for source_file in freertos_source + Glob(LIBS_DIR.Dir('nanopb').abspath + '/*.c'):
+    obj = freertos_comp_env.Object(source_file)
+    freertos_objs += obj
+    Depends(obj, bms_sim_pb_source)
+
+freertos_objs += freertos_comp_env.Object(SIM_DIR.File('BmsSim.pb.c'))
+
+freertos_objs += freertos_comp_env.Object(SRC_DIR.File('main.c'))
+
+# (Binary constructed below)
+
+
+"""
+Instructions for building the f29bms program interface library.
+"""
+
+nanopb_source = Glob(LIBS_DIR.Dir('nanopb').abspath + '/*.c')
+
+bms_sim_objs = {}
+for module_name, module_dir in sim_modules:
+    bms_sim_objs[module_name] = freertos_comp_env.SharedObject(module_dir.File(module_name + '.c'))
+    Depends(bms_sim_objs[module_name], bms_sim_pb_source)
+
+# build the library
+bms_sim_so = freertos_comp_env.SharedLibrary(
+    source=[bms_sim_pb_source, bms_sim_objs.values(), nanopb_source],
+    target=SIM_DIR.File('libBmsSim.so')
+)
+
+Alias('sim-interface', bms_sim_so)
+
+f29bms_bin = freertos_comp_env.Program(
+    source=[freertos_objs, linux_driver_objects.values(), linux_app_objects.values(), linux_common_objects.values(), linux_dbc_gen_obj],
+    target='f29bms'
+)
+
+Alias('sim', f29bms_bin)
+
+"""
+Open-loop tests.
+
+These tests spin up the linux version of the f29bms program and imperatively feed it input
+and validate output. 'Imperatively' indicates a one-after-the-other flow of applying input
+and checking output. They're literally python scripts (pytest).
+"""
+
+pytest_env = Environment(tools=[TOOL_PYTEST])
+
+# list of python files with pytests in them
+pytest_source = []
+for source in Glob(os.path.join(OPEN_LOOP_TESTS_DIR.abspath, '*tests.py')):
+    pytest_source.append(source)
+
+pytest_results = []
+for pytest in pytest_source:
+    result = pytest_env.RunTestFile(
+        source=pytest_source
+    )
+    pytest_results.append(result)
+
+Depends(pytest_results, bms_sim_so)
+Depends(pytest_results, f29bms_bin)
+    
+Alias('open-loop', pytest_results)

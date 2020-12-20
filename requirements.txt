@@ -4,6 +4,18 @@
 #
 #    pip-compile requirements.in
 #
+attrs==20.3.0             # via pytest
+grpcio-tools==1.33.2      # via -r requirements.in
+grpcio==1.33.2            # via grpcio-tools
+iniconfig==1.1.1          # via pytest
 meson==0.55.0             # via -r requirements.in
 ninja==1.10.0.post1       # via -r requirements.in
+packaging==20.7           # via pytest
+pluggy==0.13.1            # via pytest
+protobuf==3.14.0          # via -r requirements.in, grpcio-tools
+py==1.9.0                 # via pytest
+pyparsing==2.4.7          # via packaging
+pytest==6.1.2             # via -r requirements.in
 scons==3.1.2              # via -r requirements.in
+six==1.15.0               # via grpcio, protobuf
+toml==0.10.2              # via pytest

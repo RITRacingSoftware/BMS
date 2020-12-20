@@ -107,6 +107,8 @@ static void state_machine_transition(bool faulted, bool can_error)
 
 /**
  * Blink once every 3 seconds.
+ * 
+ * A blink is turning on for half a second.
  */
 void nominal_pattern_10Hz(void)
 {

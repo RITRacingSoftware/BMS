@@ -4,3 +4,6 @@
 [submodule "libs/dbcc"]
 	path = libs/dbcc
 	url = https://github.com/howerj/dbcc
+[submodule "libs/nanopb"]
+	path = libs/nanopb
+	url = https://github.com/nanopb/nanopb
