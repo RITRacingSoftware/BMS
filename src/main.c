@@ -9,6 +9,7 @@
 
 #include "BatteryModel.h"
 #include "BatteryCharacteristics.h"
+#include "CAN.h"
 #include "CellBalancer.h"
 #include "ChargeMonitor.h"
 #include "CurrentMonitor.h"
@@ -69,6 +70,7 @@ void task_1kHz(void *pvParameters)
     TickType_t next_wake_time;
     for (;;)
     {
+        CAN_1kHz();
         //Periodic_1kHz();
         //printf("Task 1kHz\n");
         vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);

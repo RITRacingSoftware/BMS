@@ -11,6 +11,9 @@ def test_blink_check(sim):
 
     Verifies Status LED blinks once every three seconds.
     """
+
+    sim.start_logging("sim_traces/smoke_tests.blf")
+
     led_was_off = False
     led_was_on = False
 

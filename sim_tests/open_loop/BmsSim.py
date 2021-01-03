@@ -18,6 +18,9 @@ class BmsSim:
     def start(self):
         self.clib.BmsSim_start()
         time.sleep(1) # give time for the sim to initialize
+    
+    def start_logging(self, filename):
+        self.clib.BmsSim_begin_logging(ctypes.c_char_p(filename.encode("utf-8")))
 
     def stop(self):
         time.sleep(1) # give time for the sim to stop processing input

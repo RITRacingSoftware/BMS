@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "common_macros.h"
 #include "BatteryModel.h"
@@ -15,6 +17,10 @@
 #include "PbSockets.h"
 #include "Mailbox.h"
 #include "TempModel.h"
+#include "can_ids.h"
+#include "f29bms_dbc.h"
+#include "BlfWriter.h"
+#include "BmsSimConfig.h"
 
 static int sim_pid = -1;
 
@@ -36,9 +42,8 @@ static BmsOut last_BmsOut;
 
 // most recent cell data from the f29bms process (ignore voltages, drain states used only)
 static Cell in_CellList[NUM_SERIES_CELLS];
-// static CellList last_CellList;
-// #define CAN_BUFFER_LEN 10
-// static CanMessage can_buffer[CAN_BUFFER_LEN]; 
+
+static can_obj_f29bms_dbc_h_t CAN_BUS;
 
 struct sockaddr_in server_addr, client_addr;
 
@@ -78,6 +83,25 @@ int BmsSim_init(void)
     // no cell data has been input yet
     out_CellList.cells_count = 0;
     out_ThermList.therms_count = 0;
+}
+
+static bool logging = false;
+
+int BmsSim_begin_logging(char* filename)
+{
+    // Create CAN logging file
+    // time_t t = time(NULL); // current time
+    // struct tm tm = *localtime(&t);
+    // char trace_file_name[200];
+    // sprintf(trace_file_name, "sim_trace_%d-%02d-%02d_%02d-%02d-%02d.blf", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    struct stat st = {0};
+    if (stat(TRACES_DIR, &st) == -1) 
+    {
+        mkdir(TRACES_DIR, 0777);
+    }
+
+    BlfWriter_create_log_file(filename);
+    logging = true;
 }
 
 int BmsSim_start(void)
@@ -151,10 +175,17 @@ void BmsSim_stop(void)
 
 
     kill(sim_pid, SIGHUP);
+
+    if (logging)
+    {
+        BlfWriter_close_log_file();
+    }
 }
 
 void BmsSim_tick(void)
 {
+    static int ms_elapsed = 0;
+
     // Bad News: sending input on each tick is hella slow
     // Good News: we dont need to send input on each tick
     static int iteration = 0;
@@ -222,12 +253,28 @@ void BmsSim_tick(void)
                         in_CellList[i] = cell_list.cells[i];
                     }
                 }
+            case BmsData_can_tag:
+            {
+                CanMessage can_msg = incoming_msg.data.can;
+                if (-1 == unpack_message(&CAN_BUS, can_msg.id, can_msg.data, 8, ms_elapsed))
+                {
+                    printf("Invalid CAN message with id: %d\n", can_msg.id);
+                    exit(-1);
+                }
+
+                if (logging)
+                {
+                    BlfWriter_log_message(can_msg.id, can_msg.data, 8, ms_elapsed);
+                }
+                break;
+            }
             default:
                 printf("Unknown message tag\n");
                 exit(-1);
                 break;
         }   
     }
+    ms_elapsed++;
 }
 
 void BmsSim_set_temp_info(int therm_index, float voltage)

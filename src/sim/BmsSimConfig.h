@@ -17,4 +17,7 @@
 // The smaller this is, the longer a simulated millisecond is.
 #define INPUT_PERIOD_MS 1000
 
+// Directory where simulation traces (blf files) are stored
+#define TRACES_DIR "sim_traces"
+
 #endif // BMS_SIM_CONFIG

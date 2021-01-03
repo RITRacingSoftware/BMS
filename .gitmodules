@@ -7,3 +7,6 @@
 [submodule "libs/nanopb"]
 	path = libs/nanopb
 	url = https://github.com/nanopb/nanopb
+[submodule "libs/vector_blf"]
+	path = libs/vector_blf
+	url = https://bitbucket.org/tobylorenz/vector_blf.git
