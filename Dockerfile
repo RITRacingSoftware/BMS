@@ -1,4 +1,7 @@
 FROM ubuntu:20.04
+
+USER root
+
 WORKDIR /f29bms
 
 # Move everything in the f29bms folder to the docker container file system
@@ -17,7 +20,9 @@ ruby \
 gcc-arm-none-eabi \
 valgrind \
 git \
-python3.8-dev
+python3.8-dev \
+cmake \
+doxygen
 
 # 'scons' command uses 'python' not 'python3.8', so make a symlink for it to use
 RUN ln -s /usr/bin/python3.8 /usr/bin/python

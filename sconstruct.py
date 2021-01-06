@@ -395,12 +395,18 @@ freertos_source.append(FREERTOS_DIR.File('Source/portable/ThirdParty/GCC/Posix/u
 freertos_source.append(FREERTOS_DIR.File('Source/portable/ThirdParty/GCC/Posix/port.c'))
 
 for module_name, module_dir in sim_modules:
-    freertos_source.append(module_dir.File(module_name + '.c'))
+    if module_name not in ['BmsSimHandle', 'BlfWriter']:
+        freertos_source.append(module_dir.File(module_name + '.c'))
+
+cpp_env = Environment(
+    CC='g++',
+    CPPPATH=LIBS_DIR.Dir('vector_blf/src/').abspath
+)
 
 
 freertos_comp_env = Environment(
     CC='gcc',
-    CPPPATH=[sim_includes, freertos_include, module_path_names, APP_DIR.abspath, tool_paths, SIM_DIR.abspath, COMMON_DIR.abspath],
+    CPPPATH=[sim_includes, freertos_include, module_path_names, APP_DIR.abspath, tool_paths, SIM_DIR.abspath, COMMON_DIR.abspath, DBC_DIR.abspath],
     CPPDEFINES=['projCOVERAGE_TEST=0', 'SIMULATION'],
     CPPFLAGS=['-O0'],
     LINKFLAGS=['-pthread']
@@ -426,6 +432,8 @@ for source_file in freertos_source + Glob(LIBS_DIR.Dir('nanopb').abspath + '/*.c
     freertos_objs += obj
     Depends(obj, bms_sim_pb_source)
 
+#Depends(freertos_objs, generated_dbc_source)
+
 freertos_objs += freertos_comp_env.Object(SIM_DIR.File('BmsSim.pb.c'))
 
 freertos_objs += freertos_comp_env.Object(SRC_DIR.File('main.c'))
@@ -441,12 +449,31 @@ nanopb_source = Glob(LIBS_DIR.Dir('nanopb').abspath + '/*.c')
 
 bms_sim_objs = {}
 for module_name, module_dir in sim_modules:
-    bms_sim_objs[module_name] = freertos_comp_env.SharedObject(module_dir.File(module_name + '.c'))
-    Depends(bms_sim_objs[module_name], bms_sim_pb_source)
+    if module_name != 'BlfWriter': # BlfWriter is C++
+        bms_sim_objs[module_name] = freertos_comp_env.SharedObject(module_dir.File(module_name + '.c'))
+        Depends(bms_sim_objs[module_name], bms_sim_pb_source)
+
+Depends(bms_sim_objs['BmsSimHandle'], generated_dbc_source)
+
+# build C++ library wrapper (BlfWriter) and c++ library (vector_blf)
+
+vector_blf_so = File('/usr/local/lib/libVector_BLF.so.2')
+
+vector_blf_lib = Command(
+    [vector_blf_so],
+    [],
+    ["cd libs/vector_blf && mkdir -p build && cd build && cmake .. && make && make install DESTDIR=.. && make install && /usr/sbin/ldconfig"]
+)
+
+bms_sim_objs['BlfWriter'] = cpp_env.SharedObject(SIM_DIR.File('BlfWriter/BlfWriter.cpp'))
+Depends(bms_sim_objs['BlfWriter'], vector_blf_so)
+
+# janky
+freertos_comp_env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']=1
 
 # build the library
 bms_sim_so = freertos_comp_env.SharedLibrary(
-    source=[bms_sim_pb_source, bms_sim_objs.values(), nanopb_source],
+    source=[bms_sim_pb_source, bms_sim_objs.values(), nanopb_source, vector_blf_so, linux_dbc_gen_obj],
     target=SIM_DIR.File('libBmsSim.so')
 )
 

@@ -32,6 +32,12 @@ int BmsSim_init(void);
 int BmsSim_start(void);
 
 /**
+ * Create a BLF (Vector binary logging format) to record received CAN messages in.
+ * filename [in] - null terminated name of the file (including .blf)
+ */
+int BmsSim_begin_logging(char* filename);
+
+/**
  * Kill the f29bms process.
  */
 void BmsSim_stop(void);
