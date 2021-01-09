@@ -59,7 +59,7 @@ void test_TempConverter_at_index(void)
 void test_TempConverter_linear_interpolate(void)
 {
     // Test with a voltage that solves to 14.5 ohms for the NTC and therefore 105.5 deg C.
-    TempModel_t tm = get_tempmodel(1.34694);
+    TempModel_t tm = get_tempmodel(1.95306);
 
     TempConverter_convert(&tm);
     const float expected_temp = 105.5;
@@ -74,7 +74,7 @@ void test_TempConverter_linear_interpolate(void)
 void test_TempConverter_upper_limit(void)
 {
     // Test with a voltage that solves to 8 ohms for the NTC and should cap to 110C.
-    TempModel_t tm = get_tempmodel(1.83333);
+    TempModel_t tm = get_tempmodel(1.46667);
 
     TempConverter_convert(&tm);
     const float expected_temp = 110;
@@ -89,7 +89,7 @@ void test_TempConverter_upper_limit(void)
 void test_TempConverter_lower_limit(void)
 {
     // Test with a voltage that solves to 30 ohms for the NTC and should cap to 100C.
-    TempModel_t tm = get_tempmodel(0.825);
+    TempModel_t tm = get_tempmodel(2.475);
 
     TempConverter_convert(&tm);
     const float expected_temp = 120;

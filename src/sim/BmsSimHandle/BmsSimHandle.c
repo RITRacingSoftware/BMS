@@ -43,7 +43,8 @@ static BmsOut last_BmsOut;
 // most recent cell data from the f29bms process (ignore voltages, drain states used only)
 static Cell in_CellList[NUM_SERIES_CELLS];
 
-static can_obj_f29bms_dbc_h_t CAN_BUS;
+static CanMessage unprocessed_can_messages[HANDLE_CAN_BUFFER_LEN];
+static int num_unprocessed_can_messages = 0;
 
 struct sockaddr_in server_addr, client_addr;
 
@@ -148,7 +149,7 @@ int BmsSim_start(void)
         // set up I/O with protobuf callback
         Mailbox_init(client_sock);
 
-        printf("f29bms connected! I/O available.\n");
+        puts("f29bms connected! I/O available.\n");
         
         return 0;
     }
@@ -189,15 +190,17 @@ void BmsSim_tick(void)
     // Bad News: sending input on each tick is hella slow
     // Good News: we dont need to send input on each tick
     static int iteration = 0;
-	iteration = (iteration + 1) % INPUT_PERIOD_MS;
 
     if (iteration == 0)
     {
         // it's time to send input
-        BmsData data = BmsData_init_zero;
-        data.which_data = BmsData_bmsIn_tag;
-        data.data.bmsIn = out_BmsIn;
-        Mailbox_add_to_outbox(&data);
+        if (diff_out_BmsIn)
+        {
+            BmsData data = BmsData_init_zero;
+            data.which_data = BmsData_bmsIn_tag;
+            data.data.bmsIn = out_BmsIn;
+            Mailbox_add_to_outbox(&data);
+        }
 
         if (out_CellList.cells_count > 0) 
         {
@@ -216,11 +219,14 @@ void BmsSim_tick(void)
         }
 
         Mailbox_send();
+        diff_out_BmsIn = false;
+        out_CellList.cells_count = 0;
+        out_ThermList.therms_count = 0;
     }
 
-    diff_out_BmsIn = false;
-    out_CellList.cells_count = 0;
-    out_ThermList.therms_count = 0;
+    iteration = (iteration + 1) % INPUT_PERIOD_MS;
+
+    
 
     // Tick the FreeRTOS clock causing a FreeRTOS tick and consumption of the sent input data.
     // i know, this is misleading...
@@ -256,11 +262,12 @@ void BmsSim_tick(void)
             case BmsData_can_tag:
             {
                 CanMessage can_msg = incoming_msg.data.can;
-                if (-1 == unpack_message(&CAN_BUS, can_msg.id, can_msg.data, 8, ms_elapsed))
+                if (num_unprocessed_can_messages < HANDLE_CAN_BUFFER_LEN)
                 {
-                    printf("Invalid CAN message with id: %d\n", can_msg.id);
-                    exit(-1);
+                    unprocessed_can_messages[num_unprocessed_can_messages] = can_msg;
+                    num_unprocessed_can_messages++;
                 }
+                
 
                 if (logging)
                 {
@@ -275,6 +282,31 @@ void BmsSim_tick(void)
         }   
     }
     ms_elapsed++;
+}
+
+int BmsSim_next_can_msg(int64_t* data)
+{
+    static int can_cursor = 0;
+    CanMessage next_msg;
+    if (can_cursor < num_unprocessed_can_messages)
+    {
+        next_msg = unprocessed_can_messages[can_cursor];
+        *data = next_msg.data;
+        can_cursor++;
+    }
+    else
+    {
+        // done reading can messages
+        return -1;
+    }
+
+    if (can_cursor == num_unprocessed_can_messages)
+    {
+        num_unprocessed_can_messages = 0;
+        can_cursor = 0;
+    }
+
+    return next_msg.id;
 }
 
 void BmsSim_set_temp_info(int therm_index, float voltage)
@@ -320,9 +352,15 @@ bool BmsSim_read_drain_state(int cell_index)
     return in_CellList[SAT(cell_index, 0, NUM_SERIES_CELLS)].is_draining;
 }
 
-void BmsSim_stage_input(BmsIn in)
+void BmsSim_set_charger_available(bool charger_available)
 {
+    out_BmsIn.charger_available = charger_available;
     diff_out_BmsIn = true;
-
-    out_BmsIn = in;
 }
+
+void BmsSim_set_current(float current)
+{
+    out_BmsIn.current = current;
+    diff_out_BmsIn = true;
+}
+

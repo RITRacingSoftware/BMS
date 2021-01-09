@@ -44,7 +44,8 @@ static void get_temp_info(TempModel_t* tm, float* largest_deg_C, float* smallest
         {
             *largest_deg_C = temp_deg_C;
         }
-        else if (temp_deg_C < *smallest_deg_C)
+        
+        if (temp_deg_C < *smallest_deg_C)
         {
             *smallest_deg_C = temp_deg_C;
         }

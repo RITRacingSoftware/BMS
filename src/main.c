@@ -36,7 +36,7 @@ void TASK_1Hz(void *pvParameters)
 
     for (;;)
     {
-        //Periodic_1Hz();
+        Periodic_1Hz();
         // printf("Task 1Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
@@ -52,8 +52,7 @@ void task_10Hz(void *pvParameters)
     TickType_t next_wake_time;
     for (;;)
     {
-        //Periodic_10Hz();
-        StatusLed_10Hz();
+        Periodic_10Hz();
         // printf("Task 10Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
@@ -70,8 +69,7 @@ void task_1kHz(void *pvParameters)
     TickType_t next_wake_time;
     for (;;)
     {
-        CAN_1kHz();
-        //Periodic_1kHz();
+        Periodic_1kHz();
         //printf("Task 1kHz\n");
         vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
     }
@@ -96,18 +94,18 @@ int main(int argc, char** argv)
     printf("Starting Sim\n");
 
     // initialize erything
-    // CellBalancer_init();
-    // ChargeMonitor_init();
-    // CurrentMonitor_init();
-    // CurrentSense_init();
-    // DriveMonitor_init();
-    // PackMonitor_init();
-    // Periodic_init();
-    // SlaveInterface_init();
-    // SOCestimator_init();
+    CAN_init();
+    CellBalancer_init();
+    ChargeMonitor_init();
+    CurrentMonitor_init();
+    CurrentSense_init();
+    DriveMonitor_init();
+    PackMonitor_init();
+    Periodic_init();
+    SOCestimator_init();
     FaultManager_init();
     StatusLed_init();
-    // TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_LUT[NTCALUG01T_LUT_LEN-1], DIVIDER_OHM);
+    TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
 
 #ifdef SIMULATION
     if (BmsSimClient_init())

@@ -44,7 +44,7 @@ int BmsSimClient_init(void)
 	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
 	if (socket_desc == -1)
 	{
-		printf("Could not create socket");
+		printf("f29bms: Could not create socket");
         return -1;
 	}
 		
@@ -55,11 +55,11 @@ int BmsSimClient_init(void)
 	int err_code = connect(socket_desc, (struct sockaddr *)&server, sizeof(server)) < 0;
 	if (err_code != 0)
 	{
-		printf("Could not connect to server, error code: %d\n", err_code);
+		printf("f29bms: Could not connect to server, error code: %d\n", err_code);
 		exit(-1);
 	}
 	
-	puts("Connected to sim harness.\n");
+	puts("f29bms: Connected to sim harness.\n");
 
 	Mailbox_init(socket_desc);
 
@@ -94,13 +94,13 @@ static void message_handler(BmsData* data)
 				for (int i = 0; i < therms.therms_count; i++)
 				{
 					Therm new_therm = therms.therms[i];
-					in_ThermList[SAT(new_therm.index, 0, NUM_THERMISTOR)] = new_therm;
+					in_ThermList[new_therm.index] = new_therm;
 				}
 			}
 			break;
 
 		default:
-			printf("....Unknown input detected by Sim....\n");
+			printf("f29bms: Unknown input type detected\n");
 			break;
 	}
 }
@@ -145,7 +145,6 @@ void BmsSimClient_io(void)
 {
 	static int iteration = 0;
 
-	iteration = (iteration + 1) % INPUT_PERIOD_MS;
 	if (iteration == 0)
 	{
 		Mailbox_receive();
@@ -155,6 +154,8 @@ void BmsSimClient_io(void)
 			message_handler(&data);	
 		}
 	}
+
+	iteration = (iteration + 1) % INPUT_PERIOD_MS;
 
 	// send most recent sim data
 	BmsData bmsdata = BmsData_init_zero;
@@ -178,17 +179,16 @@ int BmsSimClient_send_CAN(int id, uint64_t data)
 	BmsData msg;
 	msg.which_data = BmsData_can_tag;
 	msg.data.can.id = id;
-	msg.data.can.data = data;
-	
+	msg.data.can.data = (int64_t) data;	
 	return Mailbox_add_to_outbox(&msg);
 }
 
 void BmsSimClient_close(void)
 {
-	printf("BmsSimClient: Closing socket\n");
+	printf("f29bms: Closing socket\n");
 	int closecode;
 	if ((closecode = close(socket_desc)) != 0)
 	{
-		printf("BmsSimClient: Problem closing BmsSimClient Socket: %d\n", closecode);
+		printf("f29bms: Problem closing BmsSimClient Socket: %d\n", closecode);
 	}
 }

@@ -10,6 +10,10 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
         voltages[i] = cells[i].voltage;
         is_draining[i] = cells[i].is_draining;
     }
+
+    Error_t err;
+    err.active = false;
+    return err;
 }
 
 Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num)
@@ -20,6 +24,10 @@ Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num
     {
         temperatures[i] = therms[i].voltage;
     }
+
+    Error_t err;
+    err.active = false;
+    return err;
 }
 
 Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
@@ -28,4 +36,8 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
     {
         BmsSimClient_set_cell_data(i, cells[i]);
     }
+
+    Error_t err;
+    err.active = false;
+    return err;
 }

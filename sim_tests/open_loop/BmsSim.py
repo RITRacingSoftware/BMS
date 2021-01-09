@@ -3,6 +3,7 @@ import time
 import signal
 import os
 import pytest
+import cantools
 
 """
 Python wrapping of BmsSim.c functions.
@@ -12,6 +13,9 @@ Python wrapping of BmsSim.c functions.
 class BmsSim:
     def __init__(self):
         signal.signal(signal.SIGINT, self._interrupt_signal_handler)
+        self.can_db = cantools.database.load_file('src/app/CAN/f29bms_dbc.dbc')
+        self.signals = {}
+
         self.clib = ctypes.CDLL('src/sim/libBmsSim.so') # must be relative from root of repo, thats where the test scripts are ran from
         self.clib.BmsSim_init()
 
@@ -31,8 +35,23 @@ class BmsSim:
         self.stop()
         exit(0)
 
+
     def tick(self):
         self.clib.BmsSim_tick()
+
+        # get all the new CAN messages and update the signal database
+        can_data = ctypes.c_int64()
+        can_id = 0
+        while(can_id != -1):
+            can_id = self.clib.BmsSim_next_can_msg(ctypes.byref(can_data))
+            if (can_id != -1):
+                self.signals.update(self.can_db.decode_message(can_id, can_data.value.to_bytes(8, "little")))
+
+    def stage_temp_info(self, therm_index, voltage):
+        self.clib.BmsSim_set_temp_info(therm_index, ctypes.c_float(voltage))
+    
+    def stage_cell_info(self, cell_index, voltage, is_draining):
+        self.clib.BmsSim_set_cell_info(cell_index, ctypes.c_float(voltage), is_draining)
     
     def get_status_led(self):
         return self.clib.BmsSim_get_status_led()
@@ -42,6 +61,12 @@ class BmsSim:
     
     def get_charge_enable(self):
         return self.clib.BmsSim_get_charge_enable()
+    
+    def set_charger_available(self, c_a):
+        self.clib.BmsSim_set_charger_available(c_a)
+
+    def set_current(self, current):
+        self.clib.BmsSim_set_current(ctypes.c_float(current))
     
     def __del__(self):
         self.stop()
@@ -57,3 +82,20 @@ def sim():
     s = BmsSim()
     s.start()
     return s
+
+@pytest.fixture
+def sim_nominal(sim):
+    """
+    Starts the f29bms process in a nominal steady state, defined as no faults being active
+    and no draining occuring. Also starts fully charged.
+    """
+    for i in range(0, 90):
+        sim.stage_cell_info(i, 4.1, False)
+        
+    for i in range(0, 20):
+        sim.stage_temp_info(i, 1.65)
+
+    sim.set_current(100)
+    sim.set_charger_available(True)
+
+    return sim

@@ -53,6 +53,10 @@ bool BmsSim_get_shutdown_line(void);
 
 bool BmsSim_get_charge_enable(void);
 
+void BmsSim_set_charger_available(bool charger_available);
+
+void BmsSim_set_current(float current);
+
 /**
  * Stage new thermistor data to send to the f29bms process on the next tick.
  * therm_index [in] - index of thermistor to change temperature of
@@ -74,5 +78,12 @@ void BmsSim_set_cell_info(int cell_index, float voltage, bool is_draining);
  * return true if draining requested, false otherwise
  */
 bool BmsSim_read_drain_state(int cell_index);
+
+/**
+ * Get the next CAN message in the queue for processing.
+ * data [out] - can message data
+ * return can id, or -1 if no more messages
+ */
+int BmsSim_next_can_msg(int64_t* data);
 
 #endif // BMS_SIM_HANDLE
