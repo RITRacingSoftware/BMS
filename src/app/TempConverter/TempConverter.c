@@ -94,8 +94,11 @@ void TempConverter_convert(TempModel_t* tm)
     for (int i = 0; i < NUM_THERMISTOR; i++)
     {
         float temp_V = tm->tm_readings_V[i];
+
         // first convert from voltage to resistance using voltage division
-        float ntc_Ohm = ((MCU_VCC/temp_V) - 1.0) * divider_ohm;
+        // ((Vout * divider_ohms)/Vin) / (1 - Vout/Vin)
+        float Vout_over_Vin = temp_V/MCU_VCC;
+        float ntc_Ohm = (Vout_over_Vin * divider_ohm) / (1 - Vout_over_Vin);        
         
         // binary search of the temp LUT
         tm->temps_C[i] = binary_search_temp_lut(ntc_Ohm) + temp_lut_offset;

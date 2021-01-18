@@ -11,6 +11,7 @@
 #define MIN(x, y) (x < y ? x : y)
 #define SAT(v, x, y) MIN(MAX(v, x), y)
 #define ROUND_2D(v) ((float)((float)((int)((v) * 100.0 + .5))) / 100.0)
+#define ROUND_INT(v) (int)((float)(v) + 0.5)
 // idk why this doesnt work: #define FLOAT_EQ(f1, f2) (fabs(f1 - f2) < FLT_EPSILON)
 #define FLOAT_EQ(f1, f2, tol) (fabs((f1) - (f2)) <= (tol))
 

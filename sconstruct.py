@@ -504,7 +504,7 @@ for source in Glob(os.path.join(OPEN_LOOP_TESTS_DIR.abspath, '*tests.py')):
 pytest_results = []
 for pytest in pytest_source:
     result = pytest_env.RunTestFile(
-        source=pytest_source
+        source=pytest
     )
     pytest_results.append(result)
 

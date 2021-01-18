@@ -36,10 +36,15 @@ bool HAL_Gpio_read(GpioPin_e pin)
 {
     bool retval = false;
 
-    BmsIn* in = BmsSimClient_get_inputs();
+    const BmsIn* in = BmsSimClient_get_inputs();
+    BmsOut* out = BmsSimClient_get_outputs();
 
     switch(pin)
     {
+        case GpioPin_STATUS_LED:
+            retval = out->status_led;
+            break;
+
         case GpioPin_CHARGER_AVAILABLE:
             retval = in->charger_available;
             break;

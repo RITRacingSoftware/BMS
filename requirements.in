@@ -4,3 +4,4 @@ ninja
 grpcio-tools
 protobuf
 pytest
+cantools

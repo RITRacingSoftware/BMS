@@ -20,4 +20,7 @@
 // Directory where simulation traces (blf files) are stored
 #define TRACES_DIR "sim_traces"
 
+// How many CAN messages the sim handle can receive in between each tick 
+#define HANDLE_CAN_BUFFER_LEN 10
+
 #endif // BMS_SIM_CONFIG

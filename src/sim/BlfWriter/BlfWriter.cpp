@@ -29,7 +29,7 @@ void BlfWriter_log_message(int id, int64_t data, int dlc, int time_ms)
     msg->objectTimeStamp = 1000 * time_ms;
     for (int i = 0; i < dlc; i++)
     {
-        msg->data[i] = (data & (0xFF << (i*8))) >> (i*8);
+        msg->data[i] = ((data & ((int64_t)0xFF << (i*8))) >> (i*8));
     }
 
     file.write(msg);

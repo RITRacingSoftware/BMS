@@ -1,3 +1,4 @@
+#include "CAN.h"
 #include "CurrentSense.h"
 #include "HAL_CurrentSensor.h"
 #include "FaultManager.h"
@@ -56,6 +57,8 @@ void CurrentSense_1kHz(void)
         did_last_read_error = false;
         FaultManager_clear_fault(FaultCode_CURRENT_SENSOR_COMM);
         filter_new_current_reading(raw_current_A);
+
+        encode_can_0x384_BmsInstCurrentFilt(&CAN_BUS, last_current_reading);
     }
 }
 
