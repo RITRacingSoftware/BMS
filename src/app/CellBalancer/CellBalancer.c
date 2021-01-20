@@ -1,3 +1,5 @@
+#include "common_macros.h"
+
 #include "CellBalancer.h"
 #include "ChargeMonitor.h"
 #include "FaultManager.h"
@@ -27,22 +29,25 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
             FaultManager_set_fault_active(FaultCode_DRAIN_FAILURE, &i);
             drain_failure = true;
         }
-
-        float cell_diff_V = bm->cells[i].voltage > bm->smallest_V;
-        if (cell_diff_V > DIFF_CORRECTION_THRESHOLD_V)
+        
+        if (ChargeMonitor_is_balancing_allowed())
         {
-            // cell is falling behind, request drain
-            bm->cells[i].is_draining = true;
-        }
-        else if (ChargeMonitor_charger_available() && (bm->cells[i].voltage >= MAX_ALLOWED_CELL_V))
-        {
-            // charging is supposed to happen, but this cell needs to be drained first
-            bm->cells[i].is_draining = true;
-        }
-        else
-        {
-            // request draining shut off
-            bm->cells[i].is_draining = false;
+            float cell_diff_V = bm->cells[i].voltage - bm->smallest_V;
+            if (FLOAT_GT(cell_diff_V, DIFF_CORRECTION_THRESHOLD_V, VOLTAGE_TOLERANCE))
+            {
+                // cell is falling behind, request drain
+                bm->cells[i].is_draining = true;
+            }
+            else if (FLOAT_GT_EQ(bm->cells[i].voltage, CHARGED_CELL_V, VOLTAGE_TOLERANCE))
+            {
+                // charging is supposed to happen, but this cell needs to be drained first
+                bm->cells[i].is_draining = true;
+            }
+            else
+            {
+                // request draining shut off
+                bm->cells[i].is_draining = false;
+            }
         }
     }
 

@@ -13,7 +13,7 @@ void CAN_init(void)
     can_error = false;
 }
 
-void CAN_send_message(int id)
+void CAN_send_message(unsigned long int id)
 {   
     uint64_t msg_data;
     
@@ -37,6 +37,7 @@ void CAN_send_message(int id)
     {
         // CAN id invalid, dont attempt to send the message
         can_error = true;
+        printf("CAN ERROR: %x\n", id);
     }
     
 }
@@ -51,20 +52,18 @@ void CAN_1kHz(void)
     CAN_send_message(CAN_ID_BmsCurrent);    
 }
 
-#define encode_can_0x2be_DynamicCell(i, can_bus, in) encode_can_0x2be_BmsVoltages_Cell##i(can_bus, in)
-
 void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 {
     uint64_t msg_data = 0; 
 
     // Multiplexed message cycling. Mux value cycles every 100ms
-    static int voltages_mux = 0;
+    static uint8_t voltages_mux = 0;
     msg_data |= voltages_mux;
     const int voltages_per_message = 6; 
     // must pack these kinds of messages manually or call 90 signal encoding functions individually
     for (int i = 0; i < voltages_per_message; i++)
     {
-        const int voltages_start_bit = 6;
+        const int voltages_start_bit = 8;
         const int voltage_len_bits = 9;
         const int voltage_mask = 0b111111111;
         const float voltage_granularity = 0.01;

@@ -64,6 +64,7 @@ int BmsSimClient_init(void)
 	Mailbox_init(socket_desc);
 
 	out_CellList.cells_count = 0;
+	BmsIn_state.charger_available = 1;
 
 	return 0;
 }
@@ -129,13 +130,15 @@ Therm* BmsSimClient_get_therms_in(void)
 	return in_ThermList;
 }
 
-void BmsSimClient_set_cell_data(int index, int drain_state)
+void BmsSimClient_set_cell_data(int index, bool drain_state)
 {
 	if (out_CellList.cells_count < NUM_SERIES_CELLS)
 	{
 		diff_out_CellList = true;
 		
 		Cell new_cell = Cell_init_zero;
+		new_cell.is_draining = drain_state;
+		new_cell.index = index;
 		out_CellList.cells[out_CellList.cells_count] = new_cell;
 		out_CellList.cells_count++;
 	}
@@ -164,13 +167,21 @@ void BmsSimClient_io(void)
 
 	
 	Mailbox_add_to_outbox(&bmsdata);
+
+	if (out_CellList.cells_count > 0)
+	{
+		BmsData celldata = BmsData_init_zero;
+		celldata.which_data = BmsData_cell_list_tag;
+		celldata.data.cell_list = out_CellList;
+		Mailbox_add_to_outbox(&celldata);
+	}
+	
 	Mailbox_send();
 
 	bool diff_BmsIn_state = false;
 	bool diff_in_CellList = false;
 	bool diff_in_ThermList = false;
 	bool diff_BmsOut_state = false;
-	bool diff_out_CellList = false;
 	out_CellList.cells_count = 0;
 }
 

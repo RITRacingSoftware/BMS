@@ -29,7 +29,7 @@ void CAN_init(void);
  * Data is automatically retrieved from CAN_BUS.
  * id [in] - 11 bit CAN id- use the generated definitions in can_ids.h
  */
-void CAN_send_message(int id);
+void CAN_send_message(unsigned long int id);
 
 /**
  * Return true if last CAN message could not send, false otherwise.

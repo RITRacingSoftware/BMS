@@ -10,9 +10,6 @@
  * The charger available line is pulled to 0V when the charger is connected to the BMS, and remains at Vdd otherwise.
  */
 
-// If the average series cell voltage of the pack reaches this 
-#define CHARGE_SHUTOFF_V 4.1
-
 /**
  * Start off the charge enable line in a safe state.
  */
@@ -35,5 +32,10 @@ bool ChargeMonitor_charger_available(void);
  * Return true if charging has been requested, false otherwise.
  */
 bool ChargeMonitor_is_charging(void);
+
+/**
+ * Return true if charging has stopped to allow balancing, false otherwise.
+ */
+bool ChargeMonitor_is_balancing_allowed(void);
 
 #endif // CHARGE_MONITOR_H

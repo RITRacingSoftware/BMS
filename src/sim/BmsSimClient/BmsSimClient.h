@@ -39,7 +39,7 @@ BmsOut* BmsSimClient_get_outputs(void);
  * index [in] - cell index
  * drain_state [in] - new drain state for cell
  */
-void BmsSimClient_set_cell_data(int index, int drain_state);
+void BmsSimClient_set_cell_data(int index, bool drain_state);
 
 /**
  * Open-ended access for drivers to read generic inputs.
@@ -51,7 +51,7 @@ const BmsIn* BmsSimClient_get_inputs(void);
  * Open-ended access for drivers to read input cell data.
  * Return pointer to protobuf CellList structure
  */
-Cell* BmsSimClient_get_cells_in(void);
+Cell* BmsSimClient_get_cells_in(void); 
 
 /**
  * Open-ended access for drivers to read input thermistor data.

@@ -25,6 +25,7 @@
 #define OVERCURRENT_A 1000
 #define OVERCURRENT_CHG_A -200
 #define OVERCURRENT_HYST_MS 5
+#define CURRENT_TOLERANCE 0.01
 
 /**
  * Clear current history.

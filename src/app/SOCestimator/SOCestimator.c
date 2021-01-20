@@ -3,6 +3,7 @@
 #include "SOCestimator.h"
 
 #include "common_macros.h"
+#include "CAN.h"
 #include "BatteryCharacteristics.h"
 #include "HAL_EEPROM.h"
 
@@ -78,7 +79,9 @@ static float read_saved_soc(void)
  */
 static inline float calculate_dSOC(float current_A, unsigned int time_elapsed_ms)
 {
-    return (current_A * ((float) time_elapsed_ms) * 0.001 * MS_TO_HR) / BATTERY_CAPACITY_Ah;
+    // -1 because positive current is exiting the battery pack
+    // 100 converts to %
+    return -1.0 * 100.0 * (current_A * ((float) time_elapsed_ms) * MS_TO_HR) / BATTERY_CAPACITY_Ah;
 }
 
 // SOC waits for an average voltage reading to determine starting SOC.
@@ -106,6 +109,8 @@ void SOCestimator_init(void)
         starting_soc_calculated = false;
     }
     
+    encode_can_0x258_BmsStatus_SOC(&CAN_BUS, SOC_limit);
+    encode_can_0x258_BmsStatus_SOC_raw(&CAN_BUS, SOC_raw);
 }
 
 /**
@@ -122,6 +127,8 @@ void SOCestimator_coulomb_count_update_1kHz(float current_A)
     {
         pre_init_current_A += current_A;
     }
+
+    encode_can_0x258_BmsStatus_SOC_raw(&CAN_BUS, SOC_raw);
 }
 
 /**
@@ -152,6 +159,7 @@ void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, T
 
         starting_soc_calculated = true;
     }
+    encode_can_0x258_BmsStatus_SOC(&CAN_BUS, (uint8_t) (SOCestimator_get_soc_corrected() + .5));
 }
 
 /**

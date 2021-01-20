@@ -31,7 +31,7 @@ int BlfWriter_create_log_file(char* file_name);
  * dlc [in] - length of CAN message body
  * time_ms [in] - elapsed time since start of trace in milliseconds
  */
-void BlfWriter_log_message(int id, int64_t data, int dlc, int time_ms);
+void BlfWriter_log_message(int id, int64_t data, int dlc, uint64_t time_ms);
 
 /**
  * Clean up logging file resource.

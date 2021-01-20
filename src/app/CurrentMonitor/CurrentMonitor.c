@@ -15,7 +15,7 @@ void CurrentMonitor_init(void)
 
 void CurrentMonitor_1kHz(float current_A)
 {
-    if ((current_A >= OVERCURRENT_A) || (current_A <= OVERCURRENT_CHG_A))
+    if (FLOAT_GT_EQ(current_A, OVERCURRENT_A, CURRENT_TOLERANCE) || FLOAT_LT_EQ(current_A, OVERCURRENT_CHG_A, CURRENT_TOLERANCE))
     {
         if (incr_to_limit(&time_overcurrent_ms, OVERCURRENT_HYST_MS, 1))
         {

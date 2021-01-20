@@ -5,6 +5,7 @@
 
 // mocked includes
 #include "MockHAL_EEPROM.h"
+#include "MockCAN.h"
 
 // unmocked includes
 #include "common_macros.h"
@@ -12,6 +13,9 @@
 
 // module under test
 #include "SOCestimator.h"
+
+// need to define this here since CMock isn't smart enough to define it in MockCAN.h
+can_obj_f29bms_dbc_h_t CAN_BUS;
 
 // get a temperature model with a specified average temperature
 static TempModel_t tm_with_average(float temp)
