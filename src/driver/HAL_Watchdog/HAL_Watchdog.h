@@ -3,6 +3,8 @@
 
 // This header just exists for Mocks. TODO- implement this
 
+void HAL_Watchdog_Init(void);
+
 void pet(void);
 
 #endif // HAL_WATCHDOG_H
