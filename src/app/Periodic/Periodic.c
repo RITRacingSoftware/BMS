@@ -14,6 +14,7 @@
 #include "StatusLed.h"
 #include "TempConverter.h"
 #include "TempModel.h"
+#include "HAL_Watchdog.h"
 
 // the global battery model!
 static BatteryModel_t battery_model;
