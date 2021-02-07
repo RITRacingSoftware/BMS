@@ -1,12 +1,10 @@
-from BmsSim import sim, sim_nominal
+from BmsSim import sim
 import pytest
 
-def test_temperature_faults(sim_nominal):
+def test_temperature_faults(sim):
     """
     Vary thermistor voltages and check for shutdown line assertion.
     """
-    # just for easier reference
-    sim = sim_nominal
 
     sim.start_logging('sim_traces/temperature_faults.blf')
 

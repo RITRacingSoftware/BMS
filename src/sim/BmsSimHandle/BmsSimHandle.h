@@ -84,6 +84,6 @@ bool BmsSim_read_drain_state(int cell_index);
  * data [out] - can message data
  * return can id, or -1 if no more messages
  */
-int BmsSim_next_can_msg(int64_t* data);
+unsigned long int BmsSim_next_can_msg(int64_t* data);
 
 #endif // BMS_SIM_HANDLE

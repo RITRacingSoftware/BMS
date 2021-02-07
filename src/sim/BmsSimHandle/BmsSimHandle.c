@@ -185,7 +185,7 @@ void BmsSim_stop(void)
 
 void BmsSim_tick(void)
 {
-    static int ms_elapsed = 0;
+    static uint64_t ms_elapsed = 0;
 
     // Bad News: sending input on each tick is hella slow
     // Good News: we dont need to send input on each tick
@@ -226,8 +226,6 @@ void BmsSim_tick(void)
 
     iteration = (iteration + 1) % INPUT_PERIOD_MS;
 
-    
-
     // Tick the FreeRTOS clock causing a FreeRTOS tick and consumption of the sent input data.
     // i know, this is misleading...
     // What a program does with a signal is up to the program. 
@@ -259,6 +257,7 @@ void BmsSim_tick(void)
                         in_CellList[i] = cell_list.cells[i];
                     }
                 }
+                break;
             case BmsData_can_tag:
             {
                 CanMessage can_msg = incoming_msg.data.can;
@@ -273,8 +272,8 @@ void BmsSim_tick(void)
                 {
                     BlfWriter_log_message(can_msg.id, can_msg.data, 8, ms_elapsed);
                 }
-                break;
             }
+            break;
             default:
                 printf("Unknown message tag\n");
                 exit(-1);
@@ -284,7 +283,7 @@ void BmsSim_tick(void)
     ms_elapsed++;
 }
 
-int BmsSim_next_can_msg(int64_t* data)
+unsigned long int BmsSim_next_can_msg(int64_t* data)
 {
     static int can_cursor = 0;
     CanMessage next_msg;

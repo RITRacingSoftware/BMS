@@ -14,6 +14,10 @@
 #define ROUND_INT(v) (int)((float)(v) + 0.5)
 // idk why this doesnt work: #define FLOAT_EQ(f1, f2) (fabs(f1 - f2) < FLT_EPSILON)
 #define FLOAT_EQ(f1, f2, tol) (fabs((f1) - (f2)) <= (tol))
+#define FLOAT_GT(f1, f2, tol) (!FLOAT_EQ(f1, f2, tol) && ((f1) > (f2)))
+#define FLOAT_GT_EQ(f1, f2, tol) (FLOAT_EQ(f1, f2, tol) || ((f1) > (f2)))
+#define FLOAT_LT(f1, f2, tol) (!FLOAT_EQ(f1, f2, tol) && ((f1) < (f2)))
+#define FLOAT_LT_EQ(f1, f2, tol) (FLOAT_EQ(f1, f2, tol) || ((f1) < (f2)))
 
 // bitwise stuff
 #define BIT(x) (1 << (x))

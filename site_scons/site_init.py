@@ -77,7 +77,7 @@ def TOOL_DBCC(env):
     TARGET - c file node that will be generated. The directory of this file will be used in the command.
     """
     dbcc_builder = SCons.Builder.Builder(action=[
-        DBCC_DIR.abspath + '/dbcc -o ${TARGET.dir.abspath} ${SOURCE}'
+        DBCC_DIR.abspath + '/dbcc -s -o ${TARGET.dir.abspath} ${SOURCE}'
     ])
 
     env.Append(BUILDERS = {

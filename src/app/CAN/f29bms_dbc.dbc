@@ -27,7 +27,9 @@ BS_:
 BU_: Bms
 
 BO_ 600 BmsStatus: 8  Bms
- SG_ BmsStatus_SOC : 0|8@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ BmsStatus_SOC: 0|8@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ BmsStatus_SOC_raw: 8|8@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ BmsStatus_ChargeState: 16|5@1+ (1,0) [0|4] "" Vector__XXX
 
 BO_ 700 BmsFaultVector: 8 Bms
  SG_ BmsFaultVector_SLAVE_COMM_CELLS : 0|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -196,12 +198,18 @@ BO_ 704 BmsTemperatures: 8 Bms
  SG_ BmsTemperatures_19 m2: 42|8@1- (1,0) [-128|127] "C" Vector__XXX
 
 BO_ 800 BmsDrainStatusA: 8 Bms
- SG_ BmsDrainStatus_Cells0to63 : 0|64@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ BmsDrainStatus_Cells0to63 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 801 BmsDrainStatusB: 8 Bms
- SG_ BmsDrainStatus_Cells64to89 : 0|25@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ BmsDrainStatus_Cells64to89 : 0|25@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 900 BmsCurrent: 8 Bms
  SG_ BmsInstCurrentFilt : 0|32@1+ (0.001,0) [0|2000] "A" Vector__XXX
 
+BO_ 2550588916 BmsChargeRequest: 8 Bms
+ SG_ BmsChargeRequest_MaxVoltage: 0|16@1+ (0.1,0) [0|6553.3] "V" Vector__XXX
+ SG_ BmsChargeRequest_MaxCurrent: 16|16@1+ (0.1,0) [0|6553.3] "A" Vector__XXX
+ SG_ BmsChargeRequest_Control: 32|8@1+ (1,0) [0|1] "" Vector__XXX
+
 VAL_ 701 BmsFaultAlert_code 0 "FaultCode_SLAVE_COMM_CELLS" 1 "FaultCode_SLAVE_COMM_TEMPS" 2 "FaultCode_SLAVE_COMM_DRAIN_REQUEST" 3 "FaultCode_CURRENT_SENSOR_COMM" 4 "FaultCode_OVER_CURRENT" 5 "FaultCode_CELL_VOLTAGE_IRRATIONAL" 6 "FaultCode_CELL_VOLTAGE_DIFF" 7 "Faultcode_OUT_OF_JUICE" 8 "FaultCode_TEMPERATURE_IRRATIONAL" 9 "FaultCode_OVER_TEMP" 10 "FaultCode_DRAIN_FAILURE";
+VAL_ 600 BmsStatus_ChargeState 0 "ChargeState_DISCONNECTED" 1 "ChargeState_CONNECTED" 2 "ChargeState_CONNECTED_BALANCING" 3 "ChargeState_CONNECTED_CHARGING";

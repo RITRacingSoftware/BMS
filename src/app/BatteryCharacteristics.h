@@ -1,14 +1,23 @@
 #ifndef BATTERY_CHARACTERISTICS_H
 #define BATTERY_CHARACTERISTICS_H
 
+// NOTE: Be sure to define things here with decimals if you intend to use them as floats
+
 #define CELL_CAPACITY_Ah 6.550
-#define BATTERY_CAPACITY_Ah ((float) NUM_PARALLEL_CELLS * CELL_CAPACITY_Ah)
+#define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
 // todo - actually define these
 #define MAX_CELL_V 4.3
 #define MAX_ALLOWED_CELL_V 4.1
+#define CHARGED_CELL_V 4.0
 #define MIN_ALLOWED_CELL_V 1.2
-#define MIN_CELL_V 0
+#define MIN_CELL_V 0.0
+#define MAX_CHARGING_CURRENT_A 100.0
+#define MAX_CHARGING_V 5
+#define CHARGE_CURRENT_SETTLE_TIME_S 5
+
+// The amount two cell voltages must differ by to be considered different
+#define VOLTAGE_TOLERANCE 0.001
 
 // maxmimum expected difference in cell voltages
 #define MAX_CELL_DIFF_V 0.5

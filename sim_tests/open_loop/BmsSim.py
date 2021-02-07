@@ -7,13 +7,12 @@ import cantools
 
 """
 Python wrapping of BmsSim.c functions.
-
 """
-
 class BmsSim:
     def __init__(self):
         signal.signal(signal.SIGINT, self._interrupt_signal_handler)
         self.can_db = cantools.database.load_file('src/app/CAN/f29bms_dbc.dbc')
+
         self.signals = {}
 
         self.clib = ctypes.CDLL('src/sim/libBmsSim.so') # must be relative from root of repo, thats where the test scripts are ran from
@@ -35,7 +34,6 @@ class BmsSim:
         self.stop()
         exit(0)
 
-
     def tick(self):
         self.clib.BmsSim_tick()
 
@@ -45,7 +43,7 @@ class BmsSim:
         while(can_id != -1):
             can_id = self.clib.BmsSim_next_can_msg(ctypes.byref(can_data))
             if (can_id != -1):
-                self.signals.update(self.can_db.decode_message(can_id, can_data.value.to_bytes(8, "little")))
+                self.signals.update(self.can_db.decode_message(can_id & 0x1FFFFFFF, can_data.value.to_bytes(8, "little", signed=True)))
 
     def stage_temp_info(self, therm_index, voltage):
         self.clib.BmsSim_set_temp_info(therm_index, ctypes.c_float(voltage))
@@ -68,34 +66,34 @@ class BmsSim:
     def set_current(self, current):
         self.clib.BmsSim_set_current(ctypes.c_float(current))
     
-    def __del__(self):
-        self.stop()
+    def read_drain_state(self, index):
+        return self.clib.BmsSim_read_drain_state(index)
 
+can_db_loaded = False
 @pytest.fixture
 def sim():
     """
     Think of this as a "Before Each" function from other testing frameworks.
     If a pytest function has an argument "sim", this function is run before the test and its 
     return value is "sim".
+
+    Starts the f29bms process in a nominal steady state, defined as no faults being active
+    and no draining occuring. Also starts fully charged.
     """
     
     s = BmsSim()
     s.start()
-    return s
 
-@pytest.fixture
-def sim_nominal(sim):
-    """
-    Starts the f29bms process in a nominal steady state, defined as no faults being active
-    and no draining occuring. Also starts fully charged.
-    """
     for i in range(0, 90):
-        sim.stage_cell_info(i, 4.1, False)
+        s.stage_cell_info(i, 4.2, False)
         
     for i in range(0, 20):
-        sim.stage_temp_info(i, 1.65)
+        s.stage_temp_info(i, 1.65)
 
-    sim.set_current(100)
-    sim.set_charger_available(True)
+    s.set_current(100)
+    s.set_charger_available(True) # high is disconnected
+    s.tick() # essential- applies these changes so tests dont try to initially overwrite them
 
-    return sim
+    yield s
+
+    s.stop()

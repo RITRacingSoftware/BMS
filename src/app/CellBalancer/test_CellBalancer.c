@@ -39,6 +39,7 @@ void test_CellBalancer_drain_failure(void)
     // drain states start false so no faults should be set
     FaultManager_clear_fault_ExpectAnyArgs();
     ChargeMonitor_charger_available_IgnoreAndReturn(false); // not testing charging
+    ChargeMonitor_is_balancing_allowed_IgnoreAndReturn(true);
     CellBalancer_stage_cell_draining(&bm);
 
     TEST_ASSERT_MESSAGE(bm.cells[0].is_draining == true, "Cell balancer failed to trigger drain.");

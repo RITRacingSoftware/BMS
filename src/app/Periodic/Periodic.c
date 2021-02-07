@@ -25,13 +25,13 @@ void Periodic_init(void)
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
         // start with a cell voltage that shouldn't cause any errors
-        battery_model.cells[i].voltage = MAX_CELL_V - 0.1;
+        battery_model.cells[i].voltage = MAX_ALLOWED_CELL_V;
         // nothing should be draining on startup
         battery_model.cells[i].is_draining = false;
     }
-    battery_model.average_V = MAX_CELL_V - 0.1;
-    battery_model.largest_V = MAX_CELL_V - 0.1;
-    battery_model.smallest_V = MAX_CELL_V - 0.1;
+    battery_model.average_V = MAX_ALLOWED_CELL_V;
+    battery_model.largest_V = MAX_ALLOWED_CELL_V;
+    battery_model.smallest_V = MAX_ALLOWED_CELL_V;
     
     for (int i = 0; i < NUM_THERMISTOR; i++)
     {
@@ -43,10 +43,10 @@ void Periodic_init(void)
 void Periodic_1Hz(void)
 {
     // Request or reject charging
-    // ChargeMonitor_1Hz(&battery_model);
+    ChargeMonitor_1Hz(&battery_model);
 
     // update the bounds on State of Charge based on average pack voltage
-    // SOCestimator_voltage_threshold_update_10Hz(&battery_model, &temp_model);
+    SOCestimator_voltage_threshold_update_10Hz(&battery_model, &temp_model);
 
     CAN_1Hz();
 }
@@ -54,22 +54,21 @@ void Periodic_1Hz(void)
 void Periodic_10Hz(void)
 {
     // update information from the outside world
-    // SlaveInterface_read_cell_info(&battery_model);
+    SlaveInterface_read_cell_info(&battery_model);
     SlaveInterface_read_temperature_info(&temp_model);
 
     // convert from thermistor voltage probe readings to temperatures
     TempConverter_convert(&temp_model);
-    // for (int i = 0; i < NUM_THERMISTOR; i++)
-    //     printf("Temp %d: %f\n", i, temp_model.temps_C[i]);
+   
     // check the new slave board readings for errors
-    // PackMonitor_validate_battery_model_10Hz(&battery_model);
+    PackMonitor_validate_battery_model_10Hz(&battery_model);
     PackMonitor_validate_temp_model_10Hz(&temp_model);
 
     // stage/unstage cell balancing based on cell voltage differences
-    // CellBalancer_stage_cell_draining(&battery_model);
+    CellBalancer_stage_cell_draining(&battery_model);
 
     // transmit new drain requests to slave board chips
-    // SlaveInterface_request_cell_draining(&battery_model);
+    SlaveInterface_request_cell_draining(&battery_model);
 
     // statuse LED blink algorithm iteration
     StatusLed_10Hz();
@@ -82,17 +81,18 @@ void Periodic_1kHz(void)
     // read and filter a new current value from the sensor
     CurrentSense_1kHz();
 
-    // float filtered_current;
-    // if (CurrentSense_get_current(&filtered_current))
-    // {
-    //     // check filtered current for problems, set faults if they exist
-    //     CurrentMonitor_1kHz(filtered_current);
-    // }
-    // else
-    // {
-    //     // either the filtering in CurrentSense hasn't converged yet
-    //     // or there was an error reading the current and a fault has been set
-    // }
+    float filtered_current;
+    if (CurrentSense_get_current(&filtered_current))
+    {
+        // check filtered current for problems, set faults if they exist
+        CurrentMonitor_1kHz(filtered_current);
+        SOCestimator_coulomb_count_update_1kHz(filtered_current);
+    }
+    else
+    {
+        // either the filtering in CurrentSense hasn't converged yet
+        // or there was an error reading the current and a fault has been set
+    }
 
     // shut down the car if any faults have been present for too long
     DriveMonitor_1kHz();

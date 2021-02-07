@@ -498,7 +498,7 @@ pytest_env = Environment(tools=[TOOL_PYTEST])
 
 # list of python files with pytests in them
 pytest_source = []
-for source in Glob(os.path.join(OPEN_LOOP_TESTS_DIR.abspath, '*tests.py')):
+for source in Glob(os.path.join(OPEN_LOOP_TESTS_DIR.abspath, '*test.py')):
     pytest_source.append(source)
 
 pytest_results = []

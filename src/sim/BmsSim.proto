@@ -38,7 +38,7 @@ message BmsOut {
 
 // messages that can be sent either direction
 message CanMessage {
-    int32 id = 1;
+    uint32 id = 1;
     int64 data = 2;
 }
 
@@ -49,5 +49,5 @@ message CellList {
 message Cell {
     int32 index = 1;
     float voltage = 2;
-    float is_draining = 3;
+    bool is_draining = 3;
 }

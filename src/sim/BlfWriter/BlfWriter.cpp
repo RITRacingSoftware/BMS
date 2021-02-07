@@ -19,14 +19,14 @@ int BlfWriter_create_log_file(char* file_name)
     return 0;
 }
 
-void BlfWriter_log_message(int id, int64_t data, int dlc, int time_ms)
+void BlfWriter_log_message(int id, int64_t data, int dlc, uint64_t time_ms)
 {
     auto * msg = new Vector::BLF::CanMessage;
     msg->channel = 1;
     msg->flags = 1;
     msg->dlc = dlc;
     msg->id = id;
-    msg->objectTimeStamp = 1000 * time_ms;
+    msg->objectTimeStamp = time_ms * 1000 * 1000;
     for (int i = 0; i < dlc; i++)
     {
         msg->data[i] = ((data & ((int64_t)0xFF << (i*8))) >> (i*8));

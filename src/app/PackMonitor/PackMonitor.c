@@ -1,4 +1,7 @@
+#include <stdio.h>
+
 #include "counters.h"
+#include "common_macros.h"
 
 #include "ChargeMonitor.h"
 #include "FaultManager.h"
@@ -17,11 +20,12 @@ static void get_cell_voltage_info(BatteryModel_t* bm, float* largest_V, float* s
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
         float cell_V = bm->cells[i].voltage;
-        if (cell_V > *largest_V)
+        if (FLOAT_GT(cell_V, *largest_V, VOLTAGE_TOLERANCE))
         {
             *largest_V = cell_V;
         }
-        else if (cell_V < *smallest_V)
+        
+        if (FLOAT_LT(cell_V, *smallest_V, VOLTAGE_TOLERANCE))
         {
             *smallest_V = cell_V;
         }
@@ -40,12 +44,12 @@ static void get_temp_info(TempModel_t* tm, float* largest_deg_C, float* smallest
     {
         float temp_deg_C = tm->temps_C[i];
 
-        if (temp_deg_C > *largest_deg_C)
+        if (FLOAT_GT(temp_deg_C, *largest_deg_C, VOLTAGE_TOLERANCE))
         {
             *largest_deg_C = temp_deg_C;
         }
         
-        if (temp_deg_C < *smallest_deg_C)
+        if (FLOAT_LT(temp_deg_C, *smallest_deg_C, VOLTAGE_TOLERANCE))
         {
             *smallest_deg_C = temp_deg_C;
         }
@@ -79,14 +83,12 @@ void PackMonitor_init(void)
  */
 void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 {
-    float largest_V = 0;
-    float smallest_V = MAX_CELL_V * 2;
-    float average_V = 0;
+    float largest_V, smallest_V, average_V;
 
     get_cell_voltage_info(bm, &largest_V, &smallest_V, &average_V);
 
     // check for irrationality
-    if ((largest_V > MAX_CELL_V) || (smallest_V < MIN_CELL_V))
+    if (FLOAT_GT(largest_V, MAX_CELL_V, VOLTAGE_TOLERANCE) || FLOAT_LT(smallest_V, MIN_CELL_V, VOLTAGE_TOLERANCE))
     {
         if (incr_to_limit(&irrational_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
@@ -103,7 +105,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 
     // check for out of charge
     // out of charge should not occur if we're connected to the charger
-    if ((smallest_V <= MIN_ALLOWED_CELL_V) && !ChargeMonitor_charger_available())
+    if (FLOAT_LT_EQ(smallest_V, MIN_ALLOWED_CELL_V, VOLTAGE_TOLERANCE) && !ChargeMonitor_charger_available())
     {
         if (incr_to_limit(&low_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
@@ -121,7 +123,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
     float largest_diff_V = largest_V - smallest_V;
 
     // check for voltage difference error
-    if (largest_diff_V >= MAX_CELL_DIFF_V)
+    if (FLOAT_GT_EQ(largest_diff_V, MAX_CELL_DIFF_V, VOLTAGE_TOLERANCE))
     {
         if (incr_to_limit(&diff_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {   
@@ -153,7 +155,7 @@ void PackMonitor_validate_temp_model_10Hz(TempModel_t* tm)
     get_temp_info(tm, &largest_deg_C, &smallest_deg_C);
 
     // check for irrational temp
-    if ((largest_deg_C > MAX_TEMP_DEG_C) || (smallest_deg_C < MIN_TEMP_DEG_C))
+    if (FLOAT_GT(largest_deg_C, MAX_TEMP_DEG_C, VOLTAGE_TOLERANCE) || FLOAT_LT(smallest_deg_C, MIN_TEMP_DEG_C, VOLTAGE_TOLERANCE))
     {
         if (incr_to_limit(&irrational_temp_ms, TEMPERATURE_FAULT_HYSTERESIS_MS, 100))
         {
@@ -179,7 +181,7 @@ void PackMonitor_validate_temp_model_10Hz(TempModel_t* tm)
     }
 
     // check for overtemperature
-    if (largest_deg_C > OVER_TEMP_DEG_C)
+    if (FLOAT_GT(largest_deg_C, OVER_TEMP_DEG_C, VOLTAGE_TOLERANCE))
     {
         if (incr_to_limit(&over_temp_ms, TEMPERATURE_FAULT_HYSTERESIS_MS, 100))
         {
