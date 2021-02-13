@@ -7,10 +7,15 @@
 
 // TODO- implement this
 
+//voltages: array to be populated with cell voltages
+//is_draining: array to be populated with whether each cell is draining
+//num: number of cells to get info from
 Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, unsigned int num);
 
 Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num);
 
+//cells: drain stated for to set for each cell
+//num: number of cells to set drain state for
 Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num);
 
 #endif // HAL_SLAVECHIPS_H
