@@ -141,4 +141,5 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num){
     }
     char *rx;
     HAL_Spi_transmit_and_receive(thisPin, tx, 4 + (Sets_of_12 * 6), rx, 0);
+    //TO DO: add error checking
 }
