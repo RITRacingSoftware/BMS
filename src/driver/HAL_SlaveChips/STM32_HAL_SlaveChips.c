@@ -1,17 +1,25 @@
+#include "HAL_Spi.h"
+
 //Command Codes (CC)
 #define READ_VOLTAGE_GROUP_A 0x4
 #define READ_VOLTAGE_GROUP_B 0x6
 #define READ_VOLTAGE_GROUP_C 0x8
 #define READ_VOLTAGE_GROUP_D 0xA
+#define WRITE_CONFIGURATION_REGISTER_GROUP 0x1
+#define READ_CONFIGURATUION_REGISTER_GROUP 0x2
+
 
 //Masks for broadcast command format
 //CMD0 = CC & 0x700
 //CMD1 = CC & 0xFF
 
 //DCC[x]: Discharge cell X, x = 1 - 12, 1->turn on short switching for cell x, 0->turn off short switching for cell x
+//DCC in configuration register group
 Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, unsigned int num)
 {
     //DCP: Discharge Permited. 1 = Discharge permitted, 0 = Discharge not permitted
+
+
     
 }
 
