@@ -135,9 +135,11 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num){
         tx[5 + i] = ByteTwo;
         tx[6 + i] = ByteThree;
         tx[7 + i] = ByteFour;
-        tx[8 + i] = {is_draining[i*2], is_draining[(i*2)+1], is_draining[(i*2)+2], is_draining[(i*2)+3], 
-            is_draining[(i*2)+4], is_draining[(i*2)+5], is_draining[(i*2)+6], is_draining[(i*2)+7]};
-        tx[9 + i] = {0, 0, 0, 0, is_draining[(i*2)+8], is_draining[(i*2)+9], is_draining[(i*2)+10], is_draining[(i*2)+11]}; //First four Discharge Timeout
+        char temp = cells[i*2] && (cells[(i*2)+1] << 1) && (cells[(i*2)+2] << 2) && (cells[(i*2)+3] << 3) && 
+            (cells[(i*2)+4] << 4) &&  (cells[(i*2)+5] << 5) && (cells[(i*2)+6] << 6) && (cells[(i*2)+7] << 7);
+        tx[8 + i] = temp;
+        temp = cells[(i*2)+8] && (cells[(i*2)+9] << 1) && (cells[(i*2)+10] << 2) && (cells[(i*2)+11] << 3) && 0x0F;
+        tx[9 + i] = temp; //First four Discharge Timeout
     }
     char *rx;
     HAL_Spi_transmit_and_receive(thisPin, tx, 4 + (Sets_of_12 * 6), rx, 0);
