@@ -14,10 +14,10 @@
 
 #define CONFIGURATION_REGISTER_DRAINING_MASK 0xF
 
-const char ReadVoltagesCMD0[4] = {(char)0xFF && READ_VOLTAGE_GROUP_A, (char)0xFF && READ_VOLTAGE_GROUP_B, 
-    (char)0xFF && READ_VOLTAGE_GROUP_C, (char)0xFF && READ_VOLTAGE_GROUP_D};
-const char ReadVoltagesCMD1[1] = {(char)0xFF && (READ_VOLTAGE_GROUP_A>>8), (char)0xFF && (READ_VOLTAGE_GROUP_B>>8), 
-    (char)0xFF && (READ_VOLTAGE_GROUP_C>>8), (char)0xFF && (READ_VOLTAGE_GROUP_D>>8)};
+const char ReadVoltagesCMD0[4] = {(char)(0xFF && READ_VOLTAGE_GROUP_A), (char)(0xFF && READ_VOLTAGE_GROUP_B), 
+    (char)(0xFF && READ_VOLTAGE_GROUP_C), (char)(0xFF && READ_VOLTAGE_GROUP_D)};
+const char ReadVoltagesCMD1[4] = {(char)(0xFF && (READ_VOLTAGE_GROUP_A>>8)), (char)(0xFF && (READ_VOLTAGE_GROUP_B>>8)), 
+    (char)(0xFF && (READ_VOLTAGE_GROUP_C>>8)), (char)(0xFF && (READ_VOLTAGE_GROUP_D>>8))};
 
 //Function that reads the cell voltages for all of the cells
 //voltages: pointer to where cell voltages will be put
@@ -88,13 +88,18 @@ static void read_All_Is_Draining(bool* is_draining, unsigned int num_Groups_of_1
 //DCC in configuration register group
 Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, unsigned int num)
 {
-    //DCP: Discharge Permited. 1 = Discharge permitted, 0 = Discharge not permitted
-    char *recieveVoltages[num*2]; //2 bytes for voltage of each cell, 2 to get DCC values
-    char transmitData[4]; //CMD0, CMD1, PEC0, PEC1
-    transmitData[0] = 0xFF && READ_VOLTAGE_GROUP_A;
-    transmitData[1] = 0xFF && (READ_VOLTAGE_GROUP_A >> 8);
-
-    
+    int Sets_of_12 = num / 12;
+    if((num % 12) != 0)
+    {
+        Sets_of_12++;
+    }
+    float AllCellVoltages[Sets_of_12*12]; //Make sure if num isn't a multiple of 12, array is big enough
+    bool AllIsDraining[Sets_of_12*12];
+    read_All_Cell_Voltages(AllCellVoltages, Sets_of_12);
+    read_All_Is_Draining(AllIsDraining, Sets_of_12);
+    memcpy(voltages, AllCellVoltages, num);
+    memcpy(is_draining, AllIsDraining, num);
+    //TO DO: add error checking
 }
 
 Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num){
