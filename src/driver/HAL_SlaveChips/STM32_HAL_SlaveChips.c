@@ -7,8 +7,14 @@
 #define READ_VOLTAGE_GROUP_B 0x6
 #define READ_VOLTAGE_GROUP_C 0x8
 #define READ_VOLTAGE_GROUP_D 0xA
+
+//WRITE_CONFIGURATION_REGISTER_GROUP (DCC for setting is_draining state)
 #define WRITE_CONFIGURATION_REGISTER_GROUP 0x1
+#define WRITE_CONFIGURATION_REGISTER_PEC0 0x3D
+#define WRITE_CONFIGURATION_REGISTER_PEC1 0x6E
+
 #define READ_CONFIGURATUION_REGISTER_GROUP 0x2
+
 
 //#define CMD_MASK (uint8_t) 0xFF
 
@@ -107,5 +113,32 @@ Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num
 }
 
 Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num){
-
+    int Sets_of_12 = num / 12;
+    if((num % 12) != 0)
+    {
+        Sets_of_12++;
+    }
+    char tx[4 + (Sets_of_12 * 6)]; //CMD0, CMD1, PEC0, PEC1, 6 bytes of data for each set of 12
+    tx[0] = WRITE_CONFIGURATION_REGISTER_GROUP && 0xFF;
+    tx[1] = (WRITE_CONFIGURATION_REGISTER_GROUP >> 8) && 0xFF;
+    tx[2] = WRITE_CONFIGURATION_REGISTER_PEC0;
+    tx[3] = WRITE_CONFIGURATION_REGISTER_PEC1;
+    //Set other parameters of Configuration Register
+    //Alternative way, could be to read the register, and only change needed bits, but would take longer
+    char ByteOne = 0xF8; //GPIO pins, and some others, all set to default
+    char ByteTwo = 0x00; //Under voltage comparison , set to default
+    char ByteThree = 0x00; //Under Voltage comparison and over voltage comparison
+    char ByteFour = 0x00; //Over Voltage Comparison, set to default
+    for(int i = 0; i = i + 6; i < (6 * Sets_of_12)) //Cycle through each set of 12, adding the 6 bytes for configuration register
+    {
+        tx[4 + i] = ByteOne;
+        tx[5 + i] = ByteTwo;
+        tx[6 + i] = ByteThree;
+        tx[7 + i] = ByteFour;
+        tx[8 + i] = {is_draining[i*2], is_draining[(i*2)+1], is_draining[(i*2)+2], is_draining[(i*2)+3], 
+            is_draining[(i*2)+4], is_draining[(i*2)+5], is_draining[(i*2)+6], is_draining[(i*2)+7]};
+        tx[9 + i] = {0, 0, 0, 0, is_draining[(i*2)+8], is_draining[(i*2)+9], is_draining[(i*2)+10], is_draining[(i*2)+11]}; //First four Discharge Timeout
+    }
+    char *rx;
+    HAL_Spi_transmit_and_receive(thisPin, tx, 4 + (Sets_of_12 * 6), rx, 0);
 }
