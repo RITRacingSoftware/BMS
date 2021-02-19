@@ -1,6 +1,8 @@
 #include "HAL_Spi.h"
 #include <stdint.h>
 #include <string.h>
+#include "stm32f0xx.h"
+#include "stm32f0xx_rcc.h"
 
 //Command Codes (CC)
 #define READ_VOLTAGE_GROUP_A 0x4
@@ -8,12 +10,24 @@
 #define READ_VOLTAGE_GROUP_C 0x8
 #define READ_VOLTAGE_GROUP_D 0xA
 
+#define READ_CONFIGURATUION_REGISTER_GROUP 0x2
+
+
+
 //WRITE_CONFIGURATION_REGISTER_GROUP (DCC for setting is_draining state)
 #define WRITE_CONFIGURATION_REGISTER_GROUP 0x1
 #define WRITE_CONFIGURATION_REGISTER_PEC0 0x3D
 #define WRITE_CONFIGURATION_REGISTER_PEC1 0x6E
 
-#define READ_CONFIGURATUION_REGISTER_GROUP 0x2
+
+//GPIO
+#define READ_AUX_REG_A 0xC
+#define GPIO_START_CONVERSION_MASK 0x470 //CC
+#define ADC_MODE_MASK 0x100
+#define CHG_GPIO1 0x1
+#define CHG_GPIO2 0x2
+#define CHG_GPIO3 0x3
+
 
 
 //#define CMD_MASK (uint8_t) 0xFF
@@ -86,6 +100,17 @@ static void read_All_Is_Draining(bool* is_draining, unsigned int num_Groups_of_1
 
 }
 
+void HAL_SlaveChip_Init(){
+    RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
+    TIM6->PSC = PRESCALE_VAL_INTERNAL_TIM;
+    TIM6->CR1 |= (TIM_CR1_ARPE | TIM_CR1_URS | TIM_CR1_DIR);
+//     Using it:
+//     TIM6->ARR = val;
+//     TIM6->EGR |= TIM_EGR_UG;
+//     TIM6->SR = 0;
+//     TIM6->CR1 |= TIM_CR1_CEN;
+}
+
 //Masks for broadcast command format
 //CMD0 = CC & 0x700
 //CMD1 = CC & 0xFF
@@ -108,8 +133,41 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     //TO DO: add error checking
 }
 
+//Every other LTC has 3 thermistors, 1st,3rd, etc have thermistors
 Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num){
+    //GPIO voltage in Auxilary Register Group A
+    uint8_t startConversionCommand[4];
+    //NEED PEC
+    startConversionCommand[0] = (0xFF && (GPIO_START_CONVERSION_MASK || CHG_GPIO1 || ADC_MODE_MASK));
+    startConversionCommand[1] = (0xFF && ((GPIO_START_CONVERSION_MASK || ADC_MODE_MASK) << 8));
+    HAL_Spi_transmit_and_receive(thatPin, &startConversionCommand[0], 4, NULL, 0);
+    startConversionCommand[0] = (0xFF && (GPIO_START_CONVERSION_MASK || CHG_GPIO2 || ADC_MODE_MASK));
+    HAL_Spi_transmit_and_receive(thatPin, &startConversionCommand[0], 4, NULL, 0);
+    startConversionCommand[0] = (0xFF && (GPIO_START_CONVERSION_MASK || CHG_GPIO3 || ADC_MODE_MASK));
+    HAL_Spi_transmit_and_receive(thatPin, &startConversionCommand[0], 4, NULL, 0);
 
+
+    //WAIT
+    TIM6->ARR = val;
+    TIM6->EGR |= TIM_EGR_UG;
+    TIM6->SR = 0;
+    TIM6->CR1 |= TIM_CR1_CEN;
+
+    //NEED TO IMPLEMENT PEC
+    int setsOfTwelve = ((num / 3) * 2);
+    uint8_t transmitCommand[4];
+    transmitCommand[0] = 0xFF && READ_AUX_REG_A;
+    transmitCommand[1] = 0xFF && (READ_AUX_REG_A >> 8);
+    //NEED TO IMPLEMENT PEC
+    //transmitCommand[2] and [3] for PEC0 and PEC1
+    uint8_t tempRecieved[6*setsOfTwelve];
+    //Read the Configuration Register Group to get DCC
+    HAL_Spi_transmit_and_receive(thisPin, &transmitCommand[0], 4, &tempRecieved[0], 6*setsOfTwelve);
+    for(int i = 0; i < setsOfTwelve; i = i + 2){
+        temperatures[(i/2) * 3] = tempRecieved[i*6] && (tempRecieved[(i*6)+1] << 8);
+        temperatures[((i/2) * 3) + 1] = tempRecieved[(i*6)+2] || (tempRecieved[(i*6)+3] << 8);
+        temperatures[((i/2) * 3) + 2] = tempRecieved[(i*6)+4] || (tempRecieved[(i*6)+5] << 8);
+    }
 }
 
 Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num){

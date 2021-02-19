@@ -105,6 +105,7 @@ int main(int argc, char** argv)
     SOCestimator_init();
     FaultManager_init();
     StatusLed_init();
+    HAL_SlaveChip_Init();
     TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
 
 #ifdef SIMULATION
