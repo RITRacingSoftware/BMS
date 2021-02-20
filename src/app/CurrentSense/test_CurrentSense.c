@@ -16,7 +16,7 @@
 #define MAX_FILTER_INIT_MS 20
 
 // need to define this here since CMock isn't smart enough to define it in MockCAN.h
-can_obj_f29bms_dbc_h_t CAN_BUS;
+CAN_BUS can_bus;
 
 /**
  * Verify that the CurrentSense module is in fact using a low pass filter on the sensor readings.

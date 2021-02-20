@@ -17,7 +17,6 @@
 #include "PbSockets.h"
 #include "Mailbox.h"
 #include "TempModel.h"
-#include "can_ids.h"
 #include "f29bms_dbc.h"
 #include "BlfWriter.h"
 #include "BmsSimConfig.h"

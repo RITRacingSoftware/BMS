@@ -1,0 +1,1 @@
+`cat build.sh` -c

@@ -24,6 +24,8 @@ SIM_DIR = SRC_DIR.Dir('sim')
 OPEN_LOOP_TESTS_DIR = REPO_ROOT_DIR.Dir('sim_tests/open_loop/')
 CMOCK_ROOT_DIR = REPO_ROOT_DIR.Dir('libs/cmock/')
 
+LINKER_FILE = REPO_ROOT_DIR.File('stm32f091.ld')
+
 # command line options
 AddOption('--dbg',
           dest='dbg',
@@ -121,6 +123,8 @@ tool_paths.append(STM32_LIB_DIR.Dir('inc'))
 tool_paths.append(STM32_CMSIS_DIR.Dir('Device/ST/STM32F0xx/Include'))
 tool_paths.append(STM32_CMSIS_DIR.Dir('Include'))
 tool_paths.append('libs/nanopb/')
+tool_paths.append('libs/FreeRTOS/Source/include')
+tool_paths.append('libs/FreeRTOS/Source/portable/ThirdParty/GCC/Posix')
 module_path_names = []
 for mod_name, mod_path in modules:
     module_path_names.append(mod_path)
@@ -132,16 +136,20 @@ if GetOption('dbg'): # set by command line option
 
 linux_comp_env = Environment(
     CC='gcc',
-    CPPPATH=module_path_names + mock_modules + sim_modules + tool_paths + [APP_DIR.abspath, COMMON_DIR.abspath, SIM_DIR.abspath],
+    CPPPATH=module_path_names + mock_modules + sim_modules + tool_paths + [SRC_DIR.abspath, APP_DIR.abspath, COMMON_DIR.abspath, SIM_DIR.abspath],
     CCFLAGS=linux_comp_flags
 )
 
 stm32_comp_env = Environment(
-    tools=[TOOL_ARM_ELF_HEX, 'gcc'],
+    tools=[TOOL_ARM_ELF_HEX, 'gcc', 'as'],
     CC=scons_constants.ARM_CC,
+    AS=scons_constants.ARM_AS,
+    LD=scons_constants.ARM_LD,
     CPPPATH=module_path_names + tool_paths + [SRC_DIR.Dir('app').abspath, SRC_DIR.abspath],
     CPPDEFINES=['STM32F091', 'USE_STDPERIPH_DRIVER'],
-    CCFLAGS=['-mcpu=cortex-m0']
+    CCFLAGS=['-ggdb','-mcpu=cortex-m0', '-mthumb'],
+    ASFLAGS=['-mthumb', '-I{}'.format(STM32_LIB_DIR.Dir('inc').abspath), '-I{}'.format(STM32_CMSIS_DIR.Dir('Include').abspath)],
+    LDFLAGS=['-T{}'.format(LINKER_FILE.abspath), '-mcpu=cortex-m0', '-mthumb', '-Wall', '--specs=nosys.specs']
 )
 
 # instructions to compile every module
@@ -187,6 +195,12 @@ stm32_lib_objs = []
 for source in Glob(os.path.join(STM32_LIB_DIR.Dir('src').abspath, '*.c')):
     stm32_lib_objs += stm32_comp_env.Object(source)
 
+#env = Environment()
+#env.Object('stm32libs/CMSIS/Device/ST/STM32F0xx/Source/Templates/gcc_ride7/startup_stm32f0xx.s')
+
+stm32_lib_objs += stm32_comp_env.Object(LIBS_DIR.File('stm32libs/CMSIS/Device/ST/STM32F0xx/Source/Templates/system_stm32f0xx.c'))
+stm32_lib_objs += stm32_comp_env.Object(LIBS_DIR.File('stm32libs/CMSIS/Device/ST/STM32F0xx/Source/Templates/gcc_ride7/startup_stm32f0xx.s'))
+
 # instructions to compile every mock module
 mock_objects = {}
 for module_name, module_dir in (app_modules + driver_modules):
@@ -195,38 +209,17 @@ for module_name, module_dir in (app_modules + driver_modules):
 """
 CAN module depends on generated CAN code.
 This section defines this dependency and provides instructions for generating this code
-using the dbcc tool + custom id define generation tool.
+using cantools, a python module.
 """
 DBC_DIR = APP_DIR.Dir('CAN')
 DBC_NAME = 'f29bms_dbc'
 
-# first take care of the can id definition
-can_header_script = LIBS_DIR.File('gen_can_header/gen_can_header_from_dbc.py')
-can_header = APP_DIR.File('CAN/can_ids.h')
-
-can_id_header = Command(
-    [can_header],
-    [],
-    ['python3 {} {} {}'.format(can_header_script.abspath, DBC_DIR.File(DBC_NAME + '.dbc'), can_header.abspath) ]
-)
-
-# tell scons to update the id file whenever the dbc changes
-Depends(can_header, DBC_DIR.File(DBC_NAME + '.dbc'))
-
-# first must compile dbcc from source
-dbcc_tool_bin = Command(
-    [DBCC_DIR.File('dbcc')],
-    [],
-    ['cd {} && make'.format(DBCC_DIR.abspath)]
-)
-Clean(dbcc_tool_bin, Glob(DBC_DIR.abspath + "/*.o"))
-
 # instructions to generate can packing source code
-dbcc_env = Environment(
-    tools=[TOOL_DBCC]
+can_gen_env = Environment(
+    tools=[TOOL_CANTOOLS]
 )
 
-generated_dbc_source = dbcc_env.GenerateDbcSource(
+generated_dbc_source = can_gen_env.GenerateDbcSource(
     source=DBC_DIR.File(DBC_NAME + '.dbc'),
     target=DBC_DIR.File(DBC_NAME + '.c')
 )
@@ -246,9 +239,6 @@ stm32_dbc_gen_obj = stm32_comp_env.Object(
     source=DBC_DIR.File(DBC_NAME + '.c'),
     target=DBC_DIR.File('STM32_' + DBC_NAME + '.o')
 )
-
-# tell scons the dbcc program must exist in order to run it
-Depends(generated_dbc_source, dbcc_tool_bin)
 
 # establish explicit dependency of compiled CAN module on generated source
 Depends(linux_app_objects['CAN'], generated_dbc_source)
@@ -270,16 +260,24 @@ cmock_libs = Command(
 )
 Clean(cmock_libs, CMOCK_ROOT_DIR.Dir('build'))
 
-#cmock_libs = [CMOCK_ROOT_DIR.File('build/meson-out/libcmock.a.p/cmock.c.o'), CMOCK_ROOT_DIR.File('build/meson-out/libunity.a.p/unity.c.o')]
+cmock_libs = [CMOCK_ROOT_DIR.File('build/meson-out/libcmock.a.p/cmock.c.o'), CMOCK_ROOT_DIR.File('build/meson-out/libunity.a.p/unity.c.o')]
+
+unit_tested_modules = []
+for i in range(len(app_modules)):
+    app = app_modules[i]
+    # CAN doesn't do enough to need to be unit tested
+    # And uses some FreeRTOS stuff which isn't worth mocking out
+    if app[0] != 'CAN':
+        unit_tested_modules.append(app)
 
 # instructions for compiling each module's unit test source
 test_objects = {}
-for module_name, module_dir in app_modules:    
+for module_name, module_dir in unit_tested_modules:    
     test_objects[module_name] = linux_comp_env.Object(module_dir.File('test_{}.c'.format(module_name)))
 
 # instructions for compiling test runner executables
 app_test_runners = []
-for module_name, module_dir in app_modules:
+for module_name, module_dir in unit_tested_modules:
     mocks_dir = module_dir.Dir('mocks')
 
     # shallow copy mock_objects and remove the module under test's mock
@@ -314,7 +312,7 @@ valgrind_env = Environment(
 # contains scons nodes signifying unit test runs
 unit_test_results = []
 valgrind_test_results = []
-for module_name, module_dir in app_modules:
+for module_name, module_dir in unit_tested_modules:
     # executable to run
     testrunner = module_dir.File('testrunner_' + module_name)
     # results file to print to
@@ -364,10 +362,12 @@ for module_name, module_dir in driver_modules:
         target=module_dir.File('test_STM32_' + module_name + '.elf')
     )
 
+    Clean(stm32_elf, REPO_ROOT_DIR.File('f29bms.map'))
+
     # stm32 hex generation
     test_apps[module_name] = stm32_comp_env.BuildHex(
         source=stm32_elf,
-        target=BIN_DIR.File('test_STM32_' + module_name + '.hex')
+        target=BIN_DIR.File('test_STM32_' + module_name + '.bin')
     )
 
 Alias('test-apps', test_apps.values())

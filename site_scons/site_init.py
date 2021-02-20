@@ -53,11 +53,11 @@ def TOOL_ARM_ELF_HEX(env):
     SOURCE must be a list of strings
     """
     arm_elf_builder = SCons.Builder.Builder(action=[
-        scons_constants.ARM_CC + ' -mcpu=cortex-m0 --specs=nosys.specs ${SOURCE.abspath} -o ${TARGET.abspath}'
+        scons_constants.ARM_CC + ' -T stm32f091.ld -mcpu=cortex-m0 -Wl,-Map=f29bms.map --specs=nosys.specs -mthumb ${SOURCES[:].abspath} -o ${TARGET.abspath}'
     ])
 
     arm_hex_builder = SCons.Builder.Builder(action=[
-        scons_constants.ARM_OBJCOPY + ' -O ihex -j .text -j .data ${SOURCE.abspath} ${TARGET.abspath}'
+        scons_constants.ARM_OBJCOPY + ' -O binary ${SOURCE.abspath} ${TARGET.abspath}'
     ])
 
     env.Append(BUILDERS = {
@@ -66,7 +66,7 @@ def TOOL_ARM_ELF_HEX(env):
     })
 
 
-def TOOL_DBCC(env):
+def TOOL_CANTOOLS(env):
     """
     Uses the dbcc tool to generate C code for setting/getting CAN data
     from a dbc file.
@@ -77,7 +77,7 @@ def TOOL_DBCC(env):
     TARGET - c file node that will be generated. The directory of this file will be used in the command.
     """
     dbcc_builder = SCons.Builder.Builder(action=[
-        DBCC_DIR.abspath + '/dbcc -s -o ${TARGET.dir.abspath} ${SOURCE}'
+        'cd ${SOURCE.dir.abspath} && cantools generate_c_source ${SOURCE.abspath}' 
     ])
 
     env.Append(BUILDERS = {

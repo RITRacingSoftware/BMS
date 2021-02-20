@@ -131,13 +131,13 @@ static void sm_1Hz(void)
 
 static void start_charging(void)
 {
-    encode_can_0x9806e5f4_BmsChargeRequest_Control(&CAN_BUS, 0);
+    can_bus.bms_charge_request.bms_charge_request_control = 0;
 }
 
 static void stop_charging(void)
 {
     // yes, according to Elcon its 1 to stop and 0 to start...
-    encode_can_0x9806e5f4_BmsChargeRequest_Control(&CAN_BUS, 1);
+    can_bus.bms_charge_request.bms_charge_request_control = 1;
 }
 
 void ChargeMonitor_init(void)
@@ -157,8 +157,8 @@ void ChargeMonitor_init(void)
     sm_outputs.allow_balancing = false;
     sm_outputs.request_charge = false;
 
-    encode_can_0x9806e5f4_BmsChargeRequest_MaxCurrent(&CAN_BUS, MAX_CHARGING_CURRENT_A);
-    encode_can_0x9806e5f4_BmsChargeRequest_MaxVoltage(&CAN_BUS, MAX_CHARGING_V);
+    can_bus.bms_charge_request.bms_charge_request_max_current = MAX_CHARGING_CURRENT_A;
+    can_bus.bms_charge_request.bms_charge_request_max_voltage = MAX_CHARGING_V;
 }
 
 /**
@@ -203,7 +203,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     // Actually send the charger control CAN message, if we are connected to the charger
     if (state != ChargeState_DISCONNECTED)
     {
-        CAN_send_message(CAN_ID_BmsChargeRequest);
+        CAN_send_message(F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID);
     }
 
 }

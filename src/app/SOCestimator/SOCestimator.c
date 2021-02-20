@@ -109,8 +109,8 @@ void SOCestimator_init(void)
         starting_soc_calculated = false;
     }
     
-    encode_can_0x258_BmsStatus_SOC(&CAN_BUS, SOC_limit);
-    encode_can_0x258_BmsStatus_SOC_raw(&CAN_BUS, SOC_raw);
+    can_bus.bms_status.bms_status_soc = SOC_limit;
+    can_bus.bms_status.bms_status_soc_raw = SOC_raw;
 }
 
 /**
@@ -128,7 +128,7 @@ void SOCestimator_coulomb_count_update_1kHz(float current_A)
         pre_init_current_A += current_A;
     }
 
-    encode_can_0x258_BmsStatus_SOC_raw(&CAN_BUS, SOC_raw);
+    can_bus.bms_status.bms_status_soc_raw = SOC_raw;
 }
 
 /**
@@ -159,7 +159,7 @@ void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, T
 
         starting_soc_calculated = true;
     }
-    encode_can_0x258_BmsStatus_SOC(&CAN_BUS, (uint8_t) (SOCestimator_get_soc_corrected() + .5));
+    can_bus.bms_status.bms_status_soc = (uint8_t) (SOCestimator_get_soc_corrected() + .5);
 }
 
 /**

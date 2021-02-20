@@ -1,3 +1,5 @@
 ARM_CC = 'arm-none-eabi-gcc'
 ARM_OBJCOPY = 'arm-none-eabi-objcopy'
+ARM_AS = 'arm-none-eabi-as'
+ARM_LD = 'arm-none-eabi-ld'
 PYTHON = 'python3.8'

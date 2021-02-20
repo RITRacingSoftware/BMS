@@ -1,9 +1,6 @@
 [submodule "cmock"]
 	path = libs/cmock
 	url = https://github.com/throwtheswitch/cmock.git
-[submodule "libs/dbcc"]
-	path = libs/dbcc
-	url = https://github.com/howerj/dbcc
 [submodule "libs/nanopb"]
 	path = libs/nanopb
 	url = https://github.com/nanopb/nanopb

@@ -7,7 +7,7 @@
 #include "MockCAN.h"
 
 // need to define this here since CMock isn't smart enough to define it in MockCAN.h
-can_obj_f29bms_dbc_h_t CAN_BUS;
+CAN_BUS can_bus;
 
 void setUp(void)
 {
