@@ -9,6 +9,7 @@
 #define STATUS_LED_PIN ((uint16_t)0x0001)
 #define CHARGE_ENABLE_PIN ((uint16_t)0x0100)    //Charge Signal
 #define CHARGE_AVAILABLE_PIN ((uint16_t)0x0040) //Charging
+#define SHUTDOWN_LINE_PIN ((uint16_t)(1 << 7))
 
 /** @defgroup GPIO_pins_define 
   * @{
@@ -56,6 +57,10 @@ static void get_GPIO_TypeDef(GpioPin_e thisPin, struct PIN_Typedef *thisGPIO)
     case GpioPin_CHARGER_AVAILABLE:
         thisGPIO->GPIOx = GPIOA;
         thisGPIO->GPIO_Pin = CHARGE_AVAILABLE_PIN;
+        break;
+    case GpioPin_SHUTDOWN_LINE:
+        thisGPIO->GPIOx = GPIOA;
+        thisGPIO->GPIO_Pin = SHUTDOWN_LINE_PIN;
         break;
     }
 }

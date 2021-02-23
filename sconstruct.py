@@ -140,12 +140,30 @@ linux_comp_env = Environment(
     CCFLAGS=linux_comp_flags
 )
 
+# First need instructions for building FreeRTOS
+FREERTOS_DIR = LIBS_DIR.Dir("FreeRTOS")
+
+freertos_include = [
+    SRC_DIR, # (FreeRTOSConfig.h is located here)
+    FREERTOS_DIR,
+    FREERTOS_DIR.Dir('Source/include'),
+    FREERTOS_DIR.Dir('Source/portable/ThirdParty/GCC/Posix'),
+    FREERTOS_DIR.Dir('Source/portable/ThirdParty/GCC/Posix/utils'),
+]
+
+stm32_freertos_include = [
+    SRC_DIR, # (FreeRTOSConfig.h is located here)
+    FREERTOS_DIR,
+    FREERTOS_DIR.Dir('Source/include'),
+    FREERTOS_DIR.Dir('Source/portable/ThirdParty/GCC/ARM_CM0'),
+]
+
 stm32_comp_env = Environment(
     tools=[TOOL_ARM_ELF_HEX, 'gcc', 'as'],
     CC=scons_constants.ARM_CC,
     AS=scons_constants.ARM_AS,
     LD=scons_constants.ARM_LD,
-    CPPPATH=module_path_names + tool_paths + [SRC_DIR.Dir('app').abspath, SRC_DIR.abspath],
+    CPPPATH=stm32_freertos_include + module_path_names + tool_paths + [COMMON_DIR.abspath, SRC_DIR.Dir('app').abspath, SRC_DIR.abspath],
     CPPDEFINES=['STM32F091', 'USE_STDPERIPH_DRIVER'],
     CCFLAGS=['-ggdb','-mcpu=cortex-m0', '-mthumb'],
     ASFLAGS=['-mthumb', '-I{}'.format(STM32_LIB_DIR.Dir('inc').abspath), '-I{}'.format(STM32_CMSIS_DIR.Dir('Include').abspath)],
@@ -199,7 +217,6 @@ for source in Glob(os.path.join(STM32_LIB_DIR.Dir('src').abspath, '*.c')):
 #env.Object('stm32libs/CMSIS/Device/ST/STM32F0xx/Source/Templates/gcc_ride7/startup_stm32f0xx.s')
 
 stm32_lib_objs += stm32_comp_env.Object(LIBS_DIR.File('stm32libs/CMSIS/Device/ST/STM32F0xx/Source/Templates/system_stm32f0xx.c'))
-stm32_lib_objs += stm32_comp_env.Object(LIBS_DIR.File('stm32libs/CMSIS/Device/ST/STM32F0xx/Source/Templates/gcc_ride7/startup_stm32f0xx.s'))
 
 # instructions to compile every mock module
 mock_objects = {}
@@ -352,7 +369,8 @@ for module_name, module_dir in driver_modules:
         objs.append(driver_obj)
     for common_obj in stm32_common_objects.values():
         objs.append(common_obj)
-    
+    objs.extend(stm32_comp_env.Object(DRIVER_DIR.File('test_app_startup.s')))
+
     objs.extend(stm32_lib_objs)
     objs.append(stm32_dbc_gen_obj)
 
@@ -376,17 +394,6 @@ Alias('test-apps', test_apps.values())
 """
 Instructions for building the Posix FreeRTOS program.
 """
-
-# First need instructions for building FreeRTOS
-FREERTOS_DIR = LIBS_DIR.Dir("FreeRTOS")
-
-freertos_include = [
-    SRC_DIR, # (FreeRTOSConfig.h is located here)
-    FREERTOS_DIR,
-    FREERTOS_DIR.Dir('Source/include'),
-    FREERTOS_DIR.Dir('Source/portable/ThirdParty/GCC/Posix'),
-    FREERTOS_DIR.Dir('Source/portable/ThirdParty/GCC/Posix/utils'),
-]
 
 freertos_source = []
 freertos_source += Glob(FREERTOS_DIR.Dir('Source').abspath + '/*.c')
@@ -512,3 +519,38 @@ Depends(pytest_results, bms_sim_so)
 Depends(pytest_results, f29bms_bin)
     
 Alias('open-loop', pytest_results)
+
+"""
+The whole reason we're here: Instructions for building the f29bms binary.
+That is, the binary that gets loaded onto the BMS hardware itself.
+"""
+
+stm32_freertos_source = []
+stm32_freertos_source += Glob(FREERTOS_DIR.Dir('Source').abspath + '/*.c')
+stm32_freertos_source.append(FREERTOS_DIR.File('Source/portable/MemMang/heap_3.c'))
+stm32_freertos_source.append(FREERTOS_DIR.File('Source/portable/ThirdParty/GCC/ARM_CM0/port.c'))
+
+
+stm32_freertos_objs = []
+for source_file in stm32_freertos_source:
+    stm32_freertos_objs += stm32_comp_env.Object(source=source_file, target=source_file.abspath + '.stm32.o')
+
+#Depends(freertos_objs, generated_dbc_source)
+
+stm32_freertos_objs += stm32_comp_env.Object(source=SRC_DIR.File('main.c'), target=SRC_DIR.File('main.stm32.o'))
+f29bms_startup_obj = stm32_comp_env.Object(LIBS_DIR.File('stm32libs/CMSIS/Device/ST/STM32F0xx/Source/Templates/gcc_ride7/startup_stm32f0xx.s'))
+# stm32 elf generation
+f29bmself = stm32_comp_env.BuildElf(
+    source=[stm32_freertos_objs, stm32_app_objects.values(), f29bms_startup_obj, stm32_driver_objects.values(), stm32_common_objects.values(), stm32_lib_objs, stm32_dbc_gen_obj],
+    target=SRC_DIR.File('f29bms.elf')
+)
+
+Clean(stm32_elf, REPO_ROOT_DIR.File('f29bms.map'))
+
+# stm32 hex generation
+f29bmsbin = stm32_comp_env.BuildHex(
+    source=f29bmself,
+    target=BIN_DIR.File('f29bms.bin')
+)
+
+Alias('f29bms', f29bmsbin)
