@@ -664,16 +664,10 @@ static int8_t LTC6804_rdaux(uint8_t reg, //Determines which GPIO voltage registe
 
 //Function that reads the cell voltages for all of the cells
 //voltages: pointer to where cell voltages will be put
-//chips: the number of LTC6904s chained together or total number of cells/12
 static bool read_All_Cell_Voltages(float* voltages, int chips){
     //May need to run ADCV command to read cell voltages first, and wait for them to be read
     bool error = false;
     char transmitCommand[4];
-    for(int i = 0; i++; i < 4) //Cycle through each register group (A,B,C,D)
-    {
-        transmitCommand[0] = ReadVoltagesCMD0[i];
-        transmitCommand[1] = ReadVoltagesCMD1[i];
-        //NEED TO IMPLEMENT PEC
         //transmitCommand[2] and [3], for PEC0 and PEC1
         char *cellVoltagesRecieved[6*chips];
         Error_t spiError = HAL_Spi_transmit_and_receive(&transmitCommand[0], 4, cellVoltagesRecieved[0], 6*chips); //not sure about thisPin

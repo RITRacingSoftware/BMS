@@ -43,6 +43,8 @@ typedef struct
     struct f29bms_dbc_bms_charge_request_t bms_charge_request;
     struct f29bms_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
     struct f29bms_dbc_bms_ref_t bms_ref;
+    struct f29bms_dbc_watchdog_last_breath_t bms_watchdog_last_breath;
+    
 } CAN_BUS;
 
 extern CAN_BUS can_bus;
