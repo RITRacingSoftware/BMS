@@ -13,7 +13,7 @@ void HAL_Can_init(void);
 /**
  * Transmits the CAN message
  */
-Error_t HAL_Can_send_message(int id, int dlc, uint64_t data); //Changed to void return from Error_t
+Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data); //Changed to void return from Error_t
 
 /**
  * Returns the number of empty transmit mailboxes (max of three)

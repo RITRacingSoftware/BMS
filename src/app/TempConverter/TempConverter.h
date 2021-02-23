@@ -2,7 +2,7 @@
 #define TEMPCONVERTER_H
 
 #include "TempModel.h"
-#include "McuConfig.h"
+#include "f29BmsConfig.h"
 
 /**
  * Input the LUT to be used for temperature conversion.

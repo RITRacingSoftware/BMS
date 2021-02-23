@@ -1,7 +1,7 @@
 #include "unity.h"
 
 #include "ChargeMonitor.h"
-#include "BatteryCharacteristics.h"
+#include "f29BmsConfig.h"
 #include "common_macros.h"
 
 #include "MockCAN.h"
@@ -34,7 +34,7 @@ void test_ChargeMonitor_start_charged(void)
     for (int seconds = 0; seconds < 30; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // No current since no ones charging
@@ -60,7 +60,7 @@ void test_ChargeMonitor_disconnected(void)
     for (int seconds = 0; seconds < 30; seconds++)
     {
         // disconnect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Random current, shouldn't matter
@@ -90,7 +90,7 @@ void test_ChargeMonitor_single_cell_conditions(void)
     for (int seconds = 0; seconds < 3; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulation nominal current
@@ -108,7 +108,7 @@ void test_ChargeMonitor_single_cell_conditions(void)
     for (int seconds = 0; seconds < 30; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulation nominal current
@@ -125,7 +125,7 @@ void test_ChargeMonitor_single_cell_conditions(void)
     for (int seconds = 0; seconds < 3; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulate nominal current
@@ -143,7 +143,7 @@ void test_ChargeMonitor_single_cell_conditions(void)
     for (int seconds = 0; seconds < 3; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulation nominal current
@@ -170,7 +170,7 @@ void test_ChargeMonitor_disconnect(void)
     for (int seconds = 0; seconds < 5; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulate nominal current
@@ -186,7 +186,7 @@ void test_ChargeMonitor_disconnect(void)
     TEST_ASSERT_MESSAGE(charging == true, "Charging never began.");
 
     // disconnect the charger
-    HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+    HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
     // clear faults
     FaultManager_is_any_fault_active_ExpectAndReturn(false);
     // Simulation nominal current
@@ -213,7 +213,7 @@ void test_ChargeMonitor_restart_charging(void)
     for (int seconds = 0; seconds < 5; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulate nominal current
@@ -232,7 +232,7 @@ void test_ChargeMonitor_restart_charging(void)
     for (int seconds = 0; seconds < 5; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulate current under threshold
@@ -252,7 +252,7 @@ void test_ChargeMonitor_restart_charging(void)
     for (int seconds = 0; seconds < 30; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulate current (doesn't matter)
@@ -266,7 +266,7 @@ void test_ChargeMonitor_restart_charging(void)
     }
 
     // cable cycle
-    HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+    HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
     FaultManager_is_any_fault_active_ExpectAndReturn(false);
     float current = MAX_CHARGING_CURRENT_A;
     CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
@@ -277,7 +277,7 @@ void test_ChargeMonitor_restart_charging(void)
     for (int seconds = 0; seconds < 5; seconds++)
     {
         // connect the charger
-        HAL_Gpio_read_ExpectAnyArgsAndReturn(0);
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulate nominal current

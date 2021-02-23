@@ -9,7 +9,7 @@
 
 // unmocked includes
 #include "common_macros.h"
-#include "BatteryCharacteristics.h"
+#include "f29BmsConfig.h"
 
 // module under test
 #include "SOCestimator.h"
@@ -51,10 +51,12 @@ static BatteryModel_t get_battery_model_at_avg_voltage(float voltage)
 void test_SOCestimator_wait_for_voltage(void)
 {
     HAL_EEPROM_read_ExpectAnyArgs();
-    eeprom_data_t saved_soc_indicator = 0;
+    bms_eeprom_t map;
+    map.saved_soc_en = 0;
+    map.saved_soc = 0;
 
     // indicate there is no saved SOC
-    HAL_EEPROM_read_ReturnThruPtr_data(&saved_soc_indicator);
+    HAL_EEPROM_read_ReturnThruPtr_map(&map);
     // another eeprom read should not happen during init
 
     SOCestimator_init();
@@ -96,21 +98,18 @@ void test_SOCestimator_wait_for_voltage(void)
 void test_SOCestimator_saved_value_exists(void)
 {
     HAL_EEPROM_read_ExpectAnyArgs();
-    eeprom_data_t saved_soc_indicator = 1;
+    bms_eeprom_t map;
+    map.saved_soc_en = 1;
+    map.saved_soc = 45;
 
-    // indicate there is no saved SOC
-    HAL_EEPROM_read_ReturnThruPtr_data(&saved_soc_indicator);
-    // another eeprom read should happen to get the soc
-    HAL_EEPROM_read_ExpectAnyArgs();
-    eeprom_data_t saved_soc = 45;
-    HAL_EEPROM_read_ReturnThruPtr_data(&saved_soc);
-
+    // indicate there is a saved SOC and its 45
+    HAL_EEPROM_read_ReturnThruPtr_map(&map);
     SOCestimator_init();
 
-    TEST_ASSERT_MESSAGE(FLOAT_EQ(SOCestimator_get_soc_raw(), (float) saved_soc, 0.01), "invalid initial raw SOC");
-    TEST_ASSERT_MESSAGE(FLOAT_EQ(SOCestimator_get_soc_corrected(), (float) saved_soc, 0.01), "invalid initial corrected SOC");
+    TEST_ASSERT_MESSAGE(FLOAT_EQ(SOCestimator_get_soc_raw(), (float) map.saved_soc, 0.01), "invalid initial raw SOC");
+    TEST_ASSERT_MESSAGE(FLOAT_EQ(SOCestimator_get_soc_corrected(), (float) map.saved_soc, 0.01), "invalid initial corrected SOC");
 
-    float expected_soc = saved_soc;
+    float expected_soc = map.saved_soc;
     float current_A = -50.0; // realistic current at init [satire]
     int num_iter = 10;
     for (int i = 0; i < num_iter; ++i)
@@ -143,10 +142,12 @@ void test_SOCestimator_saved_value_exists(void)
 void test_SOCestimator_clips_to_voltage_limit(void)
 {
     HAL_EEPROM_read_ExpectAnyArgs();
-    eeprom_data_t saved_soc_indicator = 0;
+    bms_eeprom_t map;
+    map.saved_soc_en = 0;
+    map.saved_soc = 0;
 
     // indicate there is no saved SOC
-    HAL_EEPROM_read_ReturnThruPtr_data(&saved_soc_indicator);
+    HAL_EEPROM_read_ReturnThruPtr_map(&map);
 
     SOCestimator_init();
     

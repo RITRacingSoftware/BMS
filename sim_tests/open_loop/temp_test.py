@@ -16,7 +16,7 @@ def test_temperature_faults(sim):
     assert sim.get_shutdown_line() == 1
 
     sim.stage_temp_info(therm_index=0, voltage=3.0)
-    for i in range(0, 2500):
+    for i in range(0, 3000):
         sim.tick()
     
     assert sim.signals['BmsFaultVector_OVER_TEMPERATURE'] == 0
@@ -24,7 +24,7 @@ def test_temperature_faults(sim):
     # Could check shutdown line here but it doesn't assert for 10s on irrational condition
 
     sim.stage_temp_info(therm_index=0, voltage=.5)
-    for i in range(0, 2000):
+    for i in range(0, 3000):
         sim.tick()
     
     assert sim.signals['BmsFaultVector_OVER_TEMPERATURE'] == 1

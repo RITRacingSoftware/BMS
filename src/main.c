@@ -3,12 +3,24 @@
 #include "task.h"
 #include "timers.h"
 #include "semphr.h"
+#ifdef SIMULATION
 #include "BmsSimClient.h"
+#endif
 
 #include <stdio.h>
+#include <string.h>
+
+#include "HAL_Clock.h"
+#include "HAL_Can.h"
+#include "HAL_Gpio.h"
+#include "HAL_CurrentSensor.h"
+#include "HAL_EEPROM.h"
+#include "HAL_Watchdog.h"
+#include "HAL_SlaveChips.h"
+
+#include "f29BmsConfig.h"
 
 #include "BatteryModel.h"
-#include "BatteryCharacteristics.h"
 #include "CAN.h"
 #include "CellBalancer.h"
 #include "ChargeMonitor.h"
@@ -25,19 +37,18 @@
 #include "TempConverter.h"
 #include "TempModel.h"
 
-#define TASK_1Hz_NAME "TASK_1Hz"
-#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 1)
+#define TASK_1Hz_NAME "task_1Hz"
+#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 3)
 #define TASK_1Hz_PERIOD_MS (1000)
-#define TASK_1Hz_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TASK_1Hz_STACK_SIZE_B (1000)
 void TASK_1Hz(void *pvParameters)
 {
     (void) pvParameters;
-    TickType_t next_wake_time;
+    TickType_t next_wake_time = xTaskGetTickCount();
 
     for (;;)
     {
         Periodic_1Hz();
-        // printf("Task 1Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
 }
@@ -45,51 +56,33 @@ void TASK_1Hz(void *pvParameters)
 #define TASK_10Hz_NAME "task_10Hz"
 #define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 2)
 #define TASK_10Hz_PERIOD_MS (100)
-#define TASK_10Hz_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TASK_10Hz_STACK_SIZE_B (2000)
 void task_10Hz(void *pvParameters)
 {
     (void) pvParameters;
-    TickType_t next_wake_time;
+    TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
+
         Periodic_10Hz();
-        // printf("Task 10Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
 }
 
 #define TASK_1kHz_NAME "task_1kHz"
-#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 3)
+#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_1kHz_PERIOD_MS (1)
-#define TASK_1kHz_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TASK_1kHz_STACK_SIZE_B (1000)
 
 void task_1kHz(void *pvParameters)
 {
     (void) pvParameters;
-    TickType_t next_wake_time;
+    TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
         Periodic_1kHz();
-        //printf("Task 1kHz\n");
-        vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
-    }
-}
-
-#define TASK_CAN_NAME "task_CAN"
-#define TASK_CAN_PRIORITY (tskIDLE_PRIORITY + 3) //Not sure about what priority to give
-#define TASK_CAN_PERIOD_MS (1)                   //Need to determine correct period
-#define TASK_CAN_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
-#define TICKS_TO_WAIT_FOR_RECIEVE (0) //Not sure if this is what we want
-
-void task_CAN(void *pvParameters)
-{
-    // There are three transmit mailboxes
-    (void)pvParameters;
-    TickType_t next_wake_time;
-    for (;;)
-    {
         CAN_send_queued_messages();
-        vTaskDelayUntil(&next_wake_time, TASK_CAN_PERIOD_MS);
+        vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
     }
 }
 
@@ -106,12 +99,45 @@ void signal_handler(int signo)
 }
 #endif
 
+void hardfault_handler_routine(void)
+{
+    TaskHandle_t current_task = xTaskGetCurrentTaskHandle();
+    char* task_name = pcTaskGetName(current_task);
+
+    int task_id = 0;
+    if (strcmp(task_name, TASK_1Hz_NAME) == 0)
+    {
+        task_id = 1;
+    }
+    else if (strcmp(task_name, TASK_10Hz_NAME) == 0)
+    {
+        task_id = 2;
+    }
+    else if (strcmp(task_name, TASK_1kHz_NAME) == 0)
+    {
+        task_id = 3;
+    }
+
+    uint8_t data[8];
+    can_bus.bms_hard_fault_indicator.bms_hard_fault_indicator_task = task_id;
+    f29bms_dbc_bms_hard_fault_indicator_pack(data, &can_bus.bms_hard_fault_indicator, 8);
+    HAL_Can_send_message(F29BMS_DBC_BMS_HARD_FAULT_INDICATOR_FRAME_ID, 8, *((uint64_t*)data)); 
+}
 
 int main(int argc, char** argv)
 {
-    printf("Starting Sim\n");
+    // initialize all HAL stuff
+    HAL_Clock_init();
 
-    // initialize erything
+    HAL_Gpio_init();
+    HAL_Can_init();
+   
+    HAL_CurrentSensor_init();
+    
+    HAL_SlaveChips_init();
+    // HAL_Watchdog_init();
+
+    // initialize all app stuff
     CAN_init();
     CellBalancer_init();
     ChargeMonitor_init();
@@ -136,7 +162,7 @@ int main(int argc, char** argv)
      signal(SIGINT, signal_handler);
 #endif
 
-
+ 
 
     xTaskCreate(TASK_1Hz, 
         TASK_1Hz_NAME, 
@@ -144,7 +170,7 @@ int main(int argc, char** argv)
         NULL,
         TASK_1Hz_PRIORITY,
         NULL);
-
+    
     xTaskCreate(task_10Hz, 
         TASK_10Hz_NAME, 
         TASK_10Hz_STACK_SIZE_B,
@@ -158,14 +184,7 @@ int main(int argc, char** argv)
         NULL,
         TASK_1kHz_PRIORITY,
         NULL);
-
-    xTaskCreate(task_CAN, 
-        TASK_CAN_NAME, 
-        TASK_CAN_STACK_SIZE_B,
-        NULL,
-        TASK_CAN_PRIORITY,
-        NULL);
-    
+   
     vTaskStartScheduler();
 
     // if we get here, ope

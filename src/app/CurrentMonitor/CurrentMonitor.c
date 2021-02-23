@@ -4,6 +4,7 @@
 #include "counters.h"
 #include "CurrentMonitor.h"
 #include "FaultManager.h"
+#include "f29BmsConfig.h"
 
 // number of seconds current has been over threshold
 static int time_overcurrent_ms;

@@ -1,4 +1,5 @@
 #include "unity.h"
+#include "f29BmsConfig.h"
 
 // module under test
 #include "CurrentMonitor.h"

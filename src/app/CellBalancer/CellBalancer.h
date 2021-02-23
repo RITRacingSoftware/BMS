@@ -2,7 +2,7 @@
 #define CELL_BALANCER_H
 #include <stdbool.h>
 
-#include "BatteryCharacteristics.h"
+#include "f29BmsConfig.h"
 #include "BatteryModel.h"
 
 /**

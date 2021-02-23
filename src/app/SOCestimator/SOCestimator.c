@@ -2,9 +2,10 @@
 
 #include "SOCestimator.h"
 
+#include "f29BmsConfig.h"
 #include "common_macros.h"
+#include "counters.h"
 #include "CAN.h"
-#include "BatteryCharacteristics.h"
 #include "HAL_EEPROM.h"
 
 float SOC_raw;
@@ -40,16 +41,19 @@ static int SOC_limit_from_voltage(float avg_V, float ambient_temp_C)
     }
 }
 
+bms_eeprom_t flash_map;
+
 /**
  * Write the current SOC to eeprom for use on future startups.
  * soc_to_save [in] 0 to 100
  */
 static void write_saved_soc(float soc_to_save)
 {
-    // indicate the saved value is valid for next runtime
-    HAL_EEPROM_write(SAVED_SOC_EN_ADDR, 1);
+    flash_map.saved_soc_en = 1;
+    flash_map.saved_soc = soc_to_save;
 
-    HAL_EEPROM_write(SAVED_SOC_ADDR, (eeprom_data_t) soc_to_save);
+    // indicate the saved value is valid for next runtime
+    HAL_EEPROM_write(&flash_map);
 }
 
 /**
@@ -58,15 +62,13 @@ static void write_saved_soc(float soc_to_save)
  */
 static float read_saved_soc(void)
 {
-    eeprom_data_t read_val;
-    HAL_EEPROM_read(SAVED_SOC_EN_ADDR, &read_val);
+    HAL_EEPROM_read(&flash_map);
 
     float soc = -1;
-
-    if (read_val == 1)
+    
+    if (flash_map.saved_soc_en == 1)
     {
-        HAL_EEPROM_read(SAVED_SOC_ADDR, &read_val);
-        soc = read_val;
+        soc = flash_map.saved_soc;
     }
 
     return soc;
@@ -122,6 +124,7 @@ void SOCestimator_coulomb_count_update_1kHz(float current_A)
     if (starting_soc_calculated)
     {
         SOC_raw = SOC_raw + calculate_dSOC(current_A, 1);
+        SOC_raw = SAT(SOC_raw, 0, 100);
     }
     else
     {
@@ -156,10 +159,16 @@ void SOCestimator_voltage_threshold_update_10Hz(BatteryModel_t* battery_model, T
         // Change the SOC as if all the pre-init current readings happened over 1ms.
         // This only works because the current measurements are all over 1ms.
         SOC_raw = SOC_raw + calculate_dSOC(pre_init_current_A, 1);
-
+        SOC_raw = SAT(SOC_raw, 0, 100);
         starting_soc_calculated = true;
     }
     can_bus.bms_status.bms_status_soc = (uint8_t) (SOCestimator_get_soc_corrected() + .5);
+
+    static int save_counter_ms = 0;
+    if (incr_to_limit(&save_counter_ms, SOC_SAVE_PERIOD_MS, 100))
+    {
+        SOCestimator_save_soc();
+    }
 }
 
 /**
@@ -182,5 +191,5 @@ float SOCestimator_get_soc_corrected(void)
 
 void SOCestimator_save_soc(void)
 {
-    write_saved_soc(SOCestimator_get_soc_corrected());
+   write_saved_soc(SOCestimator_get_soc_corrected());
 }

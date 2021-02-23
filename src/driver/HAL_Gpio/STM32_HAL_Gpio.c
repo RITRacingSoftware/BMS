@@ -1,4 +1,5 @@
 #include "HAL_Gpio.h"
+#include "common_macros.h"
 
 #include <stdint.h>
 #include "stm32f0xx_gpio.h"
@@ -6,9 +7,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define STATUS_LED_PIN ((uint16_t)0x0001)
-#define CHARGE_ENABLE_PIN ((uint16_t)0x0100)    //Charge Signal
-#define CHARGE_AVAILABLE_PIN ((uint16_t)0x0040) //Charging
+#define STATUS_LED_PIN_POS (2)
+#define CHARGE_ENABLE_PIN_POS (8)  
+#define CHARGE_AVAILABLE_PIN_POS (6) 
+#define SHUTDOWN_LINE_PIN_POS (7)
 
 /** @defgroup GPIO_pins_define 
   * @{
@@ -38,25 +40,29 @@
 struct PIN_Typedef
 {
     GPIO_TypeDef *GPIOx;
-    uint16_t GPIO_Pin;
+    uint16_t GPIO_Pin_Pos;
 };
 
 static void get_GPIO_TypeDef(GpioPin_e thisPin, struct PIN_Typedef *thisGPIO)
 {
     switch (thisPin)
     {
-    case GpioPin_STATUS_LED:
-        thisGPIO->GPIOx = GPIOA;
-        thisGPIO->GPIO_Pin = STATUS_LED_PIN;
-        break;
-    case GpioPin_CHARGE_ENABLE:
-        thisGPIO->GPIOx = GPIOA;
-        thisGPIO->GPIO_Pin = CHARGE_ENABLE_PIN;
-        break;
-    case GpioPin_CHARGER_AVAILABLE:
-        thisGPIO->GPIOx = GPIOA;
-        thisGPIO->GPIO_Pin = CHARGE_AVAILABLE_PIN;
-        break;
+        case GpioPin_STATUS_LED:
+            thisGPIO->GPIOx = GPIOA;
+            thisGPIO->GPIO_Pin_Pos = STATUS_LED_PIN_POS;
+            break;
+        case GpioPin_CHARGE_ENABLE:
+            thisGPIO->GPIOx = GPIOA;
+            thisGPIO->GPIO_Pin_Pos = CHARGE_ENABLE_PIN_POS;
+            break;
+        case GpioPin_CHARGER_AVAILABLE:
+            thisGPIO->GPIOx = GPIOA;
+            thisGPIO->GPIO_Pin_Pos = CHARGE_AVAILABLE_PIN_POS;
+            break;
+        case GpioPin_SHUTDOWN_LINE:
+            thisGPIO->GPIOx = GPIOA;
+            thisGPIO->GPIO_Pin_Pos = SHUTDOWN_LINE_PIN_POS;
+            break;
     }
 }
 
@@ -74,13 +80,16 @@ void HAL_Gpio_init(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
     GPIO_InitTypeDef gpioInit;
     //Init STATUS_LED pin
-    populate_Init_Struct(&gpioInit, STATUS_LED_PIN, GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL); //Not sure about speed, otype and pupd
+    populate_Init_Struct(&gpioInit, BIT(STATUS_LED_PIN_POS), GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL); //Not sure about speed, otype and pupd
     GPIO_Init(GPIOA, &gpioInit);
     //Init CHARGE_ENABLE pin
-    populate_Init_Struct(&gpioInit, CHARGE_ENABLE_PIN, GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL); //Not sure about speed, otype, and pupd
+    populate_Init_Struct(&gpioInit, BIT(CHARGE_ENABLE_PIN_POS), GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL); //Not sure about speed, otype, and pupd
     GPIO_Init(GPIOA, &gpioInit);
     //Init CHARGE_AVAILABLE
-    populate_Init_Struct(&gpioInit, CHARGE_AVAILABLE_PIN, GPIO_Mode_IN, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_UP);
+    populate_Init_Struct(&gpioInit, BIT(CHARGE_AVAILABLE_PIN_POS), GPIO_Mode_IN, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL);
+    GPIO_Init(GPIOA, &gpioInit);
+
+    populate_Init_Struct(&gpioInit, BIT(SHUTDOWN_LINE_PIN_POS), GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL);
     GPIO_Init(GPIOA, &gpioInit);
 }
 
@@ -88,7 +97,14 @@ bool HAL_Gpio_read(GpioPin_e pin)
 {
     struct PIN_Typedef thisGPIO;
     get_GPIO_TypeDef(pin, &thisGPIO);
-    return GPIO_ReadOutputDataBit(thisGPIO.GPIOx, thisGPIO.GPIO_Pin);
+    return GPIO_ReadInputDataBit(thisGPIO.GPIOx, BIT(thisGPIO.GPIO_Pin_Pos));
+}
+
+bool HAL_Gpio_read_output(GpioPin_e pin)
+{
+    struct PIN_Typedef thisGPIO;
+    get_GPIO_TypeDef(pin, &thisGPIO);
+    return GPIO_ReadOutputDataBit(thisGPIO.GPIOx, BIT(thisGPIO.GPIO_Pin_Pos));
 }
 
 void HAL_Gpio_write(GpioPin_e pin, bool state)
@@ -97,10 +113,10 @@ void HAL_Gpio_write(GpioPin_e pin, bool state)
     get_GPIO_TypeDef(pin, &thisGPIO);
     if (state)
     {
-        GPIO_SetBits(thisGPIO.GPIOx, thisGPIO.GPIO_Pin);
+        GPIO_SetBits(thisGPIO.GPIOx, BIT(thisGPIO.GPIO_Pin_Pos));
     }
     else
     {
-        GPIO_ResetBits(thisGPIO.GPIOx, thisGPIO.GPIO_Pin);
+        GPIO_ResetBits(thisGPIO.GPIOx, BIT(thisGPIO.GPIO_Pin_Pos));
     }
 }

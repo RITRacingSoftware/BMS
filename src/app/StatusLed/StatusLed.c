@@ -19,7 +19,7 @@ static void turn_led_off(void)
 
 static void toggle_led(void)
 {
-    bool current_state = HAL_Gpio_read(GpioPin_STATUS_LED);
+    bool current_state = HAL_Gpio_read_output(GpioPin_STATUS_LED);
     HAL_Gpio_write(GpioPin_STATUS_LED, current_state ^ 1); // XOR with 1 always yields opposite
 }
 

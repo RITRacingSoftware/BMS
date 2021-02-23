@@ -3,6 +3,7 @@
 #include "common_macros.h"
 #include "CAN.h"
 #include "FaultManager.h"
+#include "f29BmsConfig.h"
 
 /**
  * Each bit represents fault status.
@@ -26,7 +27,7 @@ void FaultManager_init(void)
 void FaultManager_set_fault_active(FaultCode_e code, void* data)
 {
     // dont do anything if fault is already sent. Don't need an alert spam.
-    if ((fault_vector & BIT(code)) == 0)
+    if (((fault_vector & BIT(code)) == 0) && ((BIT(code) & DISABLE_FAULT_MASK) == 0))
     {
         // set the fault
         fault_vector |= BIT(code);
@@ -79,7 +80,6 @@ void FaultManager_set_fault_active(FaultCode_e code, void* data)
                 break;
                 
             default:
-                printf("f29bms: invalid fault code: %d\n", code);
                 // send garbage data
                 break;
         }

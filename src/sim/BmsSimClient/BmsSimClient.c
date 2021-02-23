@@ -8,7 +8,7 @@
 
 #include "common_macros.h"
 #include "BatteryModel.h"
-#include "BatteryCharacteristics.h"
+#include "f29BmsConfig.h"
 #include "TempModel.h"
 #include "BmsSimClient.h"
 #include "BmsSimConfig.h"
