@@ -3,9 +3,14 @@
 #include "task.h"
 #include "timers.h"
 #include "semphr.h"
+#ifdef SIMULATION
 #include "BmsSimClient.h"
+#endif
 
 #include <stdio.h>
+
+#include "HAL_Can.h"
+#include "HAL_Gpio.h"
 
 #include "BatteryModel.h"
 #include "BatteryCharacteristics.h"
@@ -28,28 +33,29 @@
 #define TASK_1Hz_NAME "TASK_1Hz"
 #define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_1Hz_PERIOD_MS (1000)
-#define TASK_1Hz_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TASK_1Hz_STACK_SIZE_B (1000)
 void TASK_1Hz(void *pvParameters)
 {
     (void) pvParameters;
-    TickType_t next_wake_time;
+    TickType_t next_wake_time = xTaskGetTickCount();
 
     for (;;)
     {
         Periodic_1Hz();
         // printf("Task 1Hz\n");
+        // CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
 }
 
 #define TASK_10Hz_NAME "task_10Hz"
-#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 2)
+#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_10Hz_PERIOD_MS (100)
-#define TASK_10Hz_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TASK_10Hz_STACK_SIZE_B (1000)
 void task_10Hz(void *pvParameters)
 {
     (void) pvParameters;
-    TickType_t next_wake_time;
+    TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
         Periodic_10Hz();
@@ -59,37 +65,20 @@ void task_10Hz(void *pvParameters)
 }
 
 #define TASK_1kHz_NAME "task_1kHz"
-#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 3)
+#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_1kHz_PERIOD_MS (1)
-#define TASK_1kHz_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TASK_1kHz_STACK_SIZE_B (1000)
 
 void task_1kHz(void *pvParameters)
 {
     (void) pvParameters;
-    TickType_t next_wake_time;
+    TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
         Periodic_1kHz();
         //printf("Task 1kHz\n");
-        vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
-    }
-}
-
-#define TASK_CAN_NAME "task_CAN"
-#define TASK_CAN_PRIORITY (tskIDLE_PRIORITY + 3) //Not sure about what priority to give
-#define TASK_CAN_PERIOD_MS (1)                   //Need to determine correct period
-#define TASK_CAN_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
-#define TICKS_TO_WAIT_FOR_RECIEVE (0) //Not sure if this is what we want
-
-void task_CAN(void *pvParameters)
-{
-    // There are three transmit mailboxes
-    (void)pvParameters;
-    TickType_t next_wake_time;
-    for (;;)
-    {
         CAN_send_queued_messages();
-        vTaskDelayUntil(&next_wake_time, TASK_CAN_PERIOD_MS);
+        vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
     }
 }
 
@@ -109,9 +98,15 @@ void signal_handler(int signo)
 
 int main(int argc, char** argv)
 {
-    printf("Starting Sim\n");
+    // initialize all HAL stuff
+    HAL_Gpio_init();
+    HAL_Can_init();
+    //HAL_CurrentSensor_init();
+    //HAL_EEPROM_init();
+    //HAL_SlaveChips_init();
+    //HAL_Watchdog_init();
 
-    // initialize erything
+    // initialize all app stuff
     CAN_init();
     CellBalancer_init();
     ChargeMonitor_init();
@@ -157,13 +152,6 @@ int main(int argc, char** argv)
         TASK_1kHz_STACK_SIZE_B,
         NULL,
         TASK_1kHz_PRIORITY,
-        NULL);
-
-    xTaskCreate(task_CAN, 
-        TASK_CAN_NAME, 
-        TASK_CAN_STACK_SIZE_B,
-        NULL,
-        TASK_CAN_PRIORITY,
         NULL);
     
     vTaskStartScheduler();

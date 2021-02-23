@@ -1,3 +1,4 @@
+// same as regular startup script but without FreeRTOS ISR vector table entries
 /**
   ******************************************************************************
   * @file      startup_stm32f0xx.s
@@ -229,10 +230,10 @@ g_pfnVectors:
   .thumb_set SVC_Handler,Default_Handler
 
   .weak PendSV_Handler
-  .thumb_set PendSV_Handler,xPortPendSVHandler
+  .thumb_set PendSV_Handler,Default_Handler
 
   .weak SysTick_Handler
-  .thumb_set SysTick_Handler,xPortSysTickHandler
+  .thumb_set SysTick_Handler,Default_Handler
 
   .weak WWDG_IRQHandler
   .thumb_set WWDG_IRQHandler,Default_Handler

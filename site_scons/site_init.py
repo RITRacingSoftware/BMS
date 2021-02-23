@@ -53,7 +53,7 @@ def TOOL_ARM_ELF_HEX(env):
     SOURCE must be a list of strings
     """
     arm_elf_builder = SCons.Builder.Builder(action=[
-        scons_constants.ARM_CC + ' -T stm32f091.ld -mcpu=cortex-m0 -Wl,-Map=f29bms.map --specs=nosys.specs -mthumb ${SOURCES[:].abspath} -o ${TARGET.abspath}'
+        scons_constants.ARM_CC + ' -T stm32f091.ld -mcpu=cortex-m0 -Wl,-Map=${TARGET.dir.abspath}/map.map --specs=nosys.specs -mthumb ${SOURCES[:].abspath} -o ${TARGET.abspath}'
     ])
 
     arm_hex_builder = SCons.Builder.Builder(action=[

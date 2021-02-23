@@ -41,6 +41,7 @@
 // Bms stuff
 #define CAN_QUEUE_LEN 15
 
+#define configCPU_CLOCK_HZ 48000000
 #define configUSE_PREEMPTION					1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION	0
 #define configUSE_IDLE_HOOK						0
@@ -78,7 +79,7 @@ configMAX_PRIORITIES - 1. */
 /* Run time stats gathering configuration options. */
 unsigned long ulGetRunTimeCounterValue( void ); /* Prototype of function that returns run time counter. */
 void vConfigureTimerForRunTimeStats( void );	/* Prototype of function that initialises the run time counter. */
-#define configGENERATE_RUN_TIME_STATS			1
+#define configGENERATE_RUN_TIME_STATS			0
 
 /* Co-routine related configuration options. */
 #define configUSE_CO_ROUTINES 					0

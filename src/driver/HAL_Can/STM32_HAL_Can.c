@@ -52,12 +52,19 @@ void HAL_Can_init(void)
     CAN_Init(CAN, &canInit);
 }
 
-Error_t HAL_Can_send_message(int id, int dlc, uint64_t data)
+Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data)
 {
     CanTxMsg msg;
     msg.StdId = id;
     msg.ExtId = id;
-    msg.IDE = CAN_ID_STD;
+    if (id > 0x7FF)
+    {
+        msg.IDE = CAN_Id_Extended;
+    }
+    else
+    {
+        msg.IDE = CAN_Id_Standard;
+    }
     msg.RTR = CAN_RTR_Data; //Not sure about this
     msg.DLC = dlc;
     for (int i = 0; i < dlc && i < 8; ++i)
