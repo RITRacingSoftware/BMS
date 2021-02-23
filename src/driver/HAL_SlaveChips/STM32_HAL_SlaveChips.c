@@ -664,7 +664,6 @@ static int8_t LTC6804_rdaux(uint8_t reg, //Determines which GPIO voltage registe
 
 //Function that reads the cell voltages for all of the cells
 //voltages: pointer to where cell voltages will be put
-//chips: the number of LTC6904s chained together or total number of cells/12
 static bool read_All_Cell_Voltages(float* voltages, int chips){
     //May need to run ADCV command to read cell voltages first, and wait for them to be read
     bool error = false;
