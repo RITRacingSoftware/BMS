@@ -5,6 +5,8 @@
 
 // This header just exists for Mocks. TODO- implement this
 
+void HAL_CurrentSensor_init(void);
+
 Error_t HAL_CurrentSensor_read_current(float* current);
 
 #endif
