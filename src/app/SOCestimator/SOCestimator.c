@@ -49,7 +49,7 @@ static void write_saved_soc(float soc_to_save)
     // indicate the saved value is valid for next runtime
     HAL_EEPROM_write(SAVED_SOC_EN_ADDR, 1);
 
-    HAL_EEPROM_write(SAVED_SOC_ADDR, (eeprom_data_t) soc_to_save);
+    HAL_EEPROM_write(SAVED_SOC_ADDR, soc_to_save);
 }
 
 /**
@@ -58,7 +58,7 @@ static void write_saved_soc(float soc_to_save)
  */
 static float read_saved_soc(void)
 {
-    eeprom_data_t read_val;
+    uint32_t read_val;
     HAL_EEPROM_read(SAVED_SOC_EN_ADDR, &read_val);
 
     float soc = -1;
