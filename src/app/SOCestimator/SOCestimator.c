@@ -40,16 +40,19 @@ static int SOC_limit_from_voltage(float avg_V, float ambient_temp_C)
     }
 }
 
+bms_eeprom_t flash_map;
+
 /**
  * Write the current SOC to eeprom for use on future startups.
  * soc_to_save [in] 0 to 100
  */
 static void write_saved_soc(float soc_to_save)
 {
-    // indicate the saved value is valid for next runtime
-    HAL_EEPROM_write(SAVED_SOC_EN_ADDR, 1);
+    flash_map.saved_soc_en = 1;
+    flash_map.saved_soc = soc_to_save;
 
-    HAL_EEPROM_write(SAVED_SOC_ADDR, (eeprom_data_t) soc_to_save);
+    // indicate the saved value is valid for next runtime
+    HAL_EEPROM_write(&flash_map);
 }
 
 /**
@@ -58,15 +61,13 @@ static void write_saved_soc(float soc_to_save)
  */
 static float read_saved_soc(void)
 {
-    eeprom_data_t read_val;
-    HAL_EEPROM_read(SAVED_SOC_EN_ADDR, &read_val);
+    HAL_EEPROM_read(&flash_map);
 
     float soc = -1;
-
-    if (read_val == 1)
+    
+    if (flash_map.saved_soc_en == 1)
     {
-        HAL_EEPROM_read(SAVED_SOC_ADDR, &read_val);
-        soc = read_val;
+        soc = flash_map.saved_soc;
     }
 
     return soc;
