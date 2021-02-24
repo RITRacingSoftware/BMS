@@ -46,4 +46,10 @@ Error_t HAL_CurrentSensor_read_current(float* current)
     float unshifted_volts = ((float) adc_read / (float) ADC_MAX_VALUE) * (float) Vref;
     float shifted_volts = unshifted_volts - ZERO_AMP_REF_V;
     *current = shifted_volts / V_PER_A;
+
+    // errors disabled for now
+    Error_t err;
+    err.active = false;
+
+    return err;
 }

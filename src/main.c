@@ -11,6 +11,9 @@
 
 #include "HAL_Can.h"
 #include "HAL_Gpio.h"
+#include "HAL_CurrentSensor.h"
+#include "HAL_EEPROM.h"
+#include "HAL_Watchdog.h"
 
 #include "BatteryModel.h"
 #include "BatteryCharacteristics.h"
@@ -101,10 +104,9 @@ int main(int argc, char** argv)
     // initialize all HAL stuff
     HAL_Gpio_init();
     HAL_Can_init();
-    //HAL_CurrentSensor_init();
-    //HAL_EEPROM_init();
-    //HAL_SlaveChips_init();
-    //HAL_Watchdog_init();
+    HAL_CurrentSensor_init();
+    // HAL_SlaveChips_init();
+    // HAL_Watchdog_init();
 
     // initialize all app stuff
     CAN_init();

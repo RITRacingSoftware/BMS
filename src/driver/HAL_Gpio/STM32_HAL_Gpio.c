@@ -87,6 +87,9 @@ void HAL_Gpio_init(void)
     //Init CHARGE_AVAILABLE
     populate_Init_Struct(&gpioInit, CHARGE_AVAILABLE_PIN, GPIO_Mode_IN, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_UP);
     GPIO_Init(GPIOA, &gpioInit);
+
+    populate_Init_Struct(&gpioInit, SHUTDOWN_LINE_PIN, GPIO_Mode_IN, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL);
+    GPIO_Init(GPIOA, &gpioInit);
 }
 
 bool HAL_Gpio_read(GpioPin_e pin)
