@@ -688,7 +688,7 @@ static bool read_All_Is_Draining(bool* is_draining, unsigned int num_Groups_of_1
 
 
 void HAL_SlaveChip_Init(){
-    HAL_Spi_init();
+    HAL_Spi_Init();
     set_adc(ADC_MODE, DCP_VALUE, CH_VALUE, CHG_VALUE);
     RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
     TIM6->PSC = SYS_CLK/1; //Prescale for 1 MHz clk
