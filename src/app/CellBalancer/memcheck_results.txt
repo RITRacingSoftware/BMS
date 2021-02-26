@@ -1,0 +1,19 @@
+==2076== Memcheck, a memory error detector
+==2076== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2076== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2076== Command: /f29bms/src/app/CellBalancer/testrunner_CellBalancer
+==2076== 
+/f29bms/src/app/CellBalancer/test_CellBalancer.c:16:test_CellBalancer_drain_failure:PASS
+
+-----------------------
+1 Tests 0 Failures 0 Ignored 
+OK
+==2076== 
+==2076== HEAP SUMMARY:
+==2076==     in use at exit: 0 bytes in 0 blocks
+==2076==   total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+==2076== 
+==2076== All heap blocks were freed -- no leaks are possible
+==2076== 
+==2076== For lists of detected and suppressed errors, rerun with: -s
+==2076== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

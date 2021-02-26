@@ -1,0 +1,23 @@
+==2094== Memcheck, a memory error detector
+==2094== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2094== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2094== Command: /f29bms/src/app/PackMonitor/testrunner_PackMonitor
+==2094== 
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:31:test_PackMonitor_irrational_voltage:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:79:test_PackMonitor_out_of_juice:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:126:test_PackMonitor_voltage_diff:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:174:test_PackMonitor_over_temperature:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:221:test_PackMonitor_irrational_temperature:PASS
+
+-----------------------
+5 Tests 0 Failures 0 Ignored 
+OK
+==2094== 
+==2094== HEAP SUMMARY:
+==2094==     in use at exit: 0 bytes in 0 blocks
+==2094==   total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+==2094== 
+==2094== All heap blocks were freed -- no leaks are possible
+==2094== 
+==2094== For lists of detected and suppressed errors, rerun with: -s
+==2094== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

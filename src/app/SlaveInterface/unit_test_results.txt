@@ -1,0 +1,6 @@
+/f29bms/src/app/SlaveInterface/test_SlaveInterface.c:14:test_SlaveInterface_cell_info_read:PASS
+/f29bms/src/app/SlaveInterface/test_SlaveInterface.c:73:test_SlaveInterface_temp_read:PASS
+
+-----------------------
+2 Tests 0 Failures 0 Ignored 
+OK

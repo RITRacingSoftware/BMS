@@ -1,0 +1,20 @@
+==2103== Memcheck, a memory error detector
+==2103== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2103== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2103== Command: /f29bms/src/app/SlaveInterface/testrunner_SlaveInterface
+==2103== 
+/f29bms/src/app/SlaveInterface/test_SlaveInterface.c:14:test_SlaveInterface_cell_info_read:PASS
+/f29bms/src/app/SlaveInterface/test_SlaveInterface.c:73:test_SlaveInterface_temp_read:PASS
+
+-----------------------
+2 Tests 0 Failures 0 Ignored 
+OK
+==2103== 
+==2103== HEAP SUMMARY:
+==2103==     in use at exit: 0 bytes in 0 blocks
+==2103==   total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+==2103== 
+==2103== All heap blocks were freed -- no leaks are possible
+==2103== 
+==2103== For lists of detected and suppressed errors, rerun with: -s
+==2103== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

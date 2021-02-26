@@ -1,0 +1,9 @@
+/f29bms/src/app/ChargeMonitor/test_ChargeMonitor.c:25:test_ChargeMonitor_start_charged:PASS
+/f29bms/src/app/ChargeMonitor/test_ChargeMonitor.c:53:test_ChargeMonitor_disconnected:PASS
+/f29bms/src/app/ChargeMonitor/test_ChargeMonitor.c:81:test_ChargeMonitor_single_cell_conditions:PASS
+/f29bms/src/app/ChargeMonitor/test_ChargeMonitor.c:161:test_ChargeMonitor_disconnect:PASS
+/f29bms/src/app/ChargeMonitor/test_ChargeMonitor.c:204:test_ChargeMonitor_restart_charging:PASS
+
+-----------------------
+5 Tests 0 Failures 0 Ignored 
+OK

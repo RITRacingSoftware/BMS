@@ -1,0 +1,7 @@
+/f29bms/src/app/SOCestimator/test_SOCestimator.c:51:test_SOCestimator_wait_for_voltage:PASS
+/f29bms/src/app/SOCestimator/test_SOCestimator.c:96:test_SOCestimator_saved_value_exists:PASS
+/f29bms/src/app/SOCestimator/test_SOCestimator.c:143:test_SOCestimator_clips_to_voltage_limit:PASS
+
+-----------------------
+3 Tests 0 Failures 0 Ignored 
+OK
