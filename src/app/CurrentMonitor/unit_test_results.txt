@@ -1,7 +1,0 @@
-/f29bms/src/app/CurrentMonitor/test_CurrentMonitor.c:21:test_CurrentMonitor_overcurrent:PASS
-/f29bms/src/app/CurrentMonitor/test_CurrentMonitor.c:38:test_CurrentMonitor_chg_overcurrent:PASS
-/f29bms/src/app/CurrentMonitor/test_CurrentMonitor.c:55:test_CurrentMonitor_clear_fault:PASS
-
------------------------
-3 Tests 0 Failures 0 Ignored 
-OK

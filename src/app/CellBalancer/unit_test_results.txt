@@ -1,5 +1,0 @@
-/f29bms/src/app/CellBalancer/test_CellBalancer.c:16:test_CellBalancer_drain_failure:PASS
-
------------------------
-1 Tests 0 Failures 0 Ignored 
-OK

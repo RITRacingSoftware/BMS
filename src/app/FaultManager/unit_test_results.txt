@@ -1,6 +1,0 @@
-/f29bms/src/app/FaultManager/test_FaultManager.c:20:test_FaultManager_start_no_faults:PASS
-/f29bms/src/app/FaultManager/test_FaultManager.c:34:test_FaultManager_fault_and_clear:PASS
-
------------------------
-2 Tests 0 Failures 0 Ignored 
-OK

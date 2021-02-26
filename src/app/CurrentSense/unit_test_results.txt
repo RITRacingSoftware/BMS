@@ -1,7 +1,0 @@
-/f29bms/src/app/CurrentSense/test_CurrentSense.c:24:test_CurrentSense_low_pass_filter:PASS
-/f29bms/src/app/CurrentSense/test_CurrentSense.c:91:test_CurrentSense_sensor_fault:PASS
-/f29bms/src/app/CurrentSense/test_CurrentSense.c:130:test_CurrentSense_steady:PASS
-
------------------------
-3 Tests 0 Failures 0 Ignored 
-OK
