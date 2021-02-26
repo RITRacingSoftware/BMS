@@ -87,3 +87,9 @@ bool BmsSim_read_drain_state(int cell_index);
 unsigned long int BmsSim_next_can_msg(int64_t* data);
 
 #endif // BMS_SIM_HANDLE
+
+/*
+ * File trailer for generated code.
+ *
+ * [EOF]
+ */

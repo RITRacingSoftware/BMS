@@ -1,0 +1,22 @@
+==2070== Memcheck, a memory error detector
+==2070== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2070== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2070== Command: /f29bms/src/app/CAN/testrunner_CAN
+==2070== 
+/f29bms/src/app/CAN/test_CAN.c:15:test_CAN_start_no_error:PASS
+/f29bms/src/app/CAN/test_CAN.c:24:test_CAN_transmission_error:PASS
+CAN ERROR: f4240
+/f29bms/src/app/CAN/test_CAN.c:38:test_CAN_invalid_id_error:PASS
+
+-----------------------
+3 Tests 0 Failures 0 Ignored 
+OK
+==2070== 
+==2070== HEAP SUMMARY:
+==2070==     in use at exit: 0 bytes in 0 blocks
+==2070==   total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+==2070== 
+==2070== All heap blocks were freed -- no leaks are possible
+==2070== 
+==2070== For lists of detected and suppressed errors, rerun with: -s
+==2070== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

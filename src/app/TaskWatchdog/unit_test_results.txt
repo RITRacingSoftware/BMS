@@ -1,0 +1,6 @@
+/f29bms/src/app/TaskWatchdog/test_TaskWatchdog.c:7:test_TaskWatchdog_expired_if_not_pet:PASS
+/f29bms/src/app/TaskWatchdog/test_TaskWatchdog.c:33:test_TaskWatchdog_not_expired_if_pet:PASS
+
+-----------------------
+2 Tests 0 Failures 0 Ignored 
+OK

@@ -1,0 +1,6 @@
+/f29bms/src/app/DriveMonitor/test_DriveMonitor.c:12:test_DriveMonitor_nominal:PASS
+/f29bms/src/app/DriveMonitor/test_DriveMonitor.c:38:test_DriveMonitor_shutdown_overcurrent:PASS
+
+-----------------------
+2 Tests 0 Failures 0 Ignored 
+OK

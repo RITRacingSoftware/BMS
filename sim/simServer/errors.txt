@@ -1,0 +1,323 @@
+/usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':
+(.text+0x24): undefined reference to `main'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `create_rtw_linear_algebra_complete':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_la.h:216: undefined reference to `pm_default_allocator'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `create_auto_linear_algebra_complete':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_la.h:263: undefined reference to `mc_get_csparse_linear_algebra'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `local_sim_data_destroy':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_sd.h:40: undefined reference to `pm_default_allocator'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `nesl_create_simulation_data':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_sd.h:50: undefined reference to `pm_default_allocator'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `rtw_diagnostics_msg':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:57: undefined reference to `pm_default_allocator'
+/usr/bin/ld: /usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:57: undefined reference to `neu_create_diagnostic_tree_printer'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `rtw_create_diagnostics':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:72: undefined reference to `pm_default_allocator'
+/usr/bin/ld: /usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:72: undefined reference to `neu_create_diagnostic_manager'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `nesl_lease_simulator':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_rtw_utils.h:37: undefined reference to `nesl_get_registry'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel.o: in function `nesl_erase_simulator':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_rtw_utils.h:54: undefined reference to `nesl_get_registry'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `create_rtw_linear_algebra_complete':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_la.h:216: undefined reference to `pm_default_allocator'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `create_auto_linear_algebra_complete':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_la.h:263: undefined reference to `mc_get_csparse_linear_algebra'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `local_sim_data_destroy':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_sd.h:40: undefined reference to `pm_default_allocator'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `nesl_create_simulation_data':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_sd.h:50: undefined reference to `pm_default_allocator'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `rtw_diagnostics_msg':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:57: undefined reference to `pm_default_allocator'
+/usr/bin/ld: /usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:57: undefined reference to `neu_create_diagnostic_tree_printer'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `rtw_create_diagnostics':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:72: undefined reference to `pm_default_allocator'
+/usr/bin/ld: /usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_diag.h:72: undefined reference to `neu_create_diagnostic_manager'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `nesl_lease_simulator':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_rtw_utils.h:37: undefined reference to `nesl_get_registry'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `nesl_erase_simulator':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_rtw_utils.h:54: undefined reference to `nesl_get_registry'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.o: in function `AccumulatorModel_afee0aca_1_gateway':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_gateway.c:40: undefined reference to `nesl_register_simulator_group'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1.o: in function `create_rtw_linear_algebra_complete':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_la.h:216: undefined reference to `pm_default_allocator'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1.o: in function `create_auto_linear_algebra_complete':
+/usr/local/MATLAB/R2020a/toolbox/physmod/simscape/engine/sli/c/glnxa64/nesl_la.h:263: undefined reference to `mc_get_csparse_linear_algebra'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1.o: in function `AccumulatorModel_afee0aca_1_dae':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1.c:23: undefined reference to `mc_get_csparse_linear_algebra'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1.c:25: undefined reference to `pm_default_allocator'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1.c:26: undefined reference to `ne_dae_create'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds.o: in function `ds_imin':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds.c:12183: undefined reference to `pmf_get_inf'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds.o: in function `ds_imax':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds.c:12204: undefined reference to `pmf_get_inf'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:331: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:340: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:345: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:351: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:357: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:363: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:369: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:375: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:393: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:403: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:408: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:414: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:420: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:426: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:432: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:438: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:456: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:466: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:471: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:477: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:483: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:489: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:495: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:501: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:519: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:529: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:534: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:540: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:546: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:552: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:558: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:564: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:582: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:592: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:597: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:603: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:609: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:615: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:621: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:627: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:645: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:655: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:660: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:666: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:672: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:678: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:684: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:690: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:708: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:718: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:723: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:729: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:735: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:741: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:747: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:753: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:771: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:781: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:786: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:792: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:798: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:804: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:810: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:816: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:834: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:844: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:849: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:855: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:861: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:867: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:873: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:879: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:897: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:907: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:912: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:918: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:924: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:930: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:936: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:942: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:960: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:970: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:975: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:981: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:987: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:993: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:999: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1005: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1023: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1033: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1038: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1044: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1050: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1056: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1062: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1068: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1086: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1096: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1101: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1107: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1113: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1119: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1125: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1131: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1149: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1159: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1164: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1170: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1176: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1182: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1188: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1194: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1212: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1222: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1227: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1233: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1239: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1245: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1251: undefined reference to `tlu2_2d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1257: more undefined references to `tlu2_2d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o: in function `AccumulatorModel_afee0aca_1_ds_dxf':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1442: undefined reference to `tlu2_1d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1455: undefined reference to `tlu2_1d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1474: undefined reference to `tlu2_1d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1487: undefined reference to `tlu2_1d_linear_linear_derivatives'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1500: undefined reference to `tlu2_1d_linear_linear_derivatives'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_dxf.c:1513: more undefined references to `tlu2_1d_linear_linear_derivatives' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:255: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:259: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:264: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:269: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:274: undefined reference to `tlu2_linear_linear_prelookup'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:279: more undefined references to `tlu2_linear_linear_prelookup' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:463: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:467: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:473: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:479: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:485: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:491: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:497: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:514: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:519: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:525: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:531: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:537: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:543: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:549: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:566: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:571: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:577: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:583: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:589: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:595: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:601: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:618: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:623: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:629: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:635: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:641: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:647: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:653: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:670: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:675: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:681: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:687: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:693: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:699: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:705: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:722: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:727: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:733: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:739: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:745: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:751: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:757: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:774: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:779: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:785: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:791: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:797: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:803: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:809: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:826: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:831: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:837: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:843: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:849: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:855: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:861: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:878: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:883: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:889: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:895: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:901: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:907: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:913: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:930: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:935: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:941: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:947: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:953: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:959: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:965: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:982: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:987: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:993: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:999: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1005: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1011: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1017: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1034: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1039: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1045: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1051: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1057: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1063: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1069: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1086: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1091: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1097: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1103: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1109: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1115: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1121: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1138: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1143: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1149: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1155: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1161: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1167: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1173: more undefined references to `tlu2_2d_linear_linear_value' follow
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o: in function `AccumulatorModel_afee0aca_1_ds_f':
+/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1190: undefined reference to `tlu2_1d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1195: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1201: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1207: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1213: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: /home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1219: undefined reference to `tlu2_2d_linear_linear_value'
+/usr/bin/ld: ../bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.o:/home/sean/Documents/Formula/F29/f29bms/sim/bmsModel/AccumulatorModel_ert_rtw/AccumulatorModel_afee0aca_1_ds_f.c:1225: more undefined references to `tlu2_2d_linear_linear_value' follow
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:32: sim] Error 1

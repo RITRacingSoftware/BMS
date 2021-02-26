@@ -1,0 +1,8 @@
+/f29bms/src/app/CAN/test_CAN.c:15:test_CAN_start_no_error:PASS
+/f29bms/src/app/CAN/test_CAN.c:24:test_CAN_transmission_error:PASS
+CAN ERROR: f4240
+/f29bms/src/app/CAN/test_CAN.c:38:test_CAN_invalid_id_error:PASS
+
+-----------------------
+3 Tests 0 Failures 0 Ignored 
+OK

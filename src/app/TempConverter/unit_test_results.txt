@@ -1,0 +1,8 @@
+/f29bms/src/app/TempConverter/test_TempConverter.c:41:test_TempConverter_at_index:PASS
+/f29bms/src/app/TempConverter/test_TempConverter.c:59:test_TempConverter_linear_interpolate:PASS
+/f29bms/src/app/TempConverter/test_TempConverter.c:74:test_TempConverter_upper_limit:PASS
+/f29bms/src/app/TempConverter/test_TempConverter.c:89:test_TempConverter_lower_limit:PASS
+
+-----------------------
+4 Tests 0 Failures 0 Ignored 
+OK

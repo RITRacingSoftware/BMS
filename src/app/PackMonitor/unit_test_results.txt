@@ -1,0 +1,9 @@
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:31:test_PackMonitor_irrational_voltage:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:79:test_PackMonitor_out_of_juice:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:126:test_PackMonitor_voltage_diff:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:174:test_PackMonitor_over_temperature:PASS
+/f29bms/src/app/PackMonitor/test_PackMonitor.c:221:test_PackMonitor_irrational_temperature:PASS
+
+-----------------------
+5 Tests 0 Failures 0 Ignored 
+OK

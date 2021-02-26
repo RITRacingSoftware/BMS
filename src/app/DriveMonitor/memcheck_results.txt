@@ -1,0 +1,20 @@
+==2085== Memcheck, a memory error detector
+==2085== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2085== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2085== Command: /f29bms/src/app/DriveMonitor/testrunner_DriveMonitor
+==2085== 
+/f29bms/src/app/DriveMonitor/test_DriveMonitor.c:12:test_DriveMonitor_nominal:PASS
+/f29bms/src/app/DriveMonitor/test_DriveMonitor.c:38:test_DriveMonitor_shutdown_overcurrent:PASS
+
+-----------------------
+2 Tests 0 Failures 0 Ignored 
+OK
+==2085== 
+==2085== HEAP SUMMARY:
+==2085==     in use at exit: 0 bytes in 0 blocks
+==2085==   total heap usage: 1 allocs, 1 frees, 4,096 bytes allocated
+==2085== 
+==2085== All heap blocks were freed -- no leaks are possible
+==2085== 
+==2085== For lists of detected and suppressed errors, rerun with: -s
+==2085== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
