@@ -24,6 +24,8 @@
 #include "LogicalAccumulatorModel.h"   /* Model's header file */
 #include "rtwtypes.h"
 #include "BmsSimHandle.h"
+#include <time.h>
+#include <unistd.h>
 
 /*
  * Associating rt_OneStep with a real-time clock or interrupt service routine
@@ -56,6 +58,27 @@ void rt_OneStep(void)
 
   /* Step the model */
   LogicalAccumulatorModel_step();
+  // Set current to 60 
+  rtU.LoadIn = 60;
+  BmsSim_set_current(60);
+
+  for(int i = 0; i< 90; i++){
+
+    BmsSim_set_cell_info(i, rtY.VoltageOut[i], rtU.DischargeSig[i]);
+  }
+  //call tick
+  BmsSim_tick();
+  //get output from bms and put in model
+  // test by print voltages
+
+  for(int i = 0; i< 90; i++){
+
+    rtU.DischargeSig[i] = BmsSim_read_drain_state(i);
+  }
+
+  printf("Voltage= %lf\t", rtY.TotalOut);
+
+  
 
   /* Get model outputs here */
 
@@ -86,19 +109,50 @@ int_T main(int_T argc, const char *argv[])
 
   BmsSim_init();
   BmsSim_start();
+  //begin logging
+  char filename[11] = "./file.blf";
+  BmsSim_begin_logging(filename);
 
+  
+  fflush(stdout);
   printf("Initialized model \n");
   fflush(stdout);
 
   /* Simulating the step behavior (in non real-time) to
    *  simulate model behavior at stop time.
-   */
+   
   while ((((void*) 0) == (NULL)) && !rtmGetStopRequested(rtM)) {
     rt_OneStep();
   }
+  */
 
+  time_t endwait;
+  time_t start = time(NULL);
+  time_t seconds = 10;
+  endwait = start + seconds;
+
+  printf("loop time is : %s", ctime(&start));
+  printf("end loop time is : %s", ctime(&endwait));
+
+  while (start < endwait)
+  {
+    printf("loop time is : %s", ctime(&start));
+    if(rtmGetStopRequested(rtM)){
+      break;
+    }
+    sleep(1);
+    start = time(NULL);
+    //printf("loop time is : %s", ctime(&start));
+    //printf("\nwhile");
+    rt_OneStep();
+  }
+  printf("\nend while\n");
+  //stop logging???
+
+  BmsSim_stop();
   /* Disable rt_OneStep() here */
   return 0;
+
 }
 
 /*

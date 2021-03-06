@@ -141,14 +141,14 @@ typedef struct {
 
 /* External inputs (root inport signals with default storage) */
 typedef struct {
-  double DischargeSig[90];             /* '<Root>/DischargeSig' */
-  double LoadIn;                       /* '<Root>/LoadIn' */
+  real_T DischargeSig[90];             /* '<Root>/DischargeSig' */
+  real_T LoadIn;                       /* '<Root>/LoadIn' */
 } ExtU;
 
 /* External outputs (root outports fed by signals with default storage) */
 typedef struct {
-  double VoltageOut[90];               /* '<Root>/VoltageOut' */
-  double TotalOut;                     /* '<Root>/TotalOut' */
+  real_T VoltageOut[90];               /* '<Root>/VoltageOut' */
+  real_T TotalOut;                     /* '<Root>/TotalOut' */
 } ExtY;
 
 /* Real-time Model Data Structure */
