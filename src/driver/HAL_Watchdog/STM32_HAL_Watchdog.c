@@ -1,9 +1,12 @@
 #include "HAL_Watchdog.h"
 #include "stm32f0xx_wwdg.h"
+#include "HAL_Can.h"
+#include "core_cm0.h"
 
-#define PCLK1 48 //APB clock DONT KNOW VALUE
-#define WWDG_COUNTER_CLOCK 1 //NOT SURE what we want
-#define WWDG_TIMEOUT 1 //NOT SURE what we want
+#define CAN_RESET_ID 0x0FF //NEED TO GET RIGHT ID
+#define CAN_RESET_DATA 0x0
+#define CAN_RESET_DLC 0x8
+
 #define WINDOW_VALUE 0x7F //Don't know what should be
 #define SET_VALUE 0x7F //Value counter is reset to
 //MCU resets when counter gets down to 0x40
@@ -14,13 +17,33 @@
 //For 48MHz, max timeout time ~43 ms, min timeout time ~85us
 
 void HAL_Watchdog_Init(){
-    //Right now set to 43ms timeout (Prescaler = 8 assuming 48MHz cl)
+
+
+    //Right now set to 43ms timeout (Prescaler = 8 assuming 48MHz clk)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE);
     WWDG_SetPrescaler(WWDG_Prescaler_8); //Can be 1,2,4,8 
     WWDG_SetWindowValue(WINDOW_VALUE);
-    WWDG_Enable(0x7F);
+    WWDG_Enable(SET_VALUE);
+
+    /* (1) Set prescaler to have a roll-over each about 5.5ms,
+    set window value (about 2.25ms) */
+    /* (2) Refresh WWDG before activate it */
+    /* (3) Activate WWDG */
+    // WWDG->CFR = SET_VALUE; /* (1) */
+    // WWDG->CR = WWDG_REFRESH; /* (2) */
+    // WWDG->CR |= WWDG_CR_WDGA; /* (3) */
 }
 
 void pet(){
-    WWDG_SetCounter(0x7F);
+    WWDG_SetCounter(SET_VALUE);
+    //WWDG->CR = SET_VALUE & BIT_MASK;
+}
+
+
+//MAke function for reset handler that sends CAN message and then resets the chip, put in startup_stm32f0xx.s
+void HAL_Watchdog_IRQHandler(void){
+    HAL_Can_send_message(CAN_RESET_ID, CAN_RESET_DLC, CAN_RESET_DATA); //Send CAN message that resetting
+    //MCU Reset
+    NVIC_SystemReset();
+
 }

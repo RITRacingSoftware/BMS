@@ -7,4 +7,6 @@ void HAL_Watchdog_Init(void);
 
 void pet(void);
 
+void HAL_Watchdog_IRQHandler(void);
+
 #endif // HAL_WATCHDOG_H
