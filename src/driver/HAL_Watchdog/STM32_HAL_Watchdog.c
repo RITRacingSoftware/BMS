@@ -2,6 +2,7 @@
 #include "stm32f0xx_wwdg.h"
 #include "HAL_Can.h"
 #include "core_cm0.h"
+#include "stm32f0xx.h"
 
 #define CAN_RESET_ID 0x0FF //NEED TO GET RIGHT ID
 #define CAN_RESET_DATA 0x0
@@ -17,13 +18,23 @@
 //For 48MHz, max timeout time ~43 ms, min timeout time ~85us
 
 void HAL_Watchdog_Init(){
+    
 
 
     //Right now set to 43ms timeout (Prescaler = 8 assuming 48MHz clk)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_DBGMCU, ENABLE);
+
+    //Doesn't work, look
+    //Set so WWDG stops during breakpoint in debug
+    DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_WWDG_STOP;
+
     WWDG_SetPrescaler(WWDG_Prescaler_8); //Can be 1,2,4,8 
     WWDG_SetWindowValue(WINDOW_VALUE);
     WWDG_Enable(SET_VALUE);
+    
+    
+    
 
     /* (1) Set prescaler to have a roll-over each about 5.5ms,
     set window value (about 2.25ms) */

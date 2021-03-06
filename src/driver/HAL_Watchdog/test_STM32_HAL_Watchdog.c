@@ -3,7 +3,7 @@
 
 #define SYS_CLK 48000000
 #define TIMER_FREQUENCY 1000 //1 KHZ (1 ms period)
-#define DELAY 44//in ms
+#define DELAY 35//in ms
 
 int main()
 {
