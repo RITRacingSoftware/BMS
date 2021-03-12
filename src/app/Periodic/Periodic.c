@@ -99,6 +99,4 @@ void Periodic_1kHz(void)
     DriveMonitor_1kHz();
 
     CAN_1kHz();
-
-    pet();
 }

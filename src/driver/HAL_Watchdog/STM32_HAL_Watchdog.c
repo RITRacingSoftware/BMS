@@ -25,7 +25,6 @@ void HAL_Watchdog_Init(){
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_DBGMCU, ENABLE);
 
-    //Doesn't work, look
     //Set so WWDG stops during breakpoint in debug
     DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_WWDG_STOP;
 

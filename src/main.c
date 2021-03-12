@@ -24,6 +24,8 @@
 #include "StatusLed.h"
 #include "TempConverter.h"
 #include "TempModel.h"
+#include "TaskWatchdog.h"
+#include "HAL_Watchdog.h"
 
 #define TASK_1Hz_NAME "TASK_1Hz"
 #define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 1)
@@ -37,6 +39,7 @@ void TASK_1Hz(void *pvParameters)
     for (;;)
     {
         Periodic_1Hz();
+        TaskWatchdog_pet(task_id_PERIODIC_1Hz);
         // printf("Task 1Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
@@ -53,6 +56,7 @@ void task_10Hz(void *pvParameters)
     for (;;)
     {
         Periodic_10Hz();
+        TaskWatchdog_pet(task_id_PERIODIC_10Hz);
         // printf("Task 10Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
@@ -70,6 +74,7 @@ void task_1kHz(void *pvParameters)
     for (;;)
     {
         Periodic_1kHz();
+        TaskWatchdog_pet(task_id_PERIODIC_1kHz);
         //printf("Task 1kHz\n");
         vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
     }
@@ -89,8 +94,45 @@ void task_CAN(void *pvParameters)
     for (;;)
     {
         CAN_send_queued_messages();
+        TaskWatchdog_pet(task_id_CAN);
         vTaskDelayUntil(&next_wake_time, TASK_CAN_PERIOD_MS);
     }
+}
+
+#define WATCHDOG_TASK_NAME ((signed char *) "Watchdog")
+#define WATCHDOG_TASK_STACK_SIZE (configMINIMAL_STACK_SIZE) //100
+#define WATCHDOG_TASK_PERIOD (1)
+#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY + 3) //Not sure 
+void watchdog_task(void *pvParameters)
+{
+    (void)pvParameters;
+	TickType_t next_wake_time;
+	for(;;)
+	{
+		if (!task_watchdog_expired())
+		{
+			pet();
+
+			if (TaskWatchdog_tick(task_id_PERIODIC_1Hz))
+			{
+				task_watchdog_set_expired(task_id_PERIODIC_1Hz);
+			}
+			else if (TaskWatchdog_tick(task_id_PERIODIC_10Hz))
+			{
+				task_watchdog_set_expired(task_id_PERIODIC_10Hz);
+			}
+            else if (TaskWatchdog_tick(task_id_PERIODIC_1kHz))
+			{
+				task_watchdog_set_expired(task_id_PERIODIC_1kHz);
+			}
+            else if (TaskWatchdog_tick(task_id_CAN))
+			{
+				task_watchdog_set_expired(task_id_CAN);
+			}
+		}
+
+		vTaskDelayUntil(&next_wake_time, WATCHDOG_TASK_PERIOD);
+	}
 }
 
 #ifdef SIMULATION

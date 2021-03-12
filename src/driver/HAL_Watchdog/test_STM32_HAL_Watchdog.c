@@ -3,14 +3,24 @@
 
 #define SYS_CLK 48000000
 #define TIMER_FREQUENCY 1000 //1 KHZ (1 ms period)
-#define DELAY 35//in ms
+#define DELAY 44 //in ms
+
+#define HSI48_SOURCE 0x0C
 
 int main()
 {
-    // TODO- implement
+   //Test on full program (added to 1KHz task)
+   // enable HSI48 clock
+    RCC_HSI48Cmd(ENABLE);
+    // wait for HSI48 clock to be ready
+    while(!RCC_GetFlagStatus(RCC_FLAG_HSI48RDY));
+    // tell system clock (which CAN uses) to use HSI48 clock
+    RCC_SYSCLKConfig(RCC_SYSCLKSource_HSI48);
+    // wait for system clock to switch over to HSI48
+    while(RCC_GetSYSCLKSource() != HSI48_SOURCE);
     HAL_Watchdog_Init();
     RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
-    TIM6->PSC = SYS_CLK/TIMER_FREQUENCY; 
+    TIM6->PSC = SYS_CLK/TIMER_FREQUENCY;  //Timer_F = SYS/Pre
     TIM6->CR1 |= (TIM_CR1_ARPE | TIM_CR1_URS | TIM_CR1_DIR);
     pet();
     while(1==1){
