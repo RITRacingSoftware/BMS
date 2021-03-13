@@ -1,7 +1,7 @@
 #include "TaskWatchdog.h"
+#include "HAL_Can.h"
 
-// leaky bucket for each task
-int task_buckets[NUM_TASKS];
+#define LAST_BREATH_CAN_ID 0x0BB
 
 // Nominal operation that should be maintained in each bucket by its respective task
 #define TASK_BUCKET_MAX 5
@@ -16,6 +16,9 @@ int task_buckets[NUM_TASKS];
 #define PERIODIC_10HZ_MAX_PERIOD 100
 #define PERIODIC_1KHZ_MAX_PERIOD 1
 #define CAN_MAX_PERIOD 1
+
+// leaky bucket for each task
+int task_buckets[NUM_TASKS];
 
 typedef struct
 {
@@ -80,15 +83,19 @@ void send_expired_payload(task_id_E task)
 {
     if(tasks == task_id_PERIODIC_1Hz){
         //Do something
+        HAL_Can_send_message(LAST_BREATH_CAN_ID, 8, 0);
     }
     else if (task == task_id_PERIODIC_10Hz){
         //Do something
+        HAL_Can_send_message(LAST_BREATH_CAN_ID, 8, 1);
     }
     else if (task == task_id_PERIODIC_1kHz){
         //Do something
+        HAL_Can_send_message(LAST_BREATH_CAN_ID, 8, 2);
     }
     else if (task == task_id_CAN){
         //Do something
+        HAL_Can_send_message(LAST_BREATH_CAN_ID, 8, 3);
     }
 }
 
