@@ -48,9 +48,9 @@ void TASK_1Hz(void *pvParameters)
     {
         Periodic_1Hz();
         //Don't use watchdog if Disabled
-        #ifndef DISABLE_WATCHDOG
-            TaskWatchdog_pet(task_id_PERIODIC_1Hz);
-        #endif
+        // #ifndef DISABLE_WATCHDOG
+        //     TaskWatchdog_pet(task_id_PERIODIC_1Hz);
+        // #endif
         // printf("Task 1Hz\n");
         // CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
@@ -69,9 +69,9 @@ void task_10Hz(void *pvParameters)
     {
         Periodic_10Hz();
         //Don't use watchdog if Disabled
-        #ifndef DISABLE_WATCHDOG
-            TaskWatchdog_pet(task_id_PERIODIC_10Hz);
-        #endif
+        // #ifndef DISABLE_WATCHDOG
+        //     TaskWatchdog_pet(task_id_PERIODIC_10Hz);
+        // #endif
         // printf("Task 10Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
@@ -90,18 +90,36 @@ void task_1kHz(void *pvParameters)
     {
         Periodic_1kHz();
         //Don't use watchdog if Disabled
-        #ifndef DISABLE_WATCHDOG
-            TaskWatchdog_pet(task_id_PERIODIC_1kHz);
-        #endif
+        // #ifndef DISABLE_WATCHDOG
+        //     TaskWatchdog_pet(task_id_PERIODIC_1kHz);
+        // #endif
         //printf("Task 1kHz\n");
         CAN_send_queued_messages();
-        //Don't use watchdog if Disabled
-        #ifndef DISABLE_WATCHDOG
-            TaskWatchdog_pet(task_id_CAN);
-        #endif
-        vTaskDelayUntil(&next_wake_time, TASK_CAN_PERIOD_MS);
+        vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
     }
 }
+
+#define TASK_CAN_NAME "task_CAN"
+#define TASK_CAN_PRIORITY (tskIDLE_PRIORITY + 3) //Not sure about what priority to give
+#define TASK_CAN_PERIOD_MS (1)                   //Need to determine correct period
+#define TASK_CAN_STACK_SIZE_B (configMINIMAL_STACK_SIZE)
+#define TICKS_TO_WAIT_FOR_RECIEVE (0) //Not sure if this is what we want
+
+// void task_CAN(void *pvParameters)
+// {
+//     // There are three transmit mailboxes
+//     (void)pvParameters;
+//     TickType_t next_wake_time;
+//     for (;;)
+//     {
+//         CAN_send_queued_messages();
+//         //Don't use watchdog if Disabled
+//         // #ifndef DISABLE_WATCHDOG
+//         //     TaskWatchdog_pet(task_id_CAN);
+//         // #endif
+//         vTaskDelayUntil(&next_wake_time, TASK_CAN_PERIOD_MS);
+//     }
+// }
 
 #define WATCHDOG_TASK_NAME ((signed char *) "task_Watchdog")
 #define WATCHDOG_TASK_STACK_SIZE (configMINIMAL_STACK_SIZE) //100
@@ -117,7 +135,7 @@ void watchdog_task(void *pvParameters)
         #ifndef DISABLE_WATCHDOG
 		if (!task_watchdog_expired())
 		{
-			pet();
+			HAL_Watchdog_pet();
 
 			if (TaskWatchdog_tick(task_id_PERIODIC_1Hz))
 			{
@@ -161,7 +179,7 @@ int main(int argc, char** argv)
     // initialize all HAL stuff
     HAL_Gpio_init();
     HAL_Can_init();
-    HAL_CurrentSensor_init();
+    //HAL_CurrentSensor_init();
     // HAL_SlaveChips_init();
     // HAL_Watchdog_init();
 

@@ -1,6 +1,8 @@
 #include "HAL_Watchdog.h"
+#include "BmsSim.pb.h"
 
-void pet(void)
+void HAL_Watchdog_pet(void)
 {
-    // lol
+    BmsOut* out = BmsSimClient_get_outputs();
+    out->watchdog_pet = true;
 }

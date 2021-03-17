@@ -44,7 +44,7 @@ void HAL_Watchdog_Init(){
     // WWDG->CR |= WWDG_CR_WDGA; /* (3) */
 }
 
-void pet(){
+void HAL_Watchdog_pet(){
     WWDG_SetCounter(SET_VALUE);
     //WWDG->CR = SET_VALUE & BIT_MASK;
 }
