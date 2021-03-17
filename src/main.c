@@ -48,9 +48,9 @@ void TASK_1Hz(void *pvParameters)
     {
         Periodic_1Hz();
         //Don't use watchdog if Disabled
-        // #ifndef DISABLE_WATCHDOG
-        //     TaskWatchdog_pet(task_id_PERIODIC_1Hz);
-        // #endif
+        #ifndef DISABLE_WATCHDOG
+            TaskWatchdog_pet(task_id_PERIODIC_1Hz);
+        #endif
         // printf("Task 1Hz\n");
         // CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
@@ -69,9 +69,9 @@ void task_10Hz(void *pvParameters)
     {
         Periodic_10Hz();
         //Don't use watchdog if Disabled
-        // #ifndef DISABLE_WATCHDOG
-        //     TaskWatchdog_pet(task_id_PERIODIC_10Hz);
-        // #endif
+        #ifndef DISABLE_WATCHDOG
+            TaskWatchdog_pet(task_id_PERIODIC_10Hz);
+        #endif
         // printf("Task 10Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
@@ -90,9 +90,9 @@ void task_1kHz(void *pvParameters)
     {
         Periodic_1kHz();
         //Don't use watchdog if Disabled
-        // #ifndef DISABLE_WATCHDOG
-        //     TaskWatchdog_pet(task_id_PERIODIC_1kHz);
-        // #endif
+        #ifndef DISABLE_WATCHDOG
+            TaskWatchdog_pet(task_id_PERIODIC_1kHz);
+        #endif
         //printf("Task 1kHz\n");
         CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
@@ -149,10 +149,10 @@ void watchdog_task(void *pvParameters)
 			{
 				task_watchdog_set_expired(task_id_PERIODIC_1kHz);
 			}
-            else if (TaskWatchdog_tick(task_id_CAN))
-			{
-				task_watchdog_set_expired(task_id_CAN);
-			}
+            // else if (TaskWatchdog_tick(task_id_CAN))
+			// {
+			// 	task_watchdog_set_expired(task_id_CAN);
+			// }
 		}
         #endif
 
@@ -230,6 +230,13 @@ int main(int argc, char** argv)
         TASK_1kHz_STACK_SIZE_B,
         NULL,
         TASK_1kHz_PRIORITY,
+        NULL);
+    
+    xTaskCreate(watchdog_task,
+        WATCHDOG_TASK_NAME,
+        WATCHDOG_TASK_STACK_SIZE,
+        NULL,
+        WATCHDOG_TASK_PRIORITY,
         NULL);
     
     xTaskCreate(watchdog_task,
