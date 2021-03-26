@@ -76,7 +76,7 @@ void rt_OneStep(void)
     rtU.DischargeSig[i] = BmsSim_read_drain_state(i);
   }
 
-  printf("Voltage= %lf\t", rtY.TotalOut);
+  //printf("Voltage= %lf\t", rtY.TotalOut);
 
   
 
@@ -128,19 +128,19 @@ int_T main(int_T argc, const char *argv[])
 
   time_t endwait;
   time_t start = time(NULL);
-  time_t seconds = 10;
+  time_t seconds = 300;
   endwait = start + seconds;
 
-  printf("loop time is : %s", ctime(&start));
-  printf("end loop time is : %s", ctime(&endwait));
+  //printf("loop time is : %s", ctime(&start));
+  //printf("end loop time is : %s", ctime(&endwait));
 
   while (start < endwait)
   {
-    printf("loop time is : %s", ctime(&start));
+    //printf("loop time is : %s", ctime(&start));
     if(rtmGetStopRequested(rtM)){
       break;
     }
-    sleep(1);
+    //sleep(1);
     start = time(NULL);
     //printf("loop time is : %s", ctime(&start));
     //printf("\nwhile");
