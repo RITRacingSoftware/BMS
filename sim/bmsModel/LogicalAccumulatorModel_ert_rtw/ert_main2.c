@@ -59,8 +59,9 @@ void rt_OneStep(void)
   /* Step the model */
   LogicalAccumulatorModel_step();
   // Set current to 60 
-  rtU.LoadIn = 60;
-  BmsSim_set_current(60);
+  // try to set to 100 to drain faster
+  rtU.LoadIn = 600;
+  BmsSim_set_current(600);
 
   for(int i = 0; i< 90; i++){
 
@@ -138,12 +139,16 @@ int_T main(int_T argc, const char *argv[])
   {
     //printf("loop time is : %s", ctime(&start));
     if(rtmGetStopRequested(rtM)){
+      printf("\nstop request");
+      for(int i = 0; i< 90; i++){
+        printf("%f\n", rtY.VoltageOut[i]);
+      }
       break;
     }
     //sleep(1);
     start = time(NULL);
     //printf("loop time is : %s", ctime(&start));
-    //printf("\nwhile");
+    
     rt_OneStep();
   }
   printf("\nend while\n");
