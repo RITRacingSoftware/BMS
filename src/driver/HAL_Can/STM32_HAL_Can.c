@@ -4,18 +4,9 @@
 #include "CAN.h"
 
 #define CAN_PINS (GPIO_Pin_11 | GPIO_Pin_12)
-#define HSI48_SOURCE 0x0C
 
 void HAL_Can_init(void)
 {
-    // enable HSI48 clock
-    RCC_HSI48Cmd(ENABLE);
-    // wait for HSI48 clock to be ready
-    while(!RCC_GetFlagStatus(RCC_FLAG_HSI48RDY));
-    // tell system clock (which CAN uses) to use HSI48 clock
-    RCC_SYSCLKConfig(RCC_SYSCLKSource_HSI48);
-    // wait for system clock to switch over to HSI48
-    while(RCC_GetSYSCLKSource() != HSI48_SOURCE);
     // enable GPIOA and CAN peripherals
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN, ENABLE);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
@@ -52,26 +43,39 @@ void HAL_Can_init(void)
     CAN_Init(CAN, &canInit);
 }
 
-Error_t HAL_Can_send_message(int id, int dlc, uint64_t data)
+Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data)
 {
     CanTxMsg msg;
     msg.StdId = id;
     msg.ExtId = id;
-    msg.IDE = CAN_ID_STD;
+    if (id > 0x7FF)
+    { 
+        msg.IDE = CAN_Id_Extended;
+    }
+    else
+    {
+        msg.IDE = CAN_Id_Standard;
+    }
     msg.RTR = CAN_RTR_Data; //Not sure about this
     msg.DLC = dlc;
-    for (int i = 0; i < dlc && i < 8; ++i)
+
+    if (dlc < 0)
+        dlc = 0;
+    else if (dlc > 8)
+        dlc = 8;
+
+    for (int i = 0; i < dlc; i++)
     {
-        msg.Data[i] = (data & (0xFF << (i*8))) >> (i*8);
+        msg.Data[i] = (data >> (i*8)) & 0xff;
     }
-    CAN_Transmit(CAN, &msg); //Not sure about CAN paramter
+    CAN_Transmit(CAN, &msg); 
 
     Error_t error;
     error.active = true;
 
     if (CAN_GetLastErrorCode(CAN) == 0)
     {
-        error.active == false;
+        error.active = false;
     }
 
 

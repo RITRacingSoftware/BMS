@@ -2,6 +2,7 @@
 
 #include "counters.h"
 #include "common_macros.h"
+#include "CAN.h"
 
 #include "ChargeMonitor.h"
 #include "FaultManager.h"
@@ -11,29 +12,29 @@
  * Get the largest and smallest voltages currently in the pack.
  * Also get the average voltage of the pack
  */
-static void get_cell_voltage_info(BatteryModel_t* bm, float* largest_V, float* smallest_V, float* average_V)
+static void get_cell_voltage_info(BatteryModel_t* bm)
 {
-    *largest_V = -100;
-    *smallest_V = 1000;
+    bm->largest_V = -100;
+    bm->smallest_V = 1000;
 
-    float total_V = 0;
+    bm->total_V = 0;
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
         float cell_V = bm->cells[i].voltage;
-        if (FLOAT_GT(cell_V, *largest_V, VOLTAGE_TOLERANCE))
+        if (FLOAT_GT(cell_V, bm->largest_V, VOLTAGE_TOLERANCE))
         {
-            *largest_V = cell_V;
+            bm->largest_V = cell_V;
         }
         
-        if (FLOAT_LT(cell_V, *smallest_V, VOLTAGE_TOLERANCE))
+        if (FLOAT_LT(cell_V, bm->smallest_V, VOLTAGE_TOLERANCE))
         {
-            *smallest_V = cell_V;
+            bm->smallest_V = cell_V;
         }
 
-        total_V += cell_V;
+        bm->total_V += cell_V;
     }
 
-    *average_V = total_V / (float) NUM_SERIES_CELLS;
+    bm->average_V = bm->total_V / (float) NUM_SERIES_CELLS;
 }
 
 static void get_temp_info(TempModel_t* tm, float* largest_deg_C, float* smallest_deg_C)
@@ -83,16 +84,15 @@ void PackMonitor_init(void)
  */
 void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 {
-    float largest_V, smallest_V, average_V;
-
-    get_cell_voltage_info(bm, &largest_V, &smallest_V, &average_V);
+    get_cell_voltage_info(bm);
+    can_bus.bms_status.bms_status_pack_voltage = (uint16_t) ((((float)bm->total_V))/.1 + .5);
 
     // check for irrationality
-    if (FLOAT_GT(largest_V, MAX_CELL_V, VOLTAGE_TOLERANCE) || FLOAT_LT(smallest_V, MIN_CELL_V, VOLTAGE_TOLERANCE))
+    if (FLOAT_GT(bm->largest_V, MAX_CELL_V, VOLTAGE_TOLERANCE) || FLOAT_LT(bm->smallest_V, MIN_CELL_V, VOLTAGE_TOLERANCE))
     {
         if (incr_to_limit(&irrational_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
-            FaultManager_set_fault_active(FaultCode_CELL_VOLTAGE_IRRATIONAL, &largest_V);
+            FaultManager_set_fault_active(FaultCode_CELL_VOLTAGE_IRRATIONAL, &bm->largest_V);
         }
     }
     else
@@ -105,11 +105,11 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 
     // check for out of charge
     // out of charge should not occur if we're connected to the charger
-    if (FLOAT_LT_EQ(smallest_V, MIN_ALLOWED_CELL_V, VOLTAGE_TOLERANCE) && !ChargeMonitor_charger_available())
+    if (FLOAT_LT_EQ(bm->smallest_V, MIN_ALLOWED_CELL_V, VOLTAGE_TOLERANCE) && !ChargeMonitor_charger_available())
     {
         if (incr_to_limit(&low_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
-            FaultManager_set_fault_active(FaultCode_OUT_OF_JUICE, &smallest_V);
+            FaultManager_set_fault_active(FaultCode_OUT_OF_JUICE, &bm->smallest_V);
         }
     }
     else
@@ -120,7 +120,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
         }
     }
     
-    float largest_diff_V = largest_V - smallest_V;
+    float largest_diff_V = bm->largest_V - bm->smallest_V;
 
     // check for voltage difference error
     if (FLOAT_GT_EQ(largest_diff_V, MAX_CELL_DIFF_V, VOLTAGE_TOLERANCE))
@@ -137,10 +137,6 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
             FaultManager_clear_fault(FaultCode_CELL_VOLTAGE_DIFF);
         }
     }
-
-    bm->largest_V = largest_V;
-    bm->smallest_V = smallest_V;
-    bm->average_V = average_V;
 }
 
 

@@ -1,12 +1,13 @@
 #include "HAL_EEPROM.h"
 
-void HAL_EEPROM_write(eeprom_addr_t addr, eeprom_data_t data)
+void HAL_EEPROM_write(bms_eeprom_t* map)
 {
     // :D
 }
 
-void HAL_EEPROM_read(eeprom_addr_t addr, eeprom_data_t* data)
+void HAL_EEPROM_read(bms_eeprom_t* map)
 {
     // O.O
-    *data = 0;
+    map->saved_soc = 0;
+    map->saved_soc_en = 0;
 }

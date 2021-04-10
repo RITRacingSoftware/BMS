@@ -2,7 +2,7 @@
 #include "CAN.h"
 #include "common_macros.h"
 #include "CurrentSense.h"
-#include "BatteryCharacteristics.h"
+#include "f29BmsConfig.h"
 #include "FaultManager.h"
 
 #include "HAL_Gpio.h"
@@ -169,8 +169,7 @@ void ChargeMonitor_init(void)
 void ChargeMonitor_1Hz(BatteryModel_t* bm)
 {
     // first get updated state machine inputs
-    // // this is active low, hence the !
-    sm_inputs.charger_connected = !HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE);
+    sm_inputs.charger_connected = HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE);
     sm_inputs.cell_left_to_charge = bm->smallest_V < CHARGED_CELL_V;
     sm_inputs.cell_at_max = FLOAT_GT_EQ(bm->largest_V, MAX_ALLOWED_CELL_V, VOLTAGE_TOLERANCE);
     sm_inputs.cell_over_charged = FLOAT_GT(bm->largest_V, CHARGED_CELL_V, VOLTAGE_TOLERANCE);
@@ -206,6 +205,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
         CAN_send_message(F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID);
     }
 
+    can_bus.bms_status.bms_status_charge_state = state;
 }
 
 /**

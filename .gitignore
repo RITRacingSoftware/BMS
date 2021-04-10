@@ -1,3 +1,6 @@
+*
+!/**/
+!*.*
 *.DS_Store
 **/__pycache__
 .sconsign.dblite
@@ -6,3 +9,13 @@
 *.hex
 *.elf
 **/mocks
+*.map
+*.os
+*.so
+*.pb.c
+*.pb.h
+*_dbc.h
+*_dbc.c
+*.txt
+bin/*
+sim_traces/*

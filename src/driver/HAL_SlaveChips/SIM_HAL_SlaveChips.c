@@ -2,6 +2,11 @@
 #include "BmsSimClient.h"
 #include "TempModel.h"
 
+void HAL_SlaveChips_init()
+{
+ // lol
+}
+
 Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, unsigned int num)
 {
     Cell* cells = BmsSimClient_get_cells_in();

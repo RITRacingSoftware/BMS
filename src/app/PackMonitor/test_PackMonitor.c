@@ -1,12 +1,16 @@
 #include "unity.h"
 
 #include "PackMonitor.h"
+#include "CAN.h"
 
 #include "MockChargeMonitor.h"
 #include "MockFaultManager.h"
 
 static BatteryModel_t bm;
 static TempModel_t tm;
+
+CAN_BUS can_bus;
+
 
 void setUp(void)
 {

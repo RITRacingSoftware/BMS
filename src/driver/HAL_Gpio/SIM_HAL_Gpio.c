@@ -56,3 +56,9 @@ bool HAL_Gpio_read(GpioPin_e pin)
 
     return retval;
 }
+
+bool HAL_Gpio_read_output(GpioPin_e pin)
+{
+    // same as input since this isnt a peripheral and is high level
+    return HAL_Gpio_read(pin);
+}

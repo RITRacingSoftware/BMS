@@ -1,5 +1,6 @@
 #include "CAN.h"
 #include "CurrentSense.h"
+#include "f29BmsConfig.h"
 #include "HAL_CurrentSensor.h"
 #include "FaultManager.h"
 #include <stdio.h>
@@ -33,6 +34,16 @@ void filter_new_current_reading(float new_reading_A)
     }
 }
 
+bool current_valid(float new_reading_A)
+{
+    if (fabs(new_reading_A <= CURRENT_IRRATIONAL_A))
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void CurrentSense_init(void)
 {
     first_reading_received = false;
@@ -56,7 +67,13 @@ void CurrentSense_1kHz(void)
     {
         did_last_read_error = false;
         FaultManager_clear_fault(FaultCode_CURRENT_SENSOR_COMM);
-        filter_new_current_reading(raw_current_A);
+        
+        // this check is done here since we don't want to screw up the filter with huge currents
+        // it wont recover from. There's no fault for irrational current yet.. maybe there should be?
+        if (current_valid(raw_current_A))
+        {
+            filter_new_current_reading(raw_current_A);
+        }
 
         can_bus.bms_current.bms_inst_current_filt = f29bms_dbc_bms_current_bms_inst_current_filt_encode(last_current_reading);
     }

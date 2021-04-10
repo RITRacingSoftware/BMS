@@ -1,20 +1,9 @@
 #ifndef PACK_MONITOR_H
 #define PACK_MONITOR_H
 
+#include "f29BmsConfig.h"
 #include "BatteryModel.h"
-#include "BatteryCharacteristics.h"
 #include "TempModel.h"
-
-#define MAX_TEMP_DEG_C 100.0
-#define OVER_TEMP_DEG_C 60.0
-#define MIN_TEMP_DEG_C -20.0
-
-
-// how long a voltage fault condition must be present to trigger a fault
-#define VOLTAGE_FAULT_HYSTERESIS_MS 500
-
-// how long a temperature fault condition must be present to trigger a fault
-#define TEMPERATURE_FAULT_HYSTERESIS_MS 1000
 
 /**
  * Checks battery cell and temperature readings for fault conditions and sets/clears faults. 

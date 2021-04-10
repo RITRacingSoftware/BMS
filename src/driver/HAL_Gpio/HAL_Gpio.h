@@ -10,9 +10,10 @@ typedef enum
     GpioPin_CHARGER_AVAILABLE,
     GpioPin_SHUTDOWN_LINE
 } GpioPin_e;
-// TODO - implement these
+
 void HAL_Gpio_init(void);
 void HAL_Gpio_write(GpioPin_e pin, bool state);
 bool HAL_Gpio_read(GpioPin_e pin);
+bool HAL_Gpio_read_output(GpioPin_e pin);
 
 #endif // HAL_GPIO_H

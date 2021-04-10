@@ -3,15 +3,7 @@
 #include "HAL_CurrentSensor.h"
 #include "stm32f0xx_gpio.h"
 #include "stm32f0xx_rcc.h"
-
-#define CURRENT_SENSOR_ADC_CHANNEL ADC_CHSELR_CHSEL1
-#define ADC_MAX_VALUE 4095
-#define Vref 3.3
-#define ZERO_AMP_REF_V 2.4724
-#define V_PER_A 0.0036168
-
-#define CURRENT_SENSOR_PORT GPIOA
-#define CURRENT_SENSOR_PIN GPIO_Pin_1
+#include "f29BmsConfig.h"
 
 void HAL_CurrentSensor_init(void)
 {
@@ -46,4 +38,10 @@ Error_t HAL_CurrentSensor_read_current(float* current)
     float unshifted_volts = ((float) adc_read / (float) ADC_MAX_VALUE) * (float) Vref;
     float shifted_volts = unshifted_volts - ZERO_AMP_REF_V;
     *current = shifted_volts / V_PER_A;
+
+    // errors disabled for now
+    Error_t err;
+    err.active = false;
+
+    return err;
 }

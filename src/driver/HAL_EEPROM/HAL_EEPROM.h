@@ -3,18 +3,16 @@
 
 #include <stdint.h>
 
-// subject to change, will probably need unions here
-typedef uint32_t eeprom_data_t;
-typedef uint16_t eeprom_addr_t;
-
 // EEPROM MAP
-#define SAVED_SOC_EN_ADDR ((eeprom_addr_t) 69)
-#define SAVED_SOC_ADDR    ((eeprom_addr_t) 420)
+typedef struct {
+    // whether or not the saved soc is valid
+    uint32_t saved_soc_en;
+    // saved soc (int 0-100)
+    uint32_t saved_soc;
+} bms_eeprom_t;
 
-// TODO- actually implement this module and redefine it as needed
+void HAL_EEPROM_write(bms_eeprom_t* map);
 
-void HAL_EEPROM_write(eeprom_addr_t addr, eeprom_data_t data);
-
-void HAL_EEPROM_read(eeprom_addr_t addr, eeprom_data_t* data);
+void HAL_EEPROM_read(bms_eeprom_t* map);
 
 #endif // HAL_EEPROM_H

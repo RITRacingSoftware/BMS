@@ -2,6 +2,7 @@
 #define CAN_H
 #include <stdbool.h>
 
+#include "f29BmsConfig.h"
 #include "f29bms_dbc.h"
 #include "BatteryModel.h"
 #include "TempModel.h"
@@ -40,6 +41,7 @@ typedef struct
     struct f29bms_dbc_bms_drain_status_b_t bms_drain_status_b;
     struct f29bms_dbc_bms_current_t bms_current;
     struct f29bms_dbc_bms_charge_request_t bms_charge_request;
+    struct f29bms_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
 } CAN_BUS;
 
 extern CAN_BUS can_bus;

@@ -8,9 +8,9 @@
 #define MS_TO_HR (1.0 / ((float)(1000 * 60 * 60)))
 
 // math
-#define MAX(x, y) (x < y ? y : x)
-#define MIN(x, y) (x < y ? x : y)
-#define SAT(v, x, y) MIN(MAX(v, x), y)
+#define MAX(x, y) ((x) < (y) ? (y) : (x))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
+#define SAT(v, x, y) MIN(MAX((v), (x)), (y))
 #define ROUND_2D(v) ((float)((float)((int)((v) * 100.0 + .5))) / 100.0)
 #define ROUND_INT(v) (int)((float)(v) + 0.5)
 // idk why this doesnt work: #define FLOAT_EQ(f1, f2) (fabs(f1 - f2) < FLT_EPSILON)

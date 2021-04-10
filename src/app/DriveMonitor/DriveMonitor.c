@@ -3,6 +3,7 @@
 
 #include "counters.h"
 
+#include "f29BmsConfig.h"
 #include "DriveMonitor.h"
 #include "FaultManager.h"
 
@@ -14,9 +15,6 @@
  * This could be set statically, but its nice to define things at runtime in case FaultCode_e changes.
  */
 static int fault_tolerances[FaultCode_NUM];
-
-// value a fault tolerance should have if the fault does not cause the car to shutdown
-#define NO_SHUTDOWN -1
 
 /**
  * How long each fault has been active in milliseconds.
@@ -52,17 +50,17 @@ void DriveMonitor_init(void)
     // Any faults not defined here get 0, which means car will not drive until the
     // devloper who added the fault code but didn't add a tolerance gets their act together. 
     // Use 1 for faults that trigger shutdown if they're active at all.
-    fault_tolerances[FaultCode_SLAVE_COMM_CELLS]            = 10000;
-    fault_tolerances[FaultCode_SLAVE_COMM_TEMPS]            = 10000;
-    fault_tolerances[FaultCode_SLAVE_COMM_DRAIN_REQUEST]    = 10000;
-    fault_tolerances[FaultCode_CURRENT_SENSOR_COMM]         = 10;
-    fault_tolerances[FaultCode_OVER_CURRENT]                = 1;
-    fault_tolerances[FaultCode_CELL_VOLTAGE_IRRATIONAL]     = 10000;
-    fault_tolerances[FaultCode_CELL_VOLTAGE_DIFF]           = NO_SHUTDOWN;
-    fault_tolerances[FaultCode_OUT_OF_JUICE]                = 1;
-    fault_tolerances[FaultCode_OVER_TEMPERATURE]            = 1;
-    fault_tolerances[FaultCode_TEMPERATURE_IRRATIONAL]      = 10000;
-    fault_tolerances[FaultCode_DRAIN_FAILURE]               = NO_SHUTDOWN;
+    fault_tolerances[FaultCode_SLAVE_COMM_CELLS]            = SLAVE_COMM_CELLS_TOLERANCE_MS;
+    fault_tolerances[FaultCode_SLAVE_COMM_TEMPS]            = SLAVE_COMM_TEMPS_TOLERANCE_MS;
+    fault_tolerances[FaultCode_SLAVE_COMM_DRAIN_REQUEST]    = SLAVE_COMM_DRAIN_REQUEST_TOLERANCE_MS;
+    fault_tolerances[FaultCode_CURRENT_SENSOR_COMM]         = CURRENT_SENSOR_COMM_TOLERANCE_MS;
+    fault_tolerances[FaultCode_OVER_CURRENT]                = OVER_CURRENT_TOLERANCE_MS;
+    fault_tolerances[FaultCode_CELL_VOLTAGE_IRRATIONAL]     = CELL_VOLTAGE_IRRATIONAL_TOLERANCE_MS;
+    fault_tolerances[FaultCode_CELL_VOLTAGE_DIFF]           = CELL_VOLTAGE_DIFF_TOLERANCE_MS;
+    fault_tolerances[FaultCode_OUT_OF_JUICE]                = OUT_OF_JUICE_TOLERANCE_MS;
+    fault_tolerances[FaultCode_OVER_TEMPERATURE]            = OVER_TEMPERATURE_TOLERANCE_MS;
+    fault_tolerances[FaultCode_TEMPERATURE_IRRATIONAL]      = TEMPERATURE_IRRATIONAL_TOLERANCE_MS;
+    fault_tolerances[FaultCode_DRAIN_FAILURE]               = DRAIN_FAILURE_TOLERANCE_MS;
 
     // ideally this would start low, but the FSAE rules say faults must latch
     // at the hardware level so we have to start with the true or the car will never drive

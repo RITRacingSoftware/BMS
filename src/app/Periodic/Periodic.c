@@ -1,7 +1,8 @@
 #include "Periodic.h"
 
+#include "f29BmsConfig.h"
+
 #include "BatteryModel.h"
-#include "BatteryCharacteristics.h"
 #include "CAN.h"
 #include "CellBalancer.h"
 #include "ChargeMonitor.h"
@@ -45,9 +46,6 @@ void Periodic_1Hz(void)
     // Request or reject charging
     ChargeMonitor_1Hz(&battery_model);
 
-    // update the bounds on State of Charge based on average pack voltage
-    SOCestimator_voltage_threshold_update_10Hz(&battery_model, &temp_model);
-
     CAN_1Hz();
 }
 
@@ -69,6 +67,9 @@ void Periodic_10Hz(void)
 
     // transmit new drain requests to slave board chips
     SlaveInterface_request_cell_draining(&battery_model);
+
+    // update the bounds on State of Charge based on average pack voltage
+    SOCestimator_voltage_threshold_update_10Hz(&battery_model, &temp_model);
 
     // statuse LED blink algorithm iteration
     StatusLed_10Hz();

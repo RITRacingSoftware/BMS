@@ -12,6 +12,12 @@ void SlaveInterface_read_cell_info(BatteryModel_t* battery_model)
 {
     float voltages[NUM_SERIES_CELLS];
     bool is_draining[NUM_SERIES_CELLS];
+    for (int i = 0; i < NUM_SERIES_CELLS; i++)
+    {
+        voltages[i] = 0;
+        is_draining[i] = 0;
+    }
+    
     
     // get data from slave boards
     Error_t err = HAL_SlaveChips_get_all_cell_data(voltages, is_draining, NUM_SERIES_CELLS);
