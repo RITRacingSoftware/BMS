@@ -7,6 +7,7 @@
  * Cells
  */
 
+// just defined for 2 test segments rn
 #define NUM_SERIES_CELLS 15
 #define NUM_PARALLEL_CELLS 3
 
@@ -15,11 +16,13 @@
 #define CELL_CAPACITY_Ah 6.550
 #define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
-#define MAX_CELL_V 4.3
-#define MAX_ALLOWED_CELL_V 4.1
-#define CHARGED_CELL_V 4.0
-#define MIN_ALLOWED_CELL_V 1.2
-#define MIN_CELL_V 0.0
+
+#define MAX_CELL_V 4.3 // any value above this is considered irrational
+#define MAX_ALLOWED_CELL_V 4.1 // any value above this is overcharged and should produce a fault
+#define CHARGED_CELL_V 4.0 // once all cells are above this, charging ends
+#define MIN_ALLOWED_CELL_V 1.2 // out of juice fault thrown if cells go below this
+#define MIN_CELL_V 0.0 // cells below this are considered irrational
+
 #define MAX_CHARGING_CURRENT_A 100.0
 #define MAX_CHARGING_V 5
 #define CHARGE_CURRENT_SETTLE_TIME_S 5
@@ -113,7 +116,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
  * Temperature Monitoring
  */
 
-// currently just for test segment
+// defined for 2 test segments rn
 #define NUM_THERMISTOR 3
 
 #define MAX_TEMP_DEG_C 100.0

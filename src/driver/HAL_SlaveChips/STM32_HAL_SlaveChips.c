@@ -6,6 +6,7 @@
 #include "stm32f0xx_rcc.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "f29BmsConfig.h"
 #include <stdlib.h>
 
 // Whether or not vTaskDelay or TIM6 is used to wait for adc conversions/wake ups
@@ -147,9 +148,9 @@ void wakeup_idle()
 {
   GPIO_WriteBit(GPIOB, SPI_NSS_PIN, 0);
   #if FREERTOS_TIMING == 0
-  delayMSec(2); //Guarantees the isoSPI will be in ready mode
+  delayMSec(2*NUM_SERIES_CELLS/15); //Guarantees the isoSPI will be in ready mode
   #else
-  vTaskDelay(2);
+  vTaskDelay(2*NUM_SERIES_CELLS/15);
   #endif
   GPIO_WriteBit(GPIOB, SPI_NSS_PIN, 1);
 }
@@ -958,8 +959,10 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
         tx[chip_base + 6] = (char) ((pec >> 8) & 0xFF);
         tx[chip_base + 7] = (char) (pec & 0xFF);
     }
-
+char show_tx[100];
+for (int i = 0; i < sizeof(tx)/sizeof(tx[0]); i++) show_tx[i] = tx[i];
     char *rx;
+    wakeup_idle();
     wakeup_idle();
     HAL_Spi_transmit_and_receive(tx, 4 + (num_chips * bytes_per_chip), rx, 0);
     //TO DO: add error checking

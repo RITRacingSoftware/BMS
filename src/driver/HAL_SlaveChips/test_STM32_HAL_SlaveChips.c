@@ -24,18 +24,27 @@ int main()
     int num_ltcs = 2; //Number of LTC chips
     int num_boards = num_ltcs / 2; // note this only works for an even number of chips
     bool setIsDraining[num_boards*15]; 
-    
+
+    // to set all on
+    // for (int i = 0; i < num_boards*15;i++)
+    // {
+    //     if (i % 2)
+    //     setIsDraining[i] = 1;
+    //     else
+    //     setIsDraining[i] = 0;
+    // }
+    // HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
+    // for(;;);
+    for(int i = 0; i < num_boards*15; i++) setIsDraining[i] = 0;
     for(;;)
     {
-    for (int i = 0; i < num_boards*15; i++)
-    {
-        setIsDraining[i] = 1;
-    }
+    
     for (int iter = 0; iter < num_boards* 15;iter++)
     {
 
-        if (iter != 0) setIsDraining[iter-1] = 0;
+        //if (iter != 0) setIsDraining[iter-1] = 0;
         setIsDraining[iter] = 1;
+               // HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
 
         HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
         for(int lol = 0; lol < 80000; lol++);
@@ -43,12 +52,36 @@ int main()
     for (int iter = num_boards*15-1; iter >=0;iter--)
     {
 
-        if (iter != 0) setIsDraining[iter-1] = 0;
-        setIsDraining[iter] = 1;
+        //if (iter != 0) setIsDraining[iter-1] = 0;
+        setIsDraining[iter] = 0;
+        //HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
 
         HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
         for(int lol = 0; lol < 80000; lol++);
     }
+
+    // for (int i = 0; i < num_boards*15;i++)
+    // {
+    //     if (i % 2)
+    //     setIsDraining[i] = 1;
+    //     else
+    //     setIsDraining[i] = 0;
+    // }
+    // HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
+    //         HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
+
+    //      for(int lol = 0; lol < 800000; lol++);
+    //       for (int i = 0; i < num_boards*15;i++)
+    // {
+    //     if (i % 2)
+    //     setIsDraining[i] = 0;
+    //     else
+    //     setIsDraining[i] = 1;
+    // }
+    // HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
+    //          HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
+
+    //      for(int lol = 0; lol < 800000; lol++);
     }
     
     // int cv[24];

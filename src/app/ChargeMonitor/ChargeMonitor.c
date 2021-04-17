@@ -131,13 +131,22 @@ static void sm_1Hz(void)
 
 static void start_charging(void)
 {
+    // set bit in can message
+    // yes, according to Elcon its 1 to stop and 0 to start...
     can_bus.bms_charge_request.bms_charge_request_control = 0;
+
+    // assert charge enable line
+    HAL_Gpio_write(GpioPin_CHARGE_ENABLE, 1);
 }
 
 static void stop_charging(void)
 {
+    // clear bit in can message
     // yes, according to Elcon its 1 to stop and 0 to start...
     can_bus.bms_charge_request.bms_charge_request_control = 1;
+
+    // de-assert charge enable line
+    HAL_Gpio_write(GpioPin_CHARGE_ENABLE, 1);
 }
 
 void ChargeMonitor_init(void)
