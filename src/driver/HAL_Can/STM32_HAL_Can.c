@@ -41,6 +41,8 @@ void HAL_Can_init(void)
     canInit.CAN_BS1 = CAN_BS1_13tq;
     canInit.CAN_BS2 = CAN_BS2_2tq;
     CAN_Init(CAN, &canInit);
+
+    NVIC_DisableIRQ(CEC_CAN_IRQn);
 }
 
 Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data)

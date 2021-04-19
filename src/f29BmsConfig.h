@@ -8,7 +8,7 @@
  */
 
 // just defined for 2 test segments rn
-#define NUM_SERIES_CELLS 15
+#define NUM_SERIES_CELLS 90
 #define NUM_PARALLEL_CELLS 3
 
 // NOTE: Be sure to define things here with decimals if you intend to use them as floats
@@ -51,9 +51,10 @@
  * Current Sensor
  */
 #define CURRENT_SENSOR_ADC_CHANNEL ADC_CHSELR_CHSEL1
-#define ADC_MAX_VALUE 4095
+#define ADC_MAX_VALUE 4095.0
 #define Vref 3.3
-#define ZERO_AMP_REF_V 2.4724
+#define ZERO_AMP_ADC_CAL 2094.0
+#define ZERO_AMP_REF_V ((ZERO_AMP_ADC_CAL/ADC_MAX_VALUE) * Vref)
 #define V_PER_A 0.0036168
 
 #define CURRENT_SENSOR_PORT GPIOA
@@ -117,7 +118,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
  */
 
 // defined for 2 test segments rn
-#define NUM_THERMISTOR 3
+#define NUM_THERMISTOR 18
 
 #define MAX_TEMP_DEG_C 100.0
 #define OVER_TEMP_DEG_C 60.0

@@ -21,7 +21,7 @@ int main()
     HAL_Clock_init();
 
     HAL_SlaveChips_init();
-    int num_ltcs = 2; //Number of LTC chips
+    int num_ltcs = 12; //Number of LTC chips
     int num_boards = num_ltcs / 2; // note this only works for an even number of chips
     bool setIsDraining[num_boards*15]; 
 
@@ -35,6 +35,7 @@ int main()
     // }
     // HAL_SlaveChips_request_cell_drain_state(setIsDraining, sizeof(setIsDraining)/sizeof(setIsDraining[0]));
     // for(;;);
+    
     for(int i = 0; i < num_boards*15; i++) setIsDraining[i] = 0;
     for(;;)
     {
@@ -91,17 +92,17 @@ int main()
     //     cv[i] = (int)(cellVoltages[i] * 1000.0);
     // }
     
-    bool isDraining[num_ltcs * 12];
-    for (int i = 0; i< num_ltcs*12; i++)
-    {
-        isDraining[i] = 0;
-    }
+    // bool isDraining[num_ltcs * 12];
+    // for (int i = 0; i< num_ltcs*12; i++)
+    // {
+    //     isDraining[i] = 0;
+    // }
 
-    float cellVoltages[num_ltcs * 12];
-    HAL_SlaveChips_get_all_cell_data(&cellVoltages[0], isDraining, (num_ltcs*12));
+    // float cellVoltages[num_ltcs * 12];
+    // HAL_SlaveChips_get_all_cell_data(&cellVoltages[0], isDraining, (num_ltcs*12));
     
-    float temps[(num_ltcs/2)*3];
-    HAL_SlaveChips_get_all_tm_readings(temps, 3);
+    // float temps[(num_ltcs/2)*3];
+    // HAL_SlaveChips_get_all_tm_readings(temps, 3);
 
     return 0;
 }

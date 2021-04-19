@@ -780,6 +780,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     // if(read_All_Is_Draining(AllIsDraining, num_boards)){
     //     error.active = true;
     // }
+   // float oops = (float) AllCellVoltages[0][0] / 10000.0;
 
     for (int board = 0; board < num_boards; board++)
     { 

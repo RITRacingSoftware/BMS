@@ -30,7 +30,7 @@ BO_ 600 BmsStatus: 8  Bms
  SG_ BmsStatus_SOC: 0|8@1+ (1,0) [0|100] "%" Vector__XXX
  SG_ BmsStatus_SOC_raw: 8|8@1+ (1,0) [0|100] "%" Vector__XXX
  SG_ BmsStatus_ChargeState: 16|5@1+ (1,0) [0|4] "" Vector__XXX
- SG_ BmsStatus_PackVoltage: 21|10@1+ (0.1,0) [0|400] "V" Vector__XXX
+ SG_ BmsStatus_PackVoltage: 21|15@1+ (0.1,0) [0|400] "V" Vector__XXX
 
 BO_ 700 BmsFaultVector: 8 Bms
  SG_ BmsFaultVector_SLAVE_COMM_CELLS : 0|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -199,13 +199,102 @@ BO_ 704 BmsTemperatures: 8 Bms
  SG_ BmsTemperatures_19 m2: 42|8@1- (1,0) [-128|127] "C" Vector__XXX
 
 BO_ 800 BmsDrainStatusA: 8 Bms
- SG_ BmsDrainStatus_Cells0to63 : 0|64@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell0: 0|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell1: 1|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell2: 2|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell3: 3|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell4: 4|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell5: 5|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell6: 6|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell7: 7|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell8: 8|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell9: 9|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell10: 10|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell11: 11|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell12: 12|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell13: 13|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell14: 14|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell15: 15|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell16: 16|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell17: 17|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell18: 18|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell19: 19|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell20: 20|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell21: 21|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell22: 22|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell23: 23|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell24: 24|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell25: 25|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell26: 26|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell27: 27|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell28: 28|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell29: 29|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell30: 30|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell31: 31|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell32: 32|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell33: 33|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell34: 34|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell35: 35|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell36: 36|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell37: 37|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell38: 38|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell39: 39|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell40: 40|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell41: 41|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell42: 42|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell43: 43|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell44: 44|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell45: 45|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell46: 46|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell47: 47|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell48: 48|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell49: 49|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell50: 50|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell51: 51|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell52: 52|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell53: 53|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell54: 54|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell55: 55|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell56: 56|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell57: 57|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell58: 58|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell59: 59|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell60: 60|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell61: 61|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell62: 62|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusA_Cell63: 63|1@1- (1,0) [0|1] "" Vector__XXX
+
 
 BO_ 801 BmsDrainStatusB: 8 Bms
- SG_ BmsDrainStatus_Cells64to89 : 0|25@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell64: 0|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell65: 1|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell66: 2|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell67: 3|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell68: 4|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell69: 5|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell70: 6|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell71: 7|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell72: 8|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell73: 9|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell74: 10|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell75: 11|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell76: 12|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell77: 13|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell78: 14|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell79: 15|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell80: 16|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell81: 17|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell82: 18|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell83: 19|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell84: 20|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell85: 21|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell86: 22|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell87: 23|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell88: 24|1@1- (1,0) [0|1] "" Vector__XXX
+ SG_ BmsDrainStatusB_Cell89: 25|1@1- (1,0) [0|1] "" Vector__XXX
 
 BO_ 900 BmsCurrent: 8 Bms
- SG_ BmsInstCurrentFilt : 0|32@1+ (0.001,0) [0|2000] "A" Vector__XXX
+ SG_ BmsInstCurrentFilt : 0|32@1- (0.001,0) [-100|250] "A" Vector__XXX
 
 BO_ 2550588916 BmsChargeRequest: 8 Bms
  SG_ BmsChargeRequest_MaxVoltage: 0|16@1+ (0.1,0) [0|6553.3] "V" Vector__XXX
