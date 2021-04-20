@@ -5,6 +5,7 @@
 typedef struct{
     float tm_readings_V[NUM_THERMISTOR];
     float temps_C[NUM_THERMISTOR];
+    float vref2;
 } TempModel_t;
 
 #endif // TEMP_MODEL_H

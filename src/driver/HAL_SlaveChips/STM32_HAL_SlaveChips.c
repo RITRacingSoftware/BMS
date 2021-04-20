@@ -776,7 +776,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     bool AllIsDraining[num];
 
     // TODO- change this to total # of slave chips once on full BMS
-    LTC6804_rdcv(0, num_boards * chips_per_board, AllCellVoltages);
+    int pec = LTC6804_rdcv(0, num_boards * chips_per_board, AllCellVoltages);
     // if(read_All_Is_Draining(AllIsDraining, num_boards)){
     //     error.active = true;
     // }
@@ -816,41 +816,54 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
 }
 
 //Every other LTC has 3 thermistors, 1st,3rd, etc have thermistors
-Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num){
+Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2, unsigned int num){
     Error_t error;
     error.active = false;
     //GPIO voltage in Auxilary Register Group A
     LTC6804_adax();
 
     //WAIT
-    // TIM6->ARR = 2500; //Need to wait 2335 seconds, rounded up to 2500 for now
-    // TIM6->EGR |= TIM_EGR_UG;
-    // TIM6->SR = 0;
-    // TIM6->CR1 |= TIM_CR1_CEN;
-    // while(TIM6->SR == 0);
+    #if FREERTOS_TIMING == 0
+    TIM6->ARR = 2500; //Need to wait 2335 seconds, rounded up to 2500 for now
+    TIM6->EGR |= TIM_EGR_UG;
+    TIM6->SR = 0;
+    TIM6->CR1 |= TIM_CR1_CEN;
+    while(TIM6->SR == 0);
+    #else
+    vTaskDelay(3);
+    #endif
 
     //NEED TO IMPLEMENT PEC
     // uint8_t setsOfTwelve = ((num / 3) * 2);
     // if(setsOfTwelve == 0){
     //   setsOfTwelve = 2;
     // }
-    const uint8_t therm_per_board;
+    const uint8_t therm_per_board = 3;
     uint8_t num_boards = num / therm_per_board;
+    uint8_t num_chips = num_boards * 2;
     //NEED TO IMPLEMENT PEC
     //transmitCommand[2] and [3] for PEC0 and PEC1
-    uint16_t tempRecieved[num_boards][therm_per_board];
+    uint16_t tempRecieved[num_chips][6];
     //Read the Configuration Register Group to get DCC
-    if(LTC6804_rdaux(1, num_boards * 2, tempRecieved) == -1){
+    // get temperature readings from every chip (will ignore ones without thermistors later)
+    if(LTC6804_rdaux(0, num_chips, tempRecieved) == -1){
         error.active = true;
     }
 
-    for (int r = 0; r < num_boards; r++)
+    *vref2 = (((float)tempRecieved[0][5])/LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
+
+    int temp_idx = 0;
+    for (int r = 0; r < num_chips; r+=2)
     {
+        // every other chip has thermistors
         for (int c = 0; c < therm_per_board; c++)
         {
-            temperatures[r*therm_per_board + c] = tempRecieved[r][c];
+            temperatures[temp_idx*therm_per_board + c] =  (((float) tempRecieved[r][c]) / LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
         }
+        temp_idx++;
     }
+
+    return error;
 }
 
 static uint8_t drain_state_LUT[] = {9, 8, 7, 6, 3, 2, 1, 0};

@@ -1,4 +1,6 @@
 #include "TempConverter.h"
+#include "common_macros.h"
+#include <math.h>
 
 // length of the thermistor LUT
 static int temp_lut_len;
@@ -89,18 +91,29 @@ void TempConverter_init(float* tlut, int tlut_len, float tlut_offset, float div_
     divider_ohm = div_ohm;
 }
 
+#define TEMP_A1 0.003354016435
+#define TEMP_B1 0.0002565236
+#define TEMP_C1 2.605970E-06
+#define TEMP_D1 6.329261E-08
+#define TEMP_R25 10000.0
+
 void TempConverter_convert(TempModel_t* tm) 
 {
     for (int i = 0; i < NUM_THERMISTOR; i++)
     {
         float temp_V = tm->tm_readings_V[i];
 
-        // first convert from voltage to resistance using voltage division
-        // ((Vout * divider_ohms)/Vin) / (1 - Vout/Vin)
-        float Vout_over_Vin = temp_V/MCU_VCC;
-        float ntc_Ohm = (Vout_over_Vin * divider_ohm) / (1 - Vout_over_Vin);        
+        // // first convert from voltage to resistance using voltage division
+        // // ((Vout * divider_ohms)/Vin) / (1 - Vout/Vin)
+        // float Vout_over_Vin = temp_V/LTC6804_ADC_RANGE_V;
+        // float ntc_Ohm = (Vout_over_Vin * divider_ohm) / (1 - Vout_over_Vin);        
         
-        // binary search of the temp LUT
-        tm->temps_C[i] = binary_search_temp_lut(ntc_Ohm) + temp_lut_offset;
+        // // binary search of the temp LUT
+        // tm->temps_C[i] = binary_search_temp_lut(ntc_Ohm) + temp_lut_offset;
+        
+        float Vout_over_Vin = temp_V/tm->vref2;
+        float rt = (Vout_over_Vin * divider_ohm) / (1.0 - Vout_over_Vin);
+        float ln_rt_r25 = log(rt / TEMP_R25); 
+        tm->temps_C[i] = 1.0/(TEMP_A1 + TEMP_B1*ln_rt_r25 + TEMP_C1*SQ(ln_rt_r25) + TEMP_D1 * CUBE(ln_rt_r25)) -273.15;
     }
 }

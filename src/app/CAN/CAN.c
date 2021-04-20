@@ -188,6 +188,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 
     f29bms_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&msg_data, 8);
     CAN_send_message(F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID);
+    temperature_mux = (temperature_mux + 1) % 3;
 }
 
 

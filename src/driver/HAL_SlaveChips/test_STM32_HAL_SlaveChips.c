@@ -21,7 +21,7 @@ int main()
     HAL_Clock_init();
 
     HAL_SlaveChips_init();
-    int num_ltcs = 12; //Number of LTC chips
+    int num_ltcs = 2; //Number of LTC chips
     int num_boards = num_ltcs / 2; // note this only works for an even number of chips
     bool setIsDraining[num_boards*15]; 
 

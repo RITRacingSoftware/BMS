@@ -49,7 +49,7 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
     float tm_readings_V[NUM_THERMISTOR];
 
     // get data from slave boards
-    Error_t err = HAL_SlaveChips_get_all_tm_readings(tm_readings_V, NUM_THERMISTOR);
+    Error_t err = HAL_SlaveChips_get_all_tm_readings(tm_readings_V, &temp_model->vref2, NUM_THERMISTOR);
 
     // check for communication errors
     if (err.active)

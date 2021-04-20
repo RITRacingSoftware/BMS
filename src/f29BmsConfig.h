@@ -8,7 +8,9 @@
  */
 
 // just defined for 2 test segments rn
-#define NUM_SERIES_CELLS 90
+#define NUM_BOARDS 5
+#define NUM_CHIPS (NUM_BOARDS*2)
+#define NUM_SERIES_CELLS (NUM_BOARDS * 15)
 #define NUM_PARALLEL_CELLS 3
 
 // NOTE: Be sure to define things here with decimals if you intend to use them as floats
@@ -118,7 +120,10 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
  */
 
 // defined for 2 test segments rn
-#define NUM_THERMISTOR 18
+#define NUM_THERMISTOR (NUM_BOARDS*3)
+#define LTC6804_ADC_MAX_VALUE ((float)(1 << 16))
+#define LTC6804_ADC_RANGE_V (5.7)
+#define THERM_INPUT_V (3.0)
 
 #define MAX_TEMP_DEG_C 100.0
 #define OVER_TEMP_DEG_C 60.0

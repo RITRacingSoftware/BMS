@@ -165,9 +165,9 @@ stm32_comp_env = Environment(
     LD=scons_constants.ARM_LD,
     CPPPATH=stm32_freertos_include + module_path_names + tool_paths + [COMMON_DIR.abspath, SRC_DIR.Dir('app').abspath, SRC_DIR.abspath],
     CPPDEFINES=['STM32F091', 'USE_STDPERIPH_DRIVER'],
-    CCFLAGS=['-ggdb','-mcpu=cortex-m0', '-mthumb'],
+    CCFLAGS=['-ggdb','-mcpu=cortex-m0', '-mthumb', '-lm'],
     ASFLAGS=['-mthumb', '-I{}'.format(STM32_LIB_DIR.Dir('inc').abspath), '-I{}'.format(STM32_CMSIS_DIR.Dir('Include').abspath)],
-    LDFLAGS=['-T{}'.format(LINKER_FILE.abspath), '-mcpu=cortex-m0', '-mthumb', '-Wall', '--specs=nosys.specs']
+    LDFLAGS=['-T{}'.format(LINKER_FILE.abspath), '-mcpu=cortex-m0', '-mthumb', '-Wall', '--specs=nosys.specs', '-lm']
 )
 
 # instructions to compile every module
