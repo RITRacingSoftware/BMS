@@ -6,13 +6,13 @@ def test_charge_to_full(sim):
 
     # set up a charging condition
     for i in range(0, 90):
-        sim.stage_cell_info(i, 2.0, False)
+        sim.stage_cell_info(i, 3.5, False)
 
     # make sure we start out not charging
     for i in range(0, 1000):
         sim.tick()
+        
         assert 'BmsChargeRequest_Control' not in sim.signals
-    
     # simulate a plug in
     sim.set_charger_available(False)
     

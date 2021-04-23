@@ -137,7 +137,8 @@ if GetOption('dbg'): # set by command line option
 linux_comp_env = Environment(
     CC='gcc',
     CPPPATH=module_path_names + mock_modules + sim_modules + tool_paths + [SRC_DIR.abspath, APP_DIR.abspath, COMMON_DIR.abspath, SIM_DIR.abspath],
-    CCFLAGS=linux_comp_flags
+    CCFLAGS=linux_comp_flags,
+    LIBS=['m']
 )
 
 # First need instructions for building FreeRTOS
@@ -416,7 +417,8 @@ freertos_comp_env = Environment(
     CPPPATH=[sim_includes, freertos_include, module_path_names, APP_DIR.abspath, tool_paths, SIM_DIR.abspath, COMMON_DIR.abspath, DBC_DIR.abspath],
     CPPDEFINES=['projCOVERAGE_TEST=0', 'SIMULATION'],
     CPPFLAGS=['-O0'],
-    LINKFLAGS=['-pthread']
+    LINKFLAGS=['-pthread'],
+    LIBS=['m']
 )
 
 # use the protobuf compiler to generate .pb.c and .pb.h files from the .proto file

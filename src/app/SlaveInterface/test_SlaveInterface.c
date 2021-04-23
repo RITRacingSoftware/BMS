@@ -49,6 +49,7 @@ void test_SlaveInterface_cell_info_read(void)
     }
 
     // now run again with an error. Modified voltages/drain states from for loop above should NOT appear in battery model
+    // instead should see 0's
     err.active = true;
 
     HAL_SlaveChips_get_all_cell_data_ExpectAnyArgsAndReturn(err);
@@ -59,12 +60,12 @@ void test_SlaveInterface_cell_info_read(void)
 
     SlaveInterface_read_cell_info(&bm);
 
-    // check that nothing changed in the battery model
+    // check that voltages are 0 in the battery model
     for(int i = 0; i < NUM_SERIES_CELLS; i++)
     {
         char err_msg[100];
         sprintf(err_msg, "errored cell %d voltage not expected", i);
-        TEST_ASSERT_MESSAGE(bm.cells[i].voltage == i, err_msg);
+        TEST_ASSERT_MESSAGE(bm.cells[i].voltage == 0, err_msg);
         sprintf(err_msg, "errored cell %d drain state not expected", i);
         TEST_ASSERT_MESSAGE(bm.cells[i].is_draining == (i % 2 == 0), err_msg);
     }

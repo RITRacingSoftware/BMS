@@ -90,8 +90,8 @@ def sim():
     for i in range(0, 20):
         s.stage_temp_info(i, 1.65)
 
-    s.set_current(100)
-    s.set_charger_available(True) # high is disconnected
+    s.set_current(10)
+    s.set_charger_available(False) # high is disconnected
     s.tick() # essential- applies these changes so tests dont try to initially overwrite them
 
     yield s

@@ -21,7 +21,7 @@
 
 #define MAX_CELL_V 4.35 // any value above this is considered irrational
 
-#define MAX_ALLOWED_CELL_V 4.25 // any value above this is overcharged and should produce a fault
+#define MAX_ALLOWED_CELL_V 4.28 // any value above this is overcharged and should produce a fault
 #define CHARGED_CELL_V 4.15 // once all cells are above this, charging ends
 
 #define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
@@ -32,7 +32,7 @@
 // These are NOT the overcurrent limits. See later in this document for those.
 #define MAX_CHARGING_CURRENT_A 15
 #define MAX_CHARGING_V ((float)MAX_ALLOWED_CELL_V * (float)NUM_SERIES_CELLS)
-#define CHARGE_CURRENT_SETTLE_TIME_S 5000
+#define CHARGE_CURRENT_SETTLE_TIME_S 10
 
 // The amount two cell voltages must differ by to be considered different
 #define VOLTAGE_TOLERANCE 0.001
@@ -70,9 +70,9 @@
 /**
  * Faults
  */
+// For debugging only
 // any bits set in this won't get set in the fault vector
-//#define DISABLE_FAULT_MASK ((1 << FaultCode_SLAVE_COMM_TEMPS) | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL) | (1 << FaultCode_TEMPERATURE_IRRATIONAL) | (1 << FaultCode_OVER_TEMPERATURE))
-#define DISABLE_FAULT_MASK ((1 << FaultCode_CELL_VOLTAGE_DIFF) | (1 << FaultCode_DRAIN_FAILURE))// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
+#define DISABLE_FAULT_MASK 0x00
 
 // Fault tolerances are the times a fault is allowed to be continuously active before triggering a shutdown event
 // value a fault tolerance should have if the fault does not cause the car to shutdown

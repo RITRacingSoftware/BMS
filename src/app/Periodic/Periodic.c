@@ -51,10 +51,11 @@ void Periodic_1Hz(void)
 
 void Periodic_10Hz(void)
 {
+    printf("10Hz\r\n");
     // update information from the outside world
     SlaveInterface_read_cell_info(&battery_model);
     SlaveInterface_read_temperature_info(&temp_model);
-
+    
     // convert from thermistor voltage probe readings to temperatures
     TempConverter_convert(&temp_model);
    
