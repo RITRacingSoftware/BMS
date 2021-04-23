@@ -193,3 +193,10 @@ void SOCestimator_save_soc(void)
 {
    write_saved_soc(SOCestimator_get_soc_corrected());
 }
+
+void SOCestimator_reset_soc(void)
+{
+    SOC_raw = 100;
+    SOC_limit = 100;
+    SOCestimator_save_soc();
+}

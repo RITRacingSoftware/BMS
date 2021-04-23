@@ -26,6 +26,8 @@ void SlaveInterface_read_cell_info(BatteryModel_t* battery_model)
     if (err.active)
     {
         FaultManager_set_fault_active(FaultCode_SLAVE_COMM_CELLS, err.data);
+        for (int i = 0; i < NUM_SERIES_CELLS; i++)
+        battery_model->cells[i].voltage = 0;
     }  
     else
     {
@@ -49,7 +51,7 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
     float tm_readings_V[NUM_THERMISTOR];
 
     // get data from slave boards
-    Error_t err = HAL_SlaveChips_get_all_tm_readings(tm_readings_V, &temp_model->vref2, NUM_THERMISTOR);
+    Error_t err = HAL_SlaveChips_get_all_tm_readings(tm_readings_V, temp_model->vref2s, NUM_THERMISTOR);
 
     // check for communication errors
     if (err.active)

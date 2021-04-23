@@ -101,6 +101,9 @@ void signal_handler(int signo)
 
 void hardfault_handler_routine(void)
 {
+    // shut down car
+    HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, 0);
+
     TaskHandle_t current_task = xTaskGetCurrentTaskHandle();
     char* task_name = pcTaskGetName(current_task);
 

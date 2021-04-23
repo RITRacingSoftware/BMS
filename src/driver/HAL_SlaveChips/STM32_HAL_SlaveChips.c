@@ -146,13 +146,22 @@ void initTimer()
 
 void wakeup_idle()
 {
-  GPIO_WriteBit(GPIOB, SPI_NSS_PIN, 0);
-  #if FREERTOS_TIMING == 0
-  delayMSec(2*NUM_SERIES_CELLS/15); //Guarantees the isoSPI will be in ready mode
-  #else
-  vTaskDelay(2*NUM_SERIES_CELLS/15);
-  #endif
-  GPIO_WriteBit(GPIOB, SPI_NSS_PIN, 1);
+    for (int i = 0; i < NUM_CHIPS; i++)
+    {
+        GPIO_WriteBit(GPIOB, SPI_NSS_PIN, 0);
+        #if FREERTOS_TIMING == 0
+        delayMSec(2); //Guarantees the isoSPI will be in ready mode
+        #else
+        vTaskDelay(.002);
+        #endif
+        GPIO_WriteBit(GPIOB, SPI_NSS_PIN, 1);
+        #if FREERTOS_TIMING == 0
+        delayMSec(2); //Guarantees the isoSPI will be in ready mode
+        #else
+        vTaskDelay(.002);
+        #endif
+    }
+
 }
 
 
@@ -754,10 +763,11 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     Error_t error;
     error.active = false;
     LTC6804_adcv();
+    //LTC6804_adcv();
     
     //WAIT 2335 us
     #if FREERTOS_TIMING == 0
-    TIM6->ARR = 2500; //Need to wait 2335 seconds, rounded up to 2500 for now
+    TIM6->ARR = 2500; //Need to wait 2335 micro seconds, rounded up to 2500 for now
     TIM6->EGR |= TIM_EGR_UG;
     TIM6->SR = 0;
     TIM6->CR1 |= TIM_CR1_CEN;
@@ -780,6 +790,10 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     // if(read_All_Is_Draining(AllIsDraining, num_boards)){
     //     error.active = true;
     // }
+    if (pec == 1)
+    {
+        error.active = true;
+    }
    // float oops = (float) AllCellVoltages[0][0] / 10000.0;
 
     for (int board = 0; board < num_boards; board++)
@@ -793,7 +807,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
               cell_pin += 2;
             }
 
-            voltages[board*cells_per_board+cell] = ((float) AllCellVoltages[board*chips_per_board][cell_pin]) / 10000.0;
+            voltages[board*cells_per_board+cell] = ((float)(AllCellVoltages[board*chips_per_board][cell_pin])) / 10000.0;
         }
 
         // chip 2
@@ -816,7 +830,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
 }
 
 //Every other LTC has 3 thermistors, 1st,3rd, etc have thermistors
-Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2, unsigned int num){
+Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2s, unsigned int num){
     Error_t error;
     error.active = false;
     //GPIO voltage in Auxilary Register Group A
@@ -850,17 +864,19 @@ Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2, un
         error.active = true;
     }
 
-    *vref2 = (((float)tempRecieved[0][5])/LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
-
     int temp_idx = 0;
-    for (int r = 0; r < num_chips; r+=2)
+    for (int r = 0; r < num_chips; r++)
     {
         // every other chip has thermistors
-        for (int c = 0; c < therm_per_board; c++)
+        if (r % 2 == 0)
         {
-            temperatures[temp_idx*therm_per_board + c] =  (((float) tempRecieved[r][c]) / LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
+            for (int c = 0; c < therm_per_board; c++)
+            {
+                temperatures[temp_idx*therm_per_board + c] =  (((float) tempRecieved[r][c]) / LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
+            }
+            temp_idx++;
         }
-        temp_idx++;
+        vref2s[r] = (((float)tempRecieved[r][5])/LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
     }
 
     return error;

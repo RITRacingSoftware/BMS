@@ -36,7 +36,7 @@ void HAL_Can_init(void)
     // http://www.bittiming.can-wiki.info/
     // bxcan and 48mhz clock
     // 1000Kbps
-    canInit.CAN_Prescaler = 3;
+    canInit.CAN_Prescaler = 6;
     canInit.CAN_SJW = CAN_SJW_1tq;
     canInit.CAN_BS1 = CAN_BS1_13tq;
     canInit.CAN_BS2 = CAN_BS2_2tq;

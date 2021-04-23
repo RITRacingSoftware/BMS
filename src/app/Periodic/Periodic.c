@@ -62,9 +62,12 @@ void Periodic_10Hz(void)
     PackMonitor_validate_battery_model_10Hz(&battery_model);
     PackMonitor_validate_temp_model_10Hz(&temp_model);
 
+
     // stage/unstage cell balancing based on cell voltage differences
     CellBalancer_stage_cell_draining(&battery_model);
 
+    // for (int i = 0; i < NUM_SERIES_CELLS; i++)
+    // if (i == 2 || i == 4) battery_model.cells[i].is_draining = 1; else battery_model.cells[i].is_draining = 0;
     // transmit new drain requests to slave board chips
     SlaveInterface_request_cell_draining(&battery_model);
 

@@ -111,7 +111,8 @@ void TempConverter_convert(TempModel_t* tm)
         // // binary search of the temp LUT
         // tm->temps_C[i] = binary_search_temp_lut(ntc_Ohm) + temp_lut_offset;
         
-        float Vout_over_Vin = temp_V/tm->vref2;
+        float vref = tm->vref2s[(i / 3)*2]; // three thermistors per chip, thermistors connected to every other chip
+        float Vout_over_Vin = temp_V/vref;
         float rt = (Vout_over_Vin * divider_ohm) / (1.0 - Vout_over_Vin);
         float ln_rt_r25 = log(rt / TEMP_R25); 
         tm->temps_C[i] = 1.0/(TEMP_A1 + TEMP_B1*ln_rt_r25 + TEMP_C1*SQ(ln_rt_r25) + TEMP_D1 * CUBE(ln_rt_r25)) -273.15;

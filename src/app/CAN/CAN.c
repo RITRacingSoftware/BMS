@@ -54,6 +54,9 @@ static int pack_message(int id, uint8_t* msg_data)
         
         case F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID:
             return f29bms_dbc_bms_charge_request_pack(msg_data, &can_bus.bms_charge_request, 8);
+
+        case F29BMS_DBC_BMS_REF_FRAME_ID:
+            return f29bms_dbc_bms_ref_pack(msg_data, &can_bus.bms_ref, 8);
         
         default:
             printf("f29bms: unknown CAN id: %d\n", id);
@@ -189,6 +192,46 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     f29bms_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&msg_data, 8);
     CAN_send_message(F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID);
     temperature_mux = (temperature_mux + 1) % 3;
+
+    // drain states
+    uint64_t a_drain_states = 0;
+    uint64_t b_drain_states = 0;
+    for (int i = 0; i < NUM_SERIES_CELLS; i++)
+    {
+        uint64_t draining = (bm->cells[i].is_draining ? 1 : 0);
+        if (i < 64)
+        {
+            
+            a_drain_states |= (draining << i);
+        }
+        else
+        {
+            b_drain_states |= (draining << (i - 64));
+        }
+    }
+
+    f29bms_dbc_bms_drain_status_a_unpack(&can_bus.bms_drain_status_a, (uint8_t*)&a_drain_states, 8);
+    f29bms_dbc_bms_drain_status_b_unpack(&can_bus.bms_drain_status_b, (uint8_t*)&b_drain_states, 8);
+
+    CAN_send_message(F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID);
+    CAN_send_message(F29BMS_DBC_BMS_DRAIN_STATUS_B_FRAME_ID);
+
+    static int bms_ref_mux = 0;
+    can_bus.bms_ref.bms_ref_mux = bms_ref_mux;
+    can_bus.bms_ref.bms_ref_ref0 = f29bms_dbc_bms_ref_bms_ref_ref0_encode(tm->vref2s[0]);
+    can_bus.bms_ref.bms_ref_ref1 = f29bms_dbc_bms_ref_bms_ref_ref1_encode(tm->vref2s[1]);
+    can_bus.bms_ref.bms_ref_ref2 = f29bms_dbc_bms_ref_bms_ref_ref2_encode(tm->vref2s[2]);
+    can_bus.bms_ref.bms_ref_ref3 = f29bms_dbc_bms_ref_bms_ref_ref3_encode(tm->vref2s[3]);
+    can_bus.bms_ref.bms_ref_ref4 = f29bms_dbc_bms_ref_bms_ref_ref4_encode(tm->vref2s[4]);
+    can_bus.bms_ref.bms_ref_ref5 = f29bms_dbc_bms_ref_bms_ref_ref5_encode(tm->vref2s[5]);
+    can_bus.bms_ref.bms_ref_ref6 = f29bms_dbc_bms_ref_bms_ref_ref6_encode(tm->vref2s[6]);
+    can_bus.bms_ref.bms_ref_ref7 = f29bms_dbc_bms_ref_bms_ref_ref7_encode(tm->vref2s[7]);
+    can_bus.bms_ref.bms_ref_ref8 = f29bms_dbc_bms_ref_bms_ref_ref8_encode(tm->vref2s[8]);
+    can_bus.bms_ref.bms_ref_ref9 = f29bms_dbc_bms_ref_bms_ref_ref9_encode(tm->vref2s[9]);
+    can_bus.bms_ref.bms_ref_ref10 = f29bms_dbc_bms_ref_bms_ref_ref10_encode(tm->vref2s[10]);
+    can_bus.bms_ref.bms_ref_ref11 = f29bms_dbc_bms_ref_bms_ref_ref11_encode(tm->vref2s[11]);
+    CAN_send_message(F29BMS_DBC_BMS_REF_FRAME_ID);
+    bms_ref_mux ^= 1;
 }
 
 

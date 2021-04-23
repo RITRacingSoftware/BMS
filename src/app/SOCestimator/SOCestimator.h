@@ -48,4 +48,9 @@ float SOCestimator_get_soc_corrected(void);
  */
 void SOCestimator_save_soc(void);
 
+/**
+ * Resets the SOC to 100%
+ */
+void SOCestimator_reset_soc(void);
+
 #endif // SOC_ESTIMATOR_H

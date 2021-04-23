@@ -4,6 +4,7 @@
 #include "CurrentSense.h"
 #include "f29BmsConfig.h"
 #include "FaultManager.h"
+#include "SOCestimator.h"
 
 #include "HAL_Gpio.h"
 
@@ -59,6 +60,11 @@ static void new_state(ChargeState_e next)
 {
     state = next;
     state_counter_seconds = 0;
+
+    if (next == ChargeState_CONNECTED_COMPLETE)
+    {
+        SOCestimator_reset_soc();
+    }
 }
 
 static void sm_1Hz(void)
@@ -146,7 +152,7 @@ static void stop_charging(void)
     can_bus.bms_charge_request.bms_charge_request_control = 1;
 
     // de-assert charge enable line
-    HAL_Gpio_write(GpioPin_CHARGE_ENABLE, 1);
+    HAL_Gpio_write(GpioPin_CHARGE_ENABLE, 0);
 }
 
 void ChargeMonitor_init(void)
@@ -166,8 +172,8 @@ void ChargeMonitor_init(void)
     sm_outputs.allow_balancing = false;
     sm_outputs.request_charge = false;
 
-    can_bus.bms_charge_request.bms_charge_request_max_current = MAX_CHARGING_CURRENT_A;
-    can_bus.bms_charge_request.bms_charge_request_max_voltage = MAX_CHARGING_V;
+    can_bus.bms_charge_request.bms_charge_request_max_current = f29bms_dbc_bms_charge_request_bms_charge_request_max_current_encode(MAX_CHARGING_CURRENT_A);
+    can_bus.bms_charge_request.bms_charge_request_max_voltage = f29bms_dbc_bms_charge_request_bms_charge_request_max_voltage_encode(MAX_CHARGING_V);
 }
 
 /**

@@ -8,26 +8,31 @@
  */
 
 // just defined for 2 test segments rn
-#define NUM_BOARDS 5
+#define NUM_BOARDS 6
 #define NUM_CHIPS (NUM_BOARDS*2)
 #define NUM_SERIES_CELLS (NUM_BOARDS * 15)
 #define NUM_PARALLEL_CELLS 3
 
 // NOTE: Be sure to define things here with decimals if you intend to use them as floats
 
-#define CELL_CAPACITY_Ah 6.550
+#define CELL_CAPACITY_Ah 6.950
 #define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
 
-#define MAX_CELL_V 4.3 // any value above this is considered irrational
-#define MAX_ALLOWED_CELL_V 4.1 // any value above this is overcharged and should produce a fault
-#define CHARGED_CELL_V 4.0 // once all cells are above this, charging ends
-#define MIN_ALLOWED_CELL_V 1.2 // out of juice fault thrown if cells go below this
-#define MIN_CELL_V 0.0 // cells below this are considered irrational
+#define MAX_CELL_V 4.35 // any value above this is considered irrational
 
-#define MAX_CHARGING_CURRENT_A 100.0
-#define MAX_CHARGING_V 5
-#define CHARGE_CURRENT_SETTLE_TIME_S 5
+#define MAX_ALLOWED_CELL_V 4.25 // any value above this is overcharged and should produce a fault
+#define CHARGED_CELL_V 4.15 // once all cells are above this, charging ends
+
+#define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
+#define MIN_CELL_V 2.0 // cells below this are considered irrational
+
+
+// Simply transmitted to the charger.
+// These are NOT the overcurrent limits. See later in this document for those.
+#define MAX_CHARGING_CURRENT_A 15
+#define MAX_CHARGING_V ((float)MAX_ALLOWED_CELL_V * (float)NUM_SERIES_CELLS)
+#define CHARGE_CURRENT_SETTLE_TIME_S 5000
 
 // The amount two cell voltages must differ by to be considered different
 #define VOLTAGE_TOLERANCE 0.001
@@ -43,9 +48,9 @@
  * Current Monitoring
  */
 
-#define CURRENT_IRRATIONAL_A 10000
-#define OVERCURRENT_A 1000
-#define OVERCURRENT_CHG_A -200
+#define CURRENT_IRRATIONAL_A 500
+#define OVERCURRENT_A 230
+#define OVERCURRENT_CHG_A -41
 #define OVERCURRENT_HYST_MS 5
 #define CURRENT_TOLERANCE 0.01
 
@@ -67,7 +72,7 @@
  */
 // any bits set in this won't get set in the fault vector
 //#define DISABLE_FAULT_MASK ((1 << FaultCode_SLAVE_COMM_TEMPS) | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL) | (1 << FaultCode_TEMPERATURE_IRRATIONAL) | (1 << FaultCode_OVER_TEMPERATURE))
-#define DISABLE_FAULT_MASK 0x00
+#define DISABLE_FAULT_MASK ((1 << FaultCode_CELL_VOLTAGE_DIFF) | (1 << FaultCode_DRAIN_FAILURE))// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
 
 // Fault tolerances are the times a fault is allowed to be continuously active before triggering a shutdown event
 // value a fault tolerance should have if the fault does not cause the car to shutdown
@@ -75,20 +80,20 @@
 
 #define SLAVE_COMM_CELLS_TOLERANCE_MS 10000
 #define SLAVE_COMM_TEMPS_TOLERANCE_MS 10000
-#define SLAVE_COMM_DRAIN_REQUEST_TOLERANCE_MS 10000
-#define CURRENT_SENSOR_COMM_TOLERANCE_MS 10
+#define SLAVE_COMM_DRAIN_REQUEST_TOLERANCE_MS 10000 // not implemented
+#define CURRENT_SENSOR_COMM_TOLERANCE_MS 10 // not implemented?
 #define OVER_CURRENT_TOLERANCE_MS 1
 #define CELL_VOLTAGE_IRRATIONAL_TOLERANCE_MS 10000
 #define CELL_VOLTAGE_DIFF_TOLERANCE_MS NO_SHUTDOWN
 #define OUT_OF_JUICE_TOLERANCE_MS 1
 #define OVER_TEMPERATURE_TOLERANCE_MS 1
 #define TEMPERATURE_IRRATIONAL_TOLERANCE_MS 10000
-#define DRAIN_FAILURE_TOLERANCE_MS NO_SHUTDOWN
+#define DRAIN_FAILURE_TOLERANCE_MS NO_SHUTDOWN // not implemented
 
 /**
  * MCU
  */
-#define MCU_VCC 3.3
+#define MCU_VCC 3.3 // not used
 
 /**
  * SOC
