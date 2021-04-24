@@ -21,7 +21,10 @@ typedef enum
     ChargeState_CONNECTED_BALANCING,
 
     // Charging is occuring
-    ChargeState_CONNECTED_CHARGING
+    ChargeState_CONNECTED_CHARGING,
+
+    // Balancing Halted to Allow measurement
+    ChargeState_CONNECTED_BALANCE_SENSING
 } ChargeState_e;
 
 typedef struct
@@ -94,9 +97,28 @@ static void sm_1Hz(void)
             {
                 new_state(ChargeState_CONNECTED_CHARGING);
             }
+            else if (state_counter_seconds >= BALANCING_MEASURE_INTERVAL_S)
+            {
+                new_state(ChargeState_CONNECTED_BALANCE_SENSING);
+            }
 
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = true;
+            break;
+        
+        case ChargeState_CONNECTED_BALANCE_SENSING:
+            if (!sm_inputs.charger_connected)
+            {
+                new_state(ChargeState_DISCONNECTED);
+            }
+
+            if (state_counter_seconds >= 1)
+            {
+                new_state(ChargeState_CONNECTED_BALANCING);
+            }
+
+            sm_outputs.allow_balancing = false;
+            sm_outputs.request_charge = false;
             break;
 
         case ChargeState_CONNECTED_COMPLETE:

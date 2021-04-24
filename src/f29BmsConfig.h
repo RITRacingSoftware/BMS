@@ -19,14 +19,16 @@
 #define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
 
-#define MAX_CELL_V 4.35 // any value above this is considered irrational
+#define MAX_CELL_V 4.5 // any value above this is considered irrational
 
-#define MAX_ALLOWED_CELL_V 4.25 // any value above this is overcharged and should produce a fault
-#define CHARGED_CELL_V 4.15 // once all cells are above this, charging ends
+#define MAX_ALLOWED_CELL_V 4.3 // any value above this is overcharged and should produce a fault
+#define CHARGED_CELL_V 4.2 // once all cells are above this, charging ends
 
 #define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
 #define MIN_CELL_V 2.0 // cells below this are considered irrational
 
+#define BALANCING_HISTERESIS_V .03 // how low a cell must be balanced below CHARGED_CELL_V for balancing to shut off
+#define BALANCING_MEASURE_INTERVAL_S 30 // how long to wait in between measuring cell voltages when balancing
 
 // Simply transmitted to the charger.
 // These are NOT the overcurrent limits. See later in this document for those.

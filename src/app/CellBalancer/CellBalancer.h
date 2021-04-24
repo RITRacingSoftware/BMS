@@ -17,5 +17,7 @@ void CellBalancer_init(void);
  */
 void CellBalancer_stage_cell_draining(BatteryModel_t* bm);
 
+bool CellBalancer_reading_allowed(void);
+
 
 #endif // CELL_BALANCER_H

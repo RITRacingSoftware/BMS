@@ -13,7 +13,7 @@
 #define FREERTOS_TIMING 0
 
 //Initialization Parameters
-#define ADC_MODE (uint8_t) 0x10 //7KHz, default/recommended
+#define ADC_MODE (uint8_t) 0b01 //7KHz, default/recommended
 #define DCP_VALUE (uint8_t) 0x1 //Not sure
 #define CH_VALUE (uint8_t) 0x0 //All cells
 #define CHG_VALUE (uint8_t) 0x0 //Just read all GPIOs
@@ -215,12 +215,12 @@ static bool LTC6804_adcv()
   uint16_t cmd_pec;
   
   //1
-  // cmd[0] = ADCV[0];
-  // cmd[1] = ADCV[1];
+  cmd[0] = ADCV[0];
+  cmd[1] = ADCV[1];
   // hard coded from looking at what the arduino sent over the oscope
   // this could be done better but... time
-  cmd[0] = 0x03;
-  cmd[1] = 0x60;
+//   cmd[0] = 0x03;
+//   cmd[1] = 0x60;
   
   //2
   // cmd_pec = pec15_calc(2, ADCV);

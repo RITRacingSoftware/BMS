@@ -7,6 +7,8 @@
 // used to keep track of drain status.
 static BatteryModel_t prev_model;
 
+bool reading_allowed = false;
+
 void CellBalancer_init(void)
 {
     // no cells should be draining on startup
@@ -33,6 +35,8 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
         if (ChargeMonitor_is_balancing_allowed())
         {
             float cell_diff_V = bm->cells[i].voltage - bm->smallest_V;
+          // bm->cells[i].is_draining = true; 
+            //start some cells draining
             if (FLOAT_GT(cell_diff_V, DIFF_CORRECTION_THRESHOLD_V, VOLTAGE_TOLERANCE))
             {
                 // cell is falling behind, request drain
@@ -45,9 +49,26 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
             }
             else
             {
-                // request draining shut off
-                bm->cells[i].is_draining = false;
+                // stop some cells draining
+                if (bm->cells[i].is_draining)
+                {
+                    if (FLOAT_LT_EQ(bm->cells[i].voltage, CHARGED_CELL_V - BALANCING_HISTERESIS_V, VOLTAGE_TOLERANCE))
+                    {
+                        bm->cells[i].is_draining = false;
+                    }
+                }
+                else
+                {
+                    bm->cells[i].is_draining = false;      
+                }
             }
+            //bm->cells[i].is_draining = true;
+            reading_allowed = false;
+        }
+        else
+        {
+            bm->cells[i].is_draining = false;
+            reading_allowed = true;
         }
     }
 
@@ -58,4 +79,9 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
 
     // save off the new expected drain states
     prev_model = *bm;
+}
+
+bool CellBalancer_reading_allowed(void)
+{
+    return reading_allowed;
 }

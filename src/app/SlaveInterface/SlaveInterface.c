@@ -1,6 +1,8 @@
 #include "HAL_SlaveChips.h"
 
+#include "CellBalancer.h"
 #include "FaultManager.h"
+#include "ChargeMonitor.h"
 #include "SlaveInterface.h"
 
 /**
@@ -10,34 +12,37 @@
  */
 void SlaveInterface_read_cell_info(BatteryModel_t* battery_model)
 {
-    float voltages[NUM_SERIES_CELLS];
-    bool is_draining[NUM_SERIES_CELLS];
-    for (int i = 0; i < NUM_SERIES_CELLS; i++)
+    if (CellBalancer_reading_allowed())
     {
-        voltages[i] = 0;
-        is_draining[i] = 0;
-    }
-    
-    
-    // get data from slave boards
-    Error_t err = HAL_SlaveChips_get_all_cell_data(voltages, is_draining, NUM_SERIES_CELLS);
-
-    // check for comm errors
-    if (err.active)
-    {
-        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_CELLS, err.data);
+        float voltages[NUM_SERIES_CELLS];
+        bool is_draining[NUM_SERIES_CELLS];
         for (int i = 0; i < NUM_SERIES_CELLS; i++)
-        battery_model->cells[i].voltage = 0;
-    }  
-    else
-    {
-        FaultManager_clear_fault(FaultCode_SLAVE_COMM_CELLS);
-
-        // copy data into battery model
-        for(int i = 0; i < NUM_SERIES_CELLS; i++)
         {
-            battery_model->cells[i].voltage = voltages[i];
-            battery_model->cells[i].is_draining = is_draining[i];
+            voltages[i] = 0;
+            is_draining[i] = 0;
+        }
+        
+        
+        // get data from slave boards
+        Error_t err = HAL_SlaveChips_get_all_cell_data(voltages, is_draining, NUM_SERIES_CELLS);
+
+        // check for comm errors
+        if (err.active)
+        {
+            FaultManager_set_fault_active(FaultCode_SLAVE_COMM_CELLS, err.data);
+            for (int i = 0; i < NUM_SERIES_CELLS; i++)
+            battery_model->cells[i].voltage = 0;
+        }  
+        else
+        {
+            FaultManager_clear_fault(FaultCode_SLAVE_COMM_CELLS);
+
+            // copy data into battery model
+            for(int i = 0; i < NUM_SERIES_CELLS; i++)
+            {
+                battery_model->cells[i].voltage = voltages[i];
+                battery_model->cells[i].is_draining = is_draining[i];
+            }
         }
     }
 }

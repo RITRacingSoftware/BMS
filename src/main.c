@@ -132,7 +132,7 @@ int main(int argc, char** argv)
     // initialize all HAL stuff
     HAL_Clock_init();
 
-    HAL_Gpio_init();
+    HAL_Gpio_init(); // must happen before CAN
     HAL_Can_init();
    
     HAL_CurrentSensor_init();

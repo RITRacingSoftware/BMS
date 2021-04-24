@@ -2,9 +2,11 @@
 #include "stm32f0xx_gpio.h"
 #include <string.h>
 #include "CAN.h"
+#include "HAL_Gpio.h"
 
 #define CAN_PINS (GPIO_Pin_11 | GPIO_Pin_12)
 
+// Must initialize gpio first to read charger line
 void HAL_Can_init(void)
 {
     // enable GPIOA and CAN peripherals
@@ -35,8 +37,17 @@ void HAL_Can_init(void)
     canInit.CAN_TXFP = DISABLE;
     // http://www.bittiming.can-wiki.info/
     // bxcan and 48mhz clock
-    // 1000Kbps
-    canInit.CAN_Prescaler = 6;
+    // 1000kbps = car baud rate => CAN_Prescaler = 12
+    // 500kbps = charger baud rate => CAN_Prescaler = 6
+    
+    // 1000kbps
+    int prescaler = 12;
+    if (HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE) == 1)
+    {
+        // 500 kpbs
+        prescaler = 6;
+    }
+    canInit.CAN_Prescaler = prescaler;
     canInit.CAN_SJW = CAN_SJW_1tq;
     canInit.CAN_BS1 = CAN_BS1_13tq;
     canInit.CAN_BS2 = CAN_BS2_2tq;
