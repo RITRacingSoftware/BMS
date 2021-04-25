@@ -41,7 +41,7 @@ void HAL_Can_init(void)
     // 500kbps = charger baud rate => CAN_Prescaler = 6
     
     // 1000kbps
-    int prescaler = 12;
+    int prescaler = 3;
     if (HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE) == 1)
     {
         // 500 kpbs
