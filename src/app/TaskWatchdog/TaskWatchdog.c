@@ -1,5 +1,6 @@
 #include "TaskWatchdog.h"
 #include "CAN.h"
+#include "HAL_Can.h"
 
 
 #define LAST_BREATH_CAN_ID 0x0BB
@@ -81,28 +82,36 @@ bool TaskWatchdog_tick(task_id_E task)
     return (tasks[task].bucket <= 0);
 }
 
-void send_expired_payload(task_id_E task)
+void send_expired_payload(uint64_t msg)
 {
-    CAN_send_message(F29BMS_DBC_WATCHDOG_LAST_BREATH_FRAME_ID);
+    // CAN_send_message(F29BMS_DBC_WATCHDOG_LAST_BREATH_FRAME_ID);
+    HAL_Can_send_message(F29BMS_DBC_WATCHDOG_LAST_BREATH_FRAME_ID, 8, msg); 
 }
 
 void task_watchdog_set_expired(task_id_E task)
 {
 	expired_task = task;
 	expired = 1;
+    //Indicates which task expired
+    uint64_t msg = 0;
+
+    //Right now, if there is an infinite loop in the 1Hz task, the watchdog will reset the microcontroller, however
+    //the can message will have the 1KHz task bit set, as if the 1KHz task stopped running, as it will because the 
+    //1Hz task has a higher priority, so if it is stuck, no other tasks (other than the watchdog task) will run,
+    //causing the 1KHz task to timeout (which happens faster than the 1Hz task). 
     if(task == task_id_PERIODIC_1Hz){
-        can_bus.bms_watchdog_last_breath.watchdog_last_breath_1_hz_task_expired = f29bms_dbc_watchdog_last_breath_watchdog_last_breath_1_hz_task_expired_encode(1);
+        msg |= 1;
     }
     else if(task == task_id_PERIODIC_10Hz){
-        can_bus.bms_watchdog_last_breath.watchdog_last_breath_10_hz_task_expired = f29bms_dbc_watchdog_last_breath_watchdog_last_breath_10_hz_task_expired_encode(1);
+        msg |= 2;
     }
     else if(task == task_id_PERIODIC_1kHz){
-        can_bus.bms_watchdog_last_breath.watchdog_last_breath_1_khz_task_expired = f29bms_dbc_watchdog_last_breath_watchdog_last_breath_1_khz_task_expired_encode(1);
+        msg |= 4;
     }
     else if(task == task_id_CAN){
-        can_bus.bms_watchdog_last_breath.watchdog_last_breath_can_task_expired = f29bms_dbc_watchdog_last_breath_watchdog_last_breath_can_task_expired_encode(1);
+        msg |= 8;
     }
-	send_expired_payload(task);
+	send_expired_payload(msg);
 }
 
 int task_watchdog_expired(void)

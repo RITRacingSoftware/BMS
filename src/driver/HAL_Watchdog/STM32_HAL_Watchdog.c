@@ -32,8 +32,6 @@ void HAL_Watchdog_init(){
     WWDG_SetWindowValue(WINDOW_VALUE);
     WWDG_Enable(SET_VALUE);
     
-    HAL_Can_send_message(0x0A, 8, 0);
-    
 
     /* (1) Set prescaler to have a roll-over each about 5.5ms,
     set window value (about 2.25ms) */

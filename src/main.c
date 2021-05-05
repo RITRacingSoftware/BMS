@@ -76,7 +76,6 @@ void task_10Hz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-
         Periodic_10Hz();
         //Don't use watchdog if Disabled
         #ifndef DISABLE_WATCHDOG
@@ -134,7 +133,7 @@ void task_1kHz(void *pvParameters)
 #define WATCHDOG_TASK_NAME ((signed char *) "watchdog_task")
 #define WATCHDOG_TASK_STACK_SIZE (1000)//configMINIMAL_STACK_SIZE) //100
 #define WATCHDOG_TASK_PERIOD (1)
-#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+1) //Not sure 
+#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+4) //Not sure 
 void watchdog_task(void *pvParameters)
 {
     (void)pvParameters;
@@ -145,7 +144,6 @@ void watchdog_task(void *pvParameters)
         #ifndef DISABLE_WATCHDOG
 		if (!task_watchdog_expired())
 		{
-            HAL_Can_send_message(0xAA, 8,0x0000000011111111);
 			HAL_Watchdog_pet();
 
 			if (TaskWatchdog_tick(task_id_PERIODIC_1Hz))
@@ -160,10 +158,10 @@ void watchdog_task(void *pvParameters)
 			{
 				task_watchdog_set_expired(task_id_PERIODIC_1kHz);
 			}
-            else if (TaskWatchdog_tick(task_id_CAN))
-			{
-				task_watchdog_set_expired(task_id_CAN);
-			}
+            // else if (TaskWatchdog_tick(task_id_CAN))
+			// {
+			// 	task_watchdog_set_expired(task_id_CAN);
+			// }
 		}
         #endif
 
