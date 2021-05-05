@@ -26,7 +26,6 @@
 #include "HAL_EEPROM.h"
 #include "HAL_Watchdog.h"
 
-
 #include "HAL_Can.h"
 #include "HAL_Gpio.h"
 #include "HAL_CurrentSensor.h"
@@ -270,12 +269,6 @@ int main(int argc, char** argv)
         WATCHDOG_TASK_PRIORITY,
         NULL);
     
-    xTaskCreate(watchdog_task,
-        WATCHDOG_TASK_NAME,
-        WATCHDOG_TASK_STACK_SIZE,
-        NULL,
-        WATCHDOG_TASK_PRIORITY,
-        NULL);
     
     vTaskStartScheduler();
 
