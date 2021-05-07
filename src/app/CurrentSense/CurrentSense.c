@@ -72,7 +72,7 @@ void CurrentSense_1kHz(void)
         // it wont recover from. There's no fault for irrational current yet.. maybe there should be?
         if (current_valid(raw_current_A))
         {
-            if (raw_current_A < CURRENT_REJECTION_THRESHOLD_A)
+            if (fabs(raw_current_A) < CURRENT_REJECTION_THRESHOLD_A)
             {
                 raw_current_A = 0;
             }
