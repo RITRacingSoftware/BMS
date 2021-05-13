@@ -108,28 +108,32 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 {
     uint64_t msg_data = 0; 
 
-    // Multiplexed message cycling. Mux value cycles every 100ms
-    static uint8_t voltages_mux = 0;
-    msg_data |= voltages_mux;
-    const int voltages_per_message = 6; 
-    // must pack these kinds of messages manually or call 90 signal encoding functions individually
-    for (uint64_t i = 0; i < voltages_per_message; i++)
+    // send all the bms voltages messages at once
+    for (int r = 0; r < 15; r++)
     {
-        const uint64_t voltages_start_bit = 8;
-        const uint64_t voltage_len_bits = 9;
-        const uint16_t voltage_mask = 0b111111111;
-        const float voltage_granularity = 0.01;
+        // Multiplexed message cycling. Mux value cycles every 100ms
+        static uint8_t voltages_mux = 0;
+        msg_data |= voltages_mux;
+        const int voltages_per_message = 6; 
+        // must pack these kinds of messages manually or call 90 signal encoding functions individually
+        for (uint64_t i = 0; i < voltages_per_message; i++)
+        {
+            const uint64_t voltages_start_bit = 8;
+            const uint64_t voltage_len_bits = 9;
+            const uint16_t voltage_mask = 0b111111111;
+            const float voltage_granularity = 0.01;
 
-        int cell_index = voltages_mux * voltages_per_message + i;
-        float cell_voltage = bm->cells[cell_index].voltage;
-        uint64_t frac_voltage = ROUND_INT((cell_voltage / voltage_granularity));
-        frac_voltage &= voltage_mask;
-        msg_data |= (frac_voltage << (voltages_start_bit + i*voltage_len_bits)); 
+            int cell_index = voltages_mux * voltages_per_message + i;
+            float cell_voltage = bm->cells[cell_index].voltage;
+            uint64_t frac_voltage = ROUND_INT((cell_voltage / voltage_granularity));
+            frac_voltage &= voltage_mask;
+            msg_data |= (frac_voltage << (voltages_start_bit + i*voltage_len_bits)); 
+        }
+        f29bms_dbc_bms_voltages_unpack(&can_bus.bms_voltages, (uint8_t*)(&msg_data), 8);
+        CAN_send_message(F29BMS_DBC_BMS_VOLTAGES_FRAME_ID);
+        voltages_mux = (voltages_mux + 1) % 15; // mux limits like this are hardcoded according to the DBC maximum mux values (here its m14)
     }
-    f29bms_dbc_bms_voltages_unpack(&can_bus.bms_voltages, (uint8_t*)(&msg_data), 8);
-    CAN_send_message(F29BMS_DBC_BMS_VOLTAGES_FRAME_ID);
-    voltages_mux = (voltages_mux + 1) % 15; // mux limits like this are hardcoded according to the DBC maximum mux values (here its m14)
-
+    
     msg_data = 0;
     static uint8_t thermistor_mux = 0;
     msg_data |= thermistor_mux;
