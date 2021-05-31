@@ -14,7 +14,7 @@ def test_charge_to_full(sim):
         assert 'BmsChargeRequest_Control' not in sim.signals
     
     # simulate a plug in
-    sim.set_charger_available(False)
+    sim.set_charger_available(True)
     
     # wait for charging to be requested
     charge_requested = None
@@ -37,7 +37,7 @@ def test_charge_to_full(sim):
 
     # simulate charged condition
     for i in range(0, 90):
-        sim.stage_cell_info(i, 4.1, False)
+        sim.stage_cell_info(i, 4.25, False)
     
     # make sure we stop charging
     stopped_charging = None

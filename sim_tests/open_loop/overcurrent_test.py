@@ -8,7 +8,7 @@ def test_overcurrent(sim):
     assert sim.get_shutdown_line() == 1, "Shutdown line started asserted!"
 
     # start driving using a safe current
-    sim.set_current(500)
+    sim.set_current(50)
 
     for i in range(5000):
         sim.tick()
@@ -16,7 +16,7 @@ def test_overcurrent(sim):
     assert sim.get_shutdown_line() == 1, "Shutdown line asserted during safe driving"
 
     # now draw a dangerous current
-    sim.set_current(1001)
+    sim.set_current(231)
 
     car_stopped = None
     for i in range(2000):

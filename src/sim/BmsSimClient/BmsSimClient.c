@@ -64,7 +64,7 @@ int BmsSimClient_init(void)
 	Mailbox_init(socket_desc);
 
 	out_CellList.cells_count = 0;
-	BmsIn_state.charger_available = 1;
+	BmsIn_state.charger_available = 0;
 
 	return 0;
 }

@@ -7,7 +7,6 @@
  * Cells
  */
 
-// just defined for 2 test segments rn
 #define NUM_BOARDS 6
 #define NUM_CHIPS (NUM_BOARDS*2)
 #define NUM_SERIES_CELLS (NUM_BOARDS * 15)
@@ -34,7 +33,7 @@
 // These are NOT the overcurrent limits. See later in this document for those.
 #define MAX_CHARGING_CURRENT_A 15
 #define MAX_CHARGING_V ((float)MAX_ALLOWED_CELL_V * (float)NUM_SERIES_CELLS)
-#define CHARGE_CURRENT_SETTLE_TIME_S 5000
+#define CHARGE_CURRENT_SETTLE_TIME_S 30
 
 // The amount two cell voltages must differ by to be considered different
 #define VOLTAGE_TOLERANCE 0.001

@@ -72,9 +72,11 @@ static void new_state(ChargeState_e next)
 
 static void sm_1Hz(void)
 {
+    // printf("ChargingState: ");
     switch(state)
     {
         case ChargeState_DISCONNECTED:
+            // printf("DISCONNECTED");
             if (sm_inputs.charger_connected)
             {
                 new_state(ChargeState_CONNECTED_BALANCING);
@@ -85,6 +87,7 @@ static void sm_1Hz(void)
             break;
         
         case ChargeState_CONNECTED_BALANCING:
+        // printf("CONNECTED_BALANCING");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -107,6 +110,7 @@ static void sm_1Hz(void)
             break;
         
         case ChargeState_CONNECTED_BALANCE_SENSING:
+        // printf("CONNECTED_BALALNCE_SENSING");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -122,6 +126,7 @@ static void sm_1Hz(void)
             break;
 
         case ChargeState_CONNECTED_COMPLETE:
+        // printf("CHARGING_CONNECTED_COMPLETE");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -132,6 +137,7 @@ static void sm_1Hz(void)
             break;
         
         case ChargeState_CONNECTED_CHARGING:
+        // printf("CONNECTED_CHARGING");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -153,7 +159,7 @@ static void sm_1Hz(void)
             sm_outputs.allow_balancing = false;
             break;
     }
-
+    // printf("\r\n");
     state_counter_seconds++;
 }
 

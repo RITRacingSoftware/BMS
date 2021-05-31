@@ -21,13 +21,19 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     return err;
 }
 
-Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, unsigned int num)
+Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2s, unsigned int num)
 {
     Therm* therms = BmsSimClient_get_therms_in();
 
     for (int i = 0; i < num; i++)
     {
         temperatures[i] = therms[i].voltage;
+    }
+
+    // temperature voltages in test are based off 3.3v supply.
+    for (int i = 0; i < num / 3; i++)
+    {
+        vref2s[i] = 3.3;
     }
 
     Error_t err;

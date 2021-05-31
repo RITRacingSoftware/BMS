@@ -17,10 +17,8 @@ def test_soc(sim):
     assert 'BmsStatus_SOC' in sim.signals, "BmsStatus never sent"
     assert sim.signals['BmsStatus_SOC'] == 100, 'SOC did not start at 100%'
 
-    # at 1000A, the battery will drain in .1179 minutes, or 7074ms
-    # the bms will also fault but 
-    sim.set_current(10000)
-    drain_time_ms = 7074
+    sim.set_current(400)
+    drain_time_ms = 14000
     for i in range(drain_time_ms):
         sim.tick()
     
@@ -30,4 +28,4 @@ def test_soc(sim):
         sim.tick()
 
 
-    assert sim.signals['BmsStatus_SOC'] <= 1
+    assert sim.signals['BmsStatus_SOC'] <= 93

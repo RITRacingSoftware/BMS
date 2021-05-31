@@ -7,7 +7,7 @@ def test_charging_fault(sim):
     # simulate charging condition
     for i in range(0, 90):
         sim.stage_cell_info(i, 2.0, False)
-    sim.set_charger_available(False)
+    sim.set_charger_available(True)
 
     # make sure we start charging
     started_charging = None
