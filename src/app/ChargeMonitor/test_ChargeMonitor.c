@@ -8,6 +8,7 @@
 #include "MockFaultManager.h"
 #include "MockHAL_Gpio.h"
 #include "MockCurrentSense.h"
+#include "MockSOCestimator.h"
 
 // need to define this here since CMock isn't smart enough to define it in MockCAN.h
 CAN_BUS can_bus;
@@ -26,10 +27,10 @@ void test_ChargeMonitor_start_charged(void)
 {
     // fully charged battery
     BatteryModel_t bm;
-    bm.largest_V = CHARGED_CELL_V;
-    bm.smallest_V = CHARGED_CELL_V;
+    bm.largest_V = CHARGED_CELL_V+.1;
+    bm.smallest_V = CHARGED_CELL_V+.1;
     
-
+    SOCestimator_reset_soc_Ignore();
     // simulate a few seconds and check for charge requests
     for (int seconds = 0; seconds < 30; seconds++)
     {
@@ -229,7 +230,7 @@ void test_ChargeMonitor_restart_charging(void)
     TEST_ASSERT_MESSAGE(charging == true, "Charging never began.");
 
     // Simulate charging completed due to current
-    for (int seconds = 0; seconds < 5; seconds++)
+    for (int seconds = 0; seconds < 30; seconds++)
     {
         // connect the charger
         HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
@@ -239,6 +240,7 @@ void test_ChargeMonitor_restart_charging(void)
         float current = MAX_CHARGING_CURRENT_A / 10 - 1;
         CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
         CurrentSense_get_current_ReturnThruPtr_current_A(&current);
+        SOCestimator_reset_soc_Ignore();
 
         ChargeMonitor_1Hz(&bm);
         charging = ChargeMonitor_is_charging();

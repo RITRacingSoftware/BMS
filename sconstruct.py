@@ -138,7 +138,7 @@ linux_comp_env = Environment(
     CC='gcc',
     CPPPATH=module_path_names + mock_modules + sim_modules + tool_paths + [SRC_DIR.abspath, APP_DIR.abspath, COMMON_DIR.abspath, SIM_DIR.abspath],
     CCFLAGS=linux_comp_flags,
-    LDFLAGS=['-lm']
+    LIBS=['m']
 )
 
 # First need instructions for building FreeRTOS

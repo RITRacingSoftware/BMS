@@ -46,8 +46,30 @@ def test_charge_to_full(sim):
         stopped_charging = (sim.signals['BmsChargeRequest_Control'] == 1)
         if stopped_charging:
             break
-    
+
     assert stopped_charging, "Charging did not stop on full charge condition."
+
+    # now to test if balancing state can be re-entered
+
+    # drain cells, cycle connector
+    for i in range(0, 90):
+        sim.stage_cell_info(i, 4.1, False)
+    sim.set_charger_available(False)    
+    for i in range(1000):
+        sim.tick()
+
+    # plug connector back in, wait 30 seconds, should end up in charging state
+    sim.set_charger_available(True)
+    sim.set_current(13.8)
+    for i in range(35000):
+        sim.tick()
+    assert sim.signals['BmsStatus_ChargeState'] == 'ChargeState_CONNECTED_CHARGING'
+
+    # now simulate balancing condition
+    sim.stage_cell_info(15, 4.3, False)
+    for i in range(1000):
+        sim.tick()
+    assert sim.signals['BmsStatus_ChargeState'] == 'ChargeState_CONNECTED_BALANCING'
 
 
 

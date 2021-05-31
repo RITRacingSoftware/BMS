@@ -43,32 +43,31 @@ void test_FaultManager_fault_and_clear(void)
     for (int code = 0; code < FaultCode_NUM; code++)
     {
         // make sure each fault sets correctly
-        CAN_send_message_ExpectAnyArgs();
+        CAN_send_message_Ignore();
         FaultManager_set_fault_active(code, &unused_fault_data);
         sprintf(err_msg, "Fault code %d failed to set.", code);
-        TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code) == true,  err_msg);
+        TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code) == true || !FaultManager_is_fault_enabled(code),  err_msg);
 
         // make sure no other faults were cleared
         for (int code2 = 0; code2 < code; code2++)
         {
             sprintf(err_msg, "Fault code %d was cleared after setting code %d.", code2, code);
-            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == true, err_msg);
+            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == true || !FaultManager_is_fault_enabled(code2), err_msg);
         }
 
         // make sure no other faults were set
         for (int code2 = code + 1; code2 < FaultCode_NUM; code2++)
         {
             sprintf(err_msg, "Fault code %d was set after setting code %d.", code2, code);
-            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == false, err_msg);
+            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == false || !FaultManager_is_fault_enabled(code2), err_msg);
         }
 
-        TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == true, "is_any_fault_true not true when faulted");
+        TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == true || !FaultManager_is_fault_enabled(code), "is_any_fault_true not true when faulted");
     }
     
     // check that each fault clears correctly and the state of faults is consistent
     for (int code = 0; code < FaultCode_NUM; code++)
     {
-        TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == true, "is_any_fault_active not true when not finished clearing");
         FaultManager_clear_fault(code);
         sprintf(err_msg, "Fault code %d failed to clear.", code);
         TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code) == false, err_msg);
@@ -77,16 +76,16 @@ void test_FaultManager_fault_and_clear(void)
         for (int code2 = code + 1; code2 < FaultCode_NUM; code2++)
         {
             sprintf(err_msg, "Fault code %d was cleared after clearing code %d.", code2, code);
-            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == true, err_msg);
+            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == true || !FaultManager_is_fault_enabled(code2), err_msg);
         }
 
         // make sure no other faults were set
         for (int code2 = 0; code2 < code; code2++)
         {
             sprintf(err_msg, "Fault code %d was set after clearing code %d.", code2, code);
-            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == false, err_msg);
+            TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code2) == false || !FaultManager_is_fault_enabled(code2), err_msg);
         }
     }
 
-    TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == false, "is_any_fault_active true after clearing faults");
+    TEST_ASSERT_MESSAGE(FaultManager_is_any_fault_active() == false , "is_any_fault_active true after clearing faults");
 }

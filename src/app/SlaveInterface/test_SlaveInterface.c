@@ -6,6 +6,7 @@
 
 // mocked includes
 #include "MockFaultManager.h"
+#include "MockCellBalancer.h"
 #include "MockHAL_SlaveChips.h"
 
 /**
@@ -30,6 +31,7 @@ void test_SlaveInterface_cell_info_read(void)
     err.active = false;
     HAL_SlaveChips_get_all_cell_data_ExpectAnyArgsAndReturn(err);
     FaultManager_clear_fault_ExpectAnyArgs();
+    CellBalancer_reading_allowed_ExpectAndReturn(true);
     
     HAL_SlaveChips_get_all_cell_data_ReturnArrayThruPtr_voltages(mock_voltages, NUM_SERIES_CELLS);
     HAL_SlaveChips_get_all_cell_data_ReturnArrayThruPtr_is_draining(mock_drain_states, NUM_SERIES_CELLS);
@@ -56,6 +58,7 @@ void test_SlaveInterface_cell_info_read(void)
 
     HAL_SlaveChips_get_all_cell_data_ReturnArrayThruPtr_voltages(mock_voltages, NUM_SERIES_CELLS);
     HAL_SlaveChips_get_all_cell_data_ReturnArrayThruPtr_is_draining(mock_drain_states, NUM_SERIES_CELLS);
+    CellBalancer_reading_allowed_ExpectAndReturn(true);
 
     SlaveInterface_read_cell_info(&bm);
 

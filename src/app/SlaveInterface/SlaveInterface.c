@@ -30,8 +30,6 @@ void SlaveInterface_read_cell_info(BatteryModel_t* battery_model)
         if (err.active)
         {
             FaultManager_set_fault_active(FaultCode_SLAVE_COMM_CELLS, err.data);
-            for (int i = 0; i < NUM_SERIES_CELLS; i++)
-            battery_model->cells[i].voltage = 0;
         }  
         else
         {

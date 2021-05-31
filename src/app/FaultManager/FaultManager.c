@@ -114,6 +114,11 @@ bool FaultManager_is_fault_active(FaultCode_e code)
     return (fault_vector & BIT(code)) != 0;
 }
 
+bool FaultManager_is_fault_enabled(FaultCode_e code)
+{
+    return (DISABLE_FAULT_MASK & (1 << code) == 0);
+}
+
 bool FaultManager_is_any_fault_active(void)
 {
     return (fault_vector != 0);

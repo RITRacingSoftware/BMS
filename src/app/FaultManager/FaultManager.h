@@ -78,4 +78,7 @@ bool FaultManager_is_fault_active(FaultCode_e code);
  */
 bool FaultManager_is_any_fault_active(void);
 
+bool FaultManager_is_fault_enabled(FaultCode_e code);
+
+
 #endif // FAULT_MANAGER_H
