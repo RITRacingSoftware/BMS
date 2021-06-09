@@ -8,6 +8,9 @@ def test_balancing(sim):
     """
     sim.start_logging('sim_traces/balancing.blf')
 
+    # shouldn't start with AIRs closed (assuming on charger, so this closes the AIRs)
+    assert sim.get_charge_enable() == False
+
     # start charging
     for i in range(0, 90):
         sim.stage_cell_info(i, 3.9, False)
@@ -28,6 +31,7 @@ def test_balancing(sim):
     # cells that are above the charging threshold should be balanced even if they arent that far behind the largest voltage
     sim.stage_cell_info(0, 4.29, False)
 
+    # enter balancing
     for i in range(0, 10000):
         sim.tick()
     
@@ -35,6 +39,9 @@ def test_balancing(sim):
         assert sim.read_drain_state(i) == False, "Wrong cell drained"
     for i in range(1, 91, 2):
         assert sim.read_drain_state(i) == True, "Cell not drained when appropriate"
+    
+    # should have AIRs closed when balancing
+    assert sim.get_charge_enable() == True
 
     assert sim.read_drain_state(0) == True, "Cell not drained when appropriate"
 

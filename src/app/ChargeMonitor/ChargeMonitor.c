@@ -52,6 +52,7 @@ typedef struct
 {
     bool allow_balancing;
     bool request_charge;
+    bool close_airs;
 } ChargeStateOutputs_s;
 
 static ChargeState_e state;
@@ -84,6 +85,7 @@ static void sm_1Hz(void)
 
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = false;
+            sm_outputs.close_airs = false;
             break;
         
         case ChargeState_CONNECTED_BALANCING:
@@ -107,6 +109,7 @@ static void sm_1Hz(void)
 
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = true;
+            sm_outputs.close_airs = true;
             break;
         
         case ChargeState_CONNECTED_BALANCE_SENSING:
@@ -123,6 +126,7 @@ static void sm_1Hz(void)
 
             sm_outputs.allow_balancing = false;
             sm_outputs.request_charge = false;
+            sm_outputs.close_airs = true;
             break;
 
         case ChargeState_CONNECTED_COMPLETE:
@@ -134,6 +138,7 @@ static void sm_1Hz(void)
 
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = false;
+            sm_outputs.close_airs = false;
             break;
         
         case ChargeState_CONNECTED_CHARGING:
@@ -157,6 +162,7 @@ static void sm_1Hz(void)
 
             sm_outputs.request_charge = true;
             sm_outputs.allow_balancing = false;
+            sm_outputs.close_airs = true;
             break;
     }
     // printf("\r\n");
@@ -168,7 +174,10 @@ static void start_charging(void)
     // set bit in can message
     // yes, according to Elcon its 1 to stop and 0 to start...
     can_bus.bms_charge_request.bms_charge_request_control = 0;
+}
 
+static void close_airs(void)
+{
     // assert charge enable line
     HAL_Gpio_write(GpioPin_CHARGE_ENABLE, 1);
 }
@@ -178,7 +187,10 @@ static void stop_charging(void)
     // clear bit in can message
     // yes, according to Elcon its 1 to stop and 0 to start...
     can_bus.bms_charge_request.bms_charge_request_control = 1;
+}
 
+static void open_airs(void)
+{
     // de-assert charge enable line
     HAL_Gpio_write(GpioPin_CHARGE_ENABLE, 0);
 }
@@ -240,6 +252,15 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     else
     {
         stop_charging();
+    }
+
+    if (sm_outputs.close_airs)
+    {
+        close_airs();
+    }
+    else
+    {
+        open_airs();
     }
 
     // Actually send the charger control CAN message, if we are connected to the charger

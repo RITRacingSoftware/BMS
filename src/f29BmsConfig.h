@@ -20,8 +20,8 @@
 
 #define MAX_CELL_V 4.5 // any value above this is considered irrational
 
-#define MAX_ALLOWED_CELL_V 4.3 // any value above this is overcharged and should produce a fault
-#define CHARGED_CELL_V 4.2 // once all cells are above this, charging ends
+#define MAX_ALLOWED_CELL_V 4.3 // any cell above this is considered overcharged and balancing should begin
+#define CHARGED_CELL_V 4.25 // once all cells are above this, charging ends
 
 #define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
 #define MIN_CELL_V 2.0 // cells below this are considered irrational
