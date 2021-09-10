@@ -24,7 +24,10 @@ typedef enum
     ChargeState_CONNECTED_CHARGING,
 
     // Balancing Halted to Allow measurement
-    ChargeState_CONNECTED_BALANCE_SENSING
+    ChargeState_CONNECTED_BALANCE_SENSING,
+
+    // Max voltage too high, decrease charging current
+    ChargeState_CONNECTED_TRICKLE_CHARGING
 } ChargeState_e;
 
 typedef struct
@@ -37,6 +40,9 @@ typedef struct
 
     // are any cells at MAX_ALLOWED_CELL_V?
     bool cell_at_max;
+
+    // are any cells at MAX_ALLOWED_CELL_V_TRICKLE?
+    bool cell_at_max_trickle;
 
     // is the pack accepting enough current to warrant more charging?
     bool charge_current_nominal;
@@ -53,6 +59,7 @@ typedef struct
     bool allow_balancing;
     bool request_charge;
     bool close_airs;
+    bool trickle_charging;
 } ChargeStateOutputs_s;
 
 static ChargeState_e state;
@@ -77,7 +84,7 @@ static void sm_1Hz(void)
     switch(state)
     {
         case ChargeState_DISCONNECTED:
-            // printf("DISCONNECTED");
+            printf("DISCONNECTED\t");
             if (sm_inputs.charger_connected)
             {
                 new_state(ChargeState_CONNECTED_BALANCING);
@@ -86,10 +93,11 @@ static void sm_1Hz(void)
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = false;
             sm_outputs.close_airs = false;
+            sm_outputs.trickle_charging = false;
             break;
         
         case ChargeState_CONNECTED_BALANCING:
-        // printf("CONNECTED_BALANCING");
+            printf("CONNECTED_BALANCING \t");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -110,10 +118,11 @@ static void sm_1Hz(void)
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = true;
             sm_outputs.close_airs = true;
+            sm_outputs.trickle_charging = false;
             break;
         
         case ChargeState_CONNECTED_BALANCE_SENSING:
-        // printf("CONNECTED_BALALNCE_SENSING");
+            printf("CONNECTED_BALALNCE_SENSING\t");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -127,10 +136,11 @@ static void sm_1Hz(void)
             sm_outputs.allow_balancing = false;
             sm_outputs.request_charge = false;
             sm_outputs.close_airs = true;
+            sm_outputs.trickle_charging = false;
             break;
 
         case ChargeState_CONNECTED_COMPLETE:
-        // printf("CHARGING_CONNECTED_COMPLETE");
+            printf("CHARGING_CONNECTED_COMPLETE\t");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -139,10 +149,11 @@ static void sm_1Hz(void)
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = false;
             sm_outputs.close_airs = false;
+            sm_outputs.trickle_charging = false;
             break;
         
         case ChargeState_CONNECTED_CHARGING:
-        // printf("CONNECTED_CHARGING");
+            printf("CONNECTED_CHARGING\t");
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -151,19 +162,46 @@ static void sm_1Hz(void)
             {
                 new_state(ChargeState_CONNECTED_COMPLETE);
             }
-            else if (!sm_inputs.charge_current_nominal && (state_counter_seconds >= CHARGE_CURRENT_SETTLE_TIME_S))
-            {
-                new_state(ChargeState_CONNECTED_COMPLETE);
-            }
+            //else if (!sm_inputs.charge_current_nominal && (state_counter_seconds >= CHARGE_CURRENT_SETTLE_TIME_S))
+            //{
+            //    new_state(ChargeState_CONNECTED_COMPLETE);
+            //}
             else if (sm_inputs.cell_at_max)
             {
                 new_state(ChargeState_CONNECTED_BALANCING);
+            }
+            else if (sm_inputs.cell_at_max_trickle)
+            {
+                new_state(ChargeState_CONNECTED_TRICKLE_CHARGING);
             }
 
             sm_outputs.request_charge = true;
             sm_outputs.allow_balancing = false;
             sm_outputs.close_airs = true;
+            sm_outputs.trickle_charging = false;
             break;
+
+        case ChargeState_CONNECTED_TRICKLE_CHARGING:
+            printf("CONNECTED_TRICKLE_CHARGING\t");
+            if (!sm_inputs.charger_connected)
+            {
+                new_state(ChargeState_DISCONNECTED);
+            }
+             else if (!sm_inputs.cell_left_to_charge || sm_inputs.bms_faulted)
+            {
+                new_state(ChargeState_CONNECTED_COMPLETE);
+            }
+            else if (!sm_inputs.charge_current_nominal && (state_counter_seconds >= CHARGE_CURRENT_SETTLE_TIME_S))
+            {
+                new_state(ChargeState_CONNECTED_COMPLETE);
+            }
+
+            sm_outputs.request_charge = true;
+            sm_outputs.allow_balancing = false;
+            sm_outputs.close_airs = true;
+            sm_outputs.trickle_charging = true;
+            break;
+
     }
     // printf("\r\n");
     state_counter_seconds++;
@@ -227,6 +265,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     sm_inputs.charger_connected = HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE);
     sm_inputs.cell_left_to_charge = bm->smallest_V < CHARGED_CELL_V;
     sm_inputs.cell_at_max = FLOAT_GT_EQ(bm->largest_V, MAX_ALLOWED_CELL_V, VOLTAGE_TOLERANCE);
+    sm_inputs.cell_at_max_trickle = FLOAT_GT_EQ(bm->largest_V, MAX_ALLOWED_CELL_V_TRICKLE, VOLTAGE_TOLERANCE);
     sm_inputs.cell_over_charged = FLOAT_GT(bm->largest_V, CHARGED_CELL_V, VOLTAGE_TOLERANCE);
     sm_inputs.bms_faulted = FaultManager_is_any_fault_active();
     float current;
@@ -261,6 +300,12 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     else
     {
         open_airs();
+    }
+
+    if (sm_outputs.trickle_charging)
+    {
+        // want to send a message to change the current 
+        can_bus.bms_charge_request.bms_charge_request_max_current = f29bms_dbc_bms_charge_request_bms_charge_request_max_current_encode(MAX_CHARGING_CURRENT_TRICKLE_A);
     }
 
     // Actually send the charger control CAN message, if we are connected to the charger

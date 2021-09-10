@@ -59,6 +59,8 @@ def test_charge_to_full(sim):
         sim.tick()
 
     # plug connector back in, wait 30 seconds, should end up in charging state
+    for i in range(0, 90):
+        sim.stage_cell_info(i, 4.0, False)      # changed from 4.1 to 4.0 because the max voltage trickle is 4.1
     sim.set_charger_available(True)
     sim.set_current(13.8)
     for i in range(35000):
