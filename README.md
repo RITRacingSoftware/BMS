@@ -11,19 +11,37 @@ We utilize Docker to build anywhere. Install it from [docker.com](https://www.do
 
 If you would like to build on Windows, there are additional steps, see [Docker's windows instructions](https://docs.docker.com/docker-for-windows/install-windows-home/)
 
-## Building Everything
+## Building Everything/Running all tests
 Once docker is installed, use `docker-build.sh` to build the docker image.
 
 From now on, you can just use `docker-run-build.sh` to run the firmware build in a docker container based on the above image.
 
 If you need to update your docker image, use `docker-remove-image.sh` then build it again with `docker-build.sh`.
 
+Sometimes, these scripts don't work on Windows. If not, see [below](#building-specific-targets).
+
+## Testing
+Two types of tests exist for the codebase: Unit Testing, and Software in the Loop (SIL) testing.
+
+Unit tests validate single modules, using CMock to mock out dependencies.
+
+SIL tests build f29bms for linux and run it in a child process. 
+Python tests using a sockets interface feed the program input and validate its output.
+
 ## Building Specific Targets
 Use `enter-docker.sh` to get a shell inside the f29bms docker container. From here, you can run `build.sh` to build everything, just like `docker-run-build.sh`.
 
 Specific targets can also be built using SCons commands from the docker container shell:
+- `scons bin/f29bms.bin`
+    -build stm32 binary for loading onto the BMS
 - `scons unit-tests`
     -build and run application module unit tests
+- `scons open-loop` 
+    -build and run SIL tests
+- `scons sim`
+    -build f29bms linux program for SIL testing
+- `scons sim-interface`
+    -build interface library for SIL testing
 - `scons test-apps`
     -build driver module test application hexes for loading onto an stm32 development board
 - `scons memchecks`
