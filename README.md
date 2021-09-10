@@ -1,10 +1,11 @@
 # RIT Formula SAE Battery Management System Firmware
 Welcome! This is the home of all source for the BMS master board stm32 microcontroller.
 This code accomplishes the following responsibilities:
-1. Balance Series Cell Voltages
+1. Balance + Monitor Series Cell Voltages
 2. Monitor Battery Pack Temperatures
-3. Report data such as State of Charge over CAN
-4. Indicate faults by triggering f29's shutdown circuit
+3. Facilitate Charging of the Battery Pack
+4. Report data such as State of Charge over CAN
+5. Indicate faults by triggering f29's shutdown circuit
 
 ## Installation
 We utilize Docker to build anywhere. Install it from [docker.com](https://www.docker.com/).
