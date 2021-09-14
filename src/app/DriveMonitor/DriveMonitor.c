@@ -81,7 +81,7 @@ void DriveMonitor_1kHz(void)
     for (int code = 0; code < FaultCode_NUM; code++)
     {   
         // if the fault is active or there is no tolerance for it
-        if (FaultManager_is_fault_active(code) || (fault_tolerances[code] == 0))
+        if (FaultManager_is_fault_active((FaultCode_e) code) || (fault_tolerances[code] == 0))
         {
             if (fault_tolerances[code] != NO_SHUTDOWN)
             {

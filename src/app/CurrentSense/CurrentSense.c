@@ -4,6 +4,7 @@
 #include "HAL_CurrentSensor.h"
 #include "FaultManager.h"
 #include <stdio.h>
+#include <math.h>
 
 // kept track of in order to not filter on garbage memory
 static bool first_reading_received;

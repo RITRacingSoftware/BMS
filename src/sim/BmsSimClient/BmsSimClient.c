@@ -14,6 +14,7 @@
 #include "BmsSimConfig.h"
 #include "Mailbox.h"
 #include "PbSockets.h"
+#include "BmsSim.pb.h"
 
 static int socket_desc;
 
