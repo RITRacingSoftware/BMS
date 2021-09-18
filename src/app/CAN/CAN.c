@@ -61,6 +61,9 @@ static int pack_message(int id, uint8_t* msg_data)
         case F29BMS_DBC_WATCHDOG_LAST_BREATH_FRAME_ID:
             return f29bms_dbc_watchdog_last_breath_pack(msg_data, &can_bus.bms_watchdog_last_breath, 8);
 
+        case F29BMS_DBC_CURRENT_LIMIT_FRAME_ID:
+            return f29bms_dbc_watchdog_last_breath_pack(msg_data, &can_bus.bms_current_limit, 8);
+
         default:
             printf("f29bms: unknown CAN id: %d\n", id);
             break;
