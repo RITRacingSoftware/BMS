@@ -56,21 +56,21 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
     // get data from slave boards
     Error_t err = HAL_SlaveChips_get_all_tm_readings(tm_readings_V, temp_model->vref2s, NUM_THERMISTOR);
 
-    // check for communication errors
-    if (err.active)
-    {
-        FaultManager_set_fault_active(FaultCode_SLAVE_COMM_TEMPS, err.data);
-    }
-    else
-    {
-        FaultManager_clear_fault(FaultCode_SLAVE_COMM_TEMPS);
+    // // check for communication errors
+    // if (err.active)
+    // {
+    //     FaultManager_set_fault_active(FaultCode_SLAVE_COMM_TEMPS, err.data);
+    // }
+    // else
+    // {
+    //     FaultManager_clear_fault(FaultCode_SLAVE_COMM_TEMPS);
 
-        // copy data into temperature model
-        for (int i = 0; i < NUM_THERMISTOR; i++)
-        {
-            temp_model->tm_readings_V[i] = tm_readings_V[i];
-        }
-    }
+    //     // copy data into temperature model
+    //     for (int i = 0; i < NUM_THERMISTOR; i++)
+    //     {
+    //         temp_model->tm_readings_V[i] = tm_readings_V[i];
+    //     }
+    // }
 }
 
 /**

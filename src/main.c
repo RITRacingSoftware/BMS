@@ -37,6 +37,7 @@
 #include "StatusLed.h"
 #include "TempConverter.h"
 #include "TempModel.h"
+#include "TaskWatchdog.h"
 #include "semphr.h"
 
 #define SEPHAMORE_WAIT 0
@@ -56,6 +57,12 @@ void TASK_1Hz(void *pvParameters)
     for (;;)
     {
         Periodic_1Hz();
+        //Don't use watchdog if Disabled
+        #ifndef DISABLE_WATCHDOG
+            TaskWatchdog_pet(task_id_PERIODIC_1Hz);
+        #endif
+        // printf("Task 1Hz\n");
+        // CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
 }
@@ -70,8 +77,12 @@ void task_10Hz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-
         Periodic_10Hz();
+        //Don't use watchdog if Disabled
+        #ifndef DISABLE_WATCHDOG
+            TaskWatchdog_pet(task_id_PERIODIC_10Hz);
+        #endif
+        // printf("Task 10Hz\n");
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
 }
@@ -88,6 +99,12 @@ void task_1kHz(void *pvParameters)
     for (;;)
     {
         Periodic_1kHz();
+        //Don't use watchdog if Disabled
+        #ifndef DISABLE_WATCHDOG
+            TaskWatchdog_pet(task_id_PERIODIC_1kHz);
+        #endif
+        //printf("Task 1kHz\n");
+        CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
     }
 }
@@ -127,6 +144,48 @@ void task_can_tx(void *pvParameters)
         }
     }
 }
+
+
+#define WATCHDOG_TASK_NAME ((signed char *) "watchdog_task")
+#define WATCHDOG_TASK_STACK_SIZE (1000)//configMINIMAL_STACK_SIZE) //100
+#define WATCHDOG_TASK_PERIOD (1)
+#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+4) //Not sure 
+void watchdog_task(void *pvParameters)
+{
+    (void)pvParameters;
+	TickType_t next_wake_time = xTaskGetTickCount();
+	for(;;)
+	{
+        //Don't use watchdog if Disabled
+        #ifndef DISABLE_WATCHDOG
+		if (!task_watchdog_expired())
+		{
+			HAL_Watchdog_pet();
+
+			if (TaskWatchdog_tick(task_id_PERIODIC_1Hz))
+			{
+				task_watchdog_set_expired(task_id_PERIODIC_1Hz);
+			}
+			else if (TaskWatchdog_tick(task_id_PERIODIC_10Hz))
+			{
+				task_watchdog_set_expired(task_id_PERIODIC_10Hz);
+			}
+            else if (TaskWatchdog_tick(task_id_PERIODIC_1kHz))
+			{
+				task_watchdog_set_expired(task_id_PERIODIC_1kHz);
+			}
+            // else if (TaskWatchdog_tick(task_id_CAN))
+			// {
+			// 	task_watchdog_set_expired(task_id_CAN);
+			// }
+		}
+        #endif
+
+		vTaskDelayUntil(&next_wake_time, WATCHDOG_TASK_PERIOD);
+	}
+}
+
+
 
 #ifdef SIMULATION
 #include <signal.h>
@@ -193,7 +252,10 @@ int main(int argc, char** argv)
     HAL_CurrentSensor_init();
    
     HAL_SlaveChips_init();
-    // HAL_Watchdog_init();
+
+    #ifndef DISABLE_WATCHDOG
+        HAL_Watchdog_init();
+    #endif
 
     // initialize all app stuff
     CAN_init();
@@ -209,6 +271,7 @@ int main(int argc, char** argv)
     SOCestimator_init();
     FaultManager_init();
     StatusLed_init();
+    TaskWatchdog_init();
     TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
 
 
@@ -249,7 +312,6 @@ int main(int argc, char** argv)
         TASK_1kHz_PRIORITY,
         NULL);
 
-
     xTaskCreate(task_can_rx, 
         TASK_CAN_RX_NAME, 
         TASK_CAN_RX_STACK_SIZE_B,
@@ -264,8 +326,13 @@ int main(int argc, char** argv)
         TASK_CAN_TX_PRIORITY,
         NULL);
 
-
-   
+    xTaskCreate(watchdog_task,
+        WATCHDOG_TASK_NAME,
+        WATCHDOG_TASK_STACK_SIZE,
+        NULL,
+        WATCHDOG_TASK_PRIORITY,
+        NULL);
+    
     vTaskStartScheduler();
 
     // if we get here, ope
