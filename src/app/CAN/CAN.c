@@ -238,6 +238,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     can_bus.bms_ref.bms_ref_ref11 = f29bms_dbc_bms_ref_bms_ref_ref11_encode(tm->vref2s[11]);
     CAN_send_message(F29BMS_DBC_BMS_REF_FRAME_ID);
     bms_ref_mux ^= 1;
+    CAN_send_message(F29BMS_DBC_CURRENT_LIMIT_FRAME_ID);
 }
 
 
