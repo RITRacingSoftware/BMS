@@ -44,6 +44,11 @@ typedef struct
     struct f29bms_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
     struct f29bms_dbc_bms_ref_t bms_ref;
     struct f29bms_dbc_watchdog_last_breath_t bms_watchdog_last_breath;
+    struct f29bms_dbc_current_limit_t bms_current_limit;
+    {
+        /* data */
+    };
+    
     
 } CAN_BUS;
 
