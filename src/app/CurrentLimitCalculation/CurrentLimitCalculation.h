@@ -10,6 +10,6 @@
  */
  
 
-void CurrentLimitCalculation_getCalculated(float *currentLimit, float *lowestVoltage, float *current);
+void CurrentLimitCalculation_getCalculated(float *currentLimit, BatteryModel_t* bm, float *current);
 
 #endif // CURRENT_LIMIT_CALCULATION_H

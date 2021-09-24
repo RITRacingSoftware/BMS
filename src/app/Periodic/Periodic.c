@@ -16,6 +16,7 @@
 #include "TempConverter.h"
 #include "TempModel.h"
 #include "HAL_Watchdog.h"
+#include "CurrentLimiter.h"
 
 // the global battery model!
 static BatteryModel_t battery_model;
@@ -74,6 +75,9 @@ void Periodic_10Hz(void)
 
     // update the bounds on State of Charge based on average pack voltage
     SOCestimator_voltage_threshold_update_10Hz(&battery_model, &temp_model);
+
+    // update the discharge current limit
+    CurrentLimiter_10Hz(&battery_model);
 
     // statuse LED blink algorithm iteration
     StatusLed_10Hz();
