@@ -17,6 +17,7 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm)
         //Get both current limits
         CurrentLimitCorrection_getCorrection(&currentLimitCorrection, &smallestVoltage, &current);
         CurrentLimitCalculation_getCalculated(&currentLimitCalculated, &smallestVoltage, &current);
+        //Set the lower limit as the limit
         if(currentLimitCalculated < currentLimitCorrection)
         {
             currentLimit = (double) currentLimitCalculated;

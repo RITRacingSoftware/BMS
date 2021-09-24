@@ -69,6 +69,13 @@
 #define CURRENT_SENSOR_PIN GPIO_Pin_1
 
 /**
+ * Current Limiting
+ */
+#define CURRENT_LIMIT_THRESHOLD_V 3.2 // the voltage at which the active current limiting will reduce the current limit
+#define ACTIVE_CURRENT_CORRECTION_DECREASE_VALUE 10 // the amount to decrease current limit when voltage drops below threshold
+#define MINIMUN_CURRENT_CURRENT_LIMIT 50 
+
+/**
  * Faults
  */
 // any bits set in this won't get set in the fault vector
