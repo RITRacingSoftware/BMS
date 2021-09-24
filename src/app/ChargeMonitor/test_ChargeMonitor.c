@@ -88,6 +88,7 @@ void test_ChargeMonitor_single_cell_conditions(void)
 
     bool did_charging_begin = false;
     // simulate until charging begins (should be a couple seconds)
+    printf("for 1\n");
     for (int seconds = 0; seconds < 3; seconds++)
     {
         // connect the charger
@@ -106,6 +107,7 @@ void test_ChargeMonitor_single_cell_conditions(void)
     TEST_ASSERT_MESSAGE(did_charging_begin == true, "Charging did not start with a single cell under threshold.");
 
     // ensure charging continues with no input changes
+    printf("for 2\n");
     for (int seconds = 0; seconds < 30; seconds++)
     {
         // connect the charger
@@ -123,6 +125,7 @@ void test_ChargeMonitor_single_cell_conditions(void)
 
     // now simulate a cell balancing condition
     bm.largest_V = MAX_ALLOWED_CELL_V;
+    printf("for 3\n");
     for (int seconds = 0; seconds < 3; seconds++)
     {
         // connect the charger
@@ -140,10 +143,11 @@ void test_ChargeMonitor_single_cell_conditions(void)
     // TEST_ASSERT_MESSAGE(ChargeMonitor_is_charging() == false, "Charging did not stop on balancing condition.");
     TEST_ASSERT_MESSAGE(ChargeMonitor_is_charging() == true, "Charging did not stop on balancing condition.");
     //TEST_ASSERT_MESSAGE(ChargeMonitor_is_balancing_allowed() == true, "Cell balancing not allowed when it needed to be.");
-    TEST_ASSERT_MESSAGE(ChargeMonitor_is_balancing_allowed() == false, "Cell balancing not allowed when it needed to be.");
+    TEST_ASSERT_MESSAGE(ChargeMonitor_is_balancing_allowed() == true, "Cell balancing not allowed when it needed to be.");
 
     // get back to charging
     bm.largest_V = CHARGED_CELL_V;
+    printf("for 4\n");
     for (int seconds = 0; seconds < 3; seconds++)
     {
         // connect the charger
@@ -240,6 +244,9 @@ void test_ChargeMonitor_restart_charging(void)
         // clear faults
         FaultManager_is_any_fault_active_ExpectAndReturn(false);
         // Simulate current under threshold
+
+        // get state machine from charging to trickle for complete
+        // make sure state machine matches the documentation
         float current = MAX_CHARGING_CURRENT_A / 10 - 1;
         CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
         CurrentSense_get_current_ReturnThruPtr_current_A(&current);
@@ -248,13 +255,56 @@ void test_ChargeMonitor_restart_charging(void)
         ChargeMonitor_1Hz(&bm);
         charging = ChargeMonitor_is_charging();
         if (!charging) {
-            printf("break\n\n");
+            printf("break1\n\n");
+            break;
+        }
+    }
+    // Verify charging true
+    TEST_ASSERT_MESSAGE(charging == true, "Charging did not stopped with current.");
+
+    bm.largest_V = MAX_ALLOWED_CELL_V_TRICKLE +.01;
+    for (int seconds = 0; seconds < 30; seconds++)
+    {
+       /// connect the charger
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+        // clear faults
+        FaultManager_is_any_fault_active_ExpectAndReturn(false);
+        // Simulation nominal current
+        float current = MAX_CHARGING_CURRENT_A/ 100;
+        CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
+        CurrentSense_get_current_ReturnThruPtr_current_A(&current);
+
+        ChargeMonitor_1Hz(&bm);
+    
+        if (!charging) {
+            printf("break2\n\n");
             break;
         }
     }
 
-    // Verify charging stopped
-    TEST_ASSERT_MESSAGE(charging == false, "Charging did not stop with current.");
+    // Verify charging true
+    TEST_ASSERT_MESSAGE(charging == true, "Not Trickle Charging.");
+
+    bm.smallest_V = CHARGED_CELL_V -0.01;
+
+    for (int seconds = 0; seconds < 30; seconds++)
+    {
+       /// connect the charger
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+        // clear faults
+        FaultManager_is_any_fault_active_ExpectAndReturn(false);
+        // Simulation nominal current
+        float current = MAX_CHARGING_CURRENT_A/ 100;
+        CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
+        CurrentSense_get_current_ReturnThruPtr_current_A(&current);
+
+        ChargeMonitor_1Hz(&bm);
+    
+        if (!charging) {
+            printf("break3\n\n");
+            break;
+        }
+    }
 
     // run the state machine for a bit and make sure charging does not resume
     for (int seconds = 0; seconds < 30; seconds++)
@@ -271,6 +321,11 @@ void test_ChargeMonitor_restart_charging(void)
         ChargeMonitor_1Hz(&bm);
         charging = ChargeMonitor_is_charging();
         TEST_ASSERT_MESSAGE(!charging, "Charging restarted without cable cycle!");
+        if (!charging) {
+            printf("break4\n\n");
+            break;
+        }
+
     }
 
     // cable cycle
@@ -299,4 +354,111 @@ void test_ChargeMonitor_restart_charging(void)
     }
 
     TEST_ASSERT_MESSAGE(charging, "Charging did not restart after cable cycle!");
+}
+
+/**
+ * Verify that the cable must be cycled for charging to resume once completed.
+ */
+void test_ChargeMonitor_trickle_charging(void)
+{
+    // partially charged battery
+    BatteryModel_t bm;
+    bm.largest_V = CHARGED_CELL_V - 1;
+    bm.smallest_V = CHARGED_CELL_V - 1;
+    
+    bool charging = false;
+    // simulate a few seconds and check for charge requests
+    for (int seconds = 0; seconds < 5; seconds++)
+    {
+        // connect the charger
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+        // clear faults
+        FaultManager_is_any_fault_active_ExpectAndReturn(false);
+        // Simulate nominal current
+        float current = MAX_CHARGING_CURRENT_A;
+        CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
+        CurrentSense_get_current_ReturnThruPtr_current_A(&current);
+
+        ChargeMonitor_1Hz(&bm);
+        charging = ChargeMonitor_is_charging();
+        if (charging) break;
+    }
+
+    TEST_ASSERT_MESSAGE(charging == true, "Charging never began.");
+
+    // Simulate charging completed due to current
+    for (int seconds = 0; seconds < 30; seconds++)
+    {
+        // connect the charger
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+        // clear faults
+        FaultManager_is_any_fault_active_ExpectAndReturn(false);
+        // Simulate current under threshold
+
+        // get state machine from charging to trickle for complete
+        // make sure state machine matches the documentation
+        float current = MAX_CHARGING_CURRENT_A / 10 - 1;
+        CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
+        CurrentSense_get_current_ReturnThruPtr_current_A(&current);
+        SOCestimator_reset_soc_Ignore();
+
+        ChargeMonitor_1Hz(&bm);
+        charging = ChargeMonitor_is_charging();
+        if (!charging) {
+            printf("break1\n\n");
+            break;
+        }
+    }
+    // Verify charging true
+    TEST_ASSERT_MESSAGE(charging == true, "Charging did not stopped with current.");
+
+    bm.largest_V = MAX_ALLOWED_CELL_V_TRICKLE +.01;
+    for (int seconds = 0; seconds < 30; seconds++)
+    {
+       /// connect the charger
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+        // clear faults
+        FaultManager_is_any_fault_active_ExpectAndReturn(false);
+        // Simulation nominal current
+        float current = MAX_CHARGING_CURRENT_A/ 100;
+        CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
+        CurrentSense_get_current_ReturnThruPtr_current_A(&current);
+
+        ChargeMonitor_1Hz(&bm);
+    
+        if (!charging) {
+            printf("break2\n\n");
+            break;
+        }
+    }
+
+    // Verify charging true
+    TEST_ASSERT_MESSAGE(charging == true, "Not Trickle Charging.");
+
+    bm.smallest_V = CHARGED_CELL_V -0.01;
+
+    for (int seconds = 0; seconds < 30; seconds++)
+    {
+       /// connect the charger
+        HAL_Gpio_read_ExpectAnyArgsAndReturn(1);
+        // clear faults
+        FaultManager_is_any_fault_active_ExpectAndReturn(false);
+        // Simulation nominal current
+        float current = MAX_CHARGING_CURRENT_A/ 100;
+        CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
+        CurrentSense_get_current_ReturnThruPtr_current_A(&current);
+
+        ChargeMonitor_1Hz(&bm);
+    
+        if (!charging) {
+            printf("break3\n\n");
+            break;
+        }
+    }
+
+    // Verify charging true
+    TEST_ASSERT_MESSAGE(charging == true, "Not connected Complete.");
+
+
+
 }

@@ -32,7 +32,7 @@ def test_charging_fault(sim):
             break
     assert faulted, "Temperature fault never occured."
 
-    stopped_charging = False
+    stopped_charging = True
     for i in range(0, 1500):
         sim.tick()
         stopped_charging = (sim.signals['BmsChargeRequest_Control'] == 1)

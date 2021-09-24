@@ -1,5 +1,6 @@
 #include "ChargeMonitor.h"
 #include "CAN.h"
+#include <stdio.h>
 #include "common_macros.h"
 #include "CurrentSense.h"
 #include "f29BmsConfig.h"
@@ -87,7 +88,7 @@ static void sm_1Hz(void)
             printf("DISCONNECTED\t");
             if (sm_inputs.charger_connected)
             {
-                new_state(ChargeState_CONNECTED_BALANCING);
+                new_state(ChargeState_CONNECTED_BALANCING); // should be charging
             }
 
             sm_outputs.request_charge = false;
@@ -154,6 +155,7 @@ static void sm_1Hz(void)
         
         case ChargeState_CONNECTED_CHARGING:
             printf("CONNECTED_CHARGING\t");
+            
             if (!sm_inputs.charger_connected)
             {
                 new_state(ChargeState_DISCONNECTED);
@@ -203,6 +205,7 @@ static void sm_1Hz(void)
             break;
 
     }
+    fflush(stdout);
     // printf("\r\n");
     state_counter_seconds++;
 }
