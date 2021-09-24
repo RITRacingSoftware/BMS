@@ -362,3 +362,8 @@ void BmsSim_set_current(float current)
     diff_out_BmsIn = true;
 }
 
+void BmsSim_get_current()
+{
+    return out_BmsIn.current;
+}
+

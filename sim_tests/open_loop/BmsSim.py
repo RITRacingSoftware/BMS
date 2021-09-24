@@ -68,6 +68,9 @@ class BmsSim:
     
     def read_drain_state(self, index):
         return self.clib.BmsSim_read_drain_state(index)
+    
+    def get_current(self):
+        return self.clib.BmsSim_get_current()
 
 can_db_loaded = False
 @pytest.fixture

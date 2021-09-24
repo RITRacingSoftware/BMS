@@ -21,6 +21,7 @@
 #define MAX_CELL_V 4.5 // any value above this is considered irrational
 
 #define MAX_ALLOWED_CELL_V 4.3 // any cell above this is considered overcharged and balancing should begin
+#define MAX_ALLOWED_CELL_V_TRICKLE 4.1 // any cell above this is considered almost overcharged and trickle charging
 #define CHARGED_CELL_V 4.25 // once all cells are above this, charging ends
 
 #define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
@@ -32,6 +33,7 @@
 // Simply transmitted to the charger.
 // These are NOT the overcurrent limits. See later in this document for those.
 #define MAX_CHARGING_CURRENT_A 15
+#define MAX_CHARGING_CURRENT_TRICKLE_A 5
 #define MAX_CHARGING_V ((float)MAX_ALLOWED_CELL_V * (float)NUM_SERIES_CELLS)
 #define CHARGE_CURRENT_SETTLE_TIME_S 30
 
