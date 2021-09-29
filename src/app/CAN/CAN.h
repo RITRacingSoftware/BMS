@@ -45,11 +45,7 @@ typedef struct
     struct f29bms_dbc_bms_ref_t bms_ref;
     struct f29bms_dbc_watchdog_last_breath_t bms_watchdog_last_breath;
     struct f29bms_dbc_current_limit_t bms_current_limit;
-    {
-        /* data */
-    };
-    
-    
+    struct f29bms_dbc_active_correction_current_limit_alert_t bms_current_limit_correction_count;
 } CAN_BUS;
 
 extern CAN_BUS can_bus;

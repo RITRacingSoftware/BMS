@@ -4,10 +4,107 @@
 // module under test
 #include "CurrentLimitCalculation.h"
 
-// runs before each test
-void setUp(void)
+/** 
+ * Test to make sure that if the voltage drops with the same instantaneous current, the 
+ * current limit will decrease
+ */
+void test_CurrentLimitCalculation_voltage_drop(void)
 {
-   
+    float current_limit_1;
+    float current_limit_2;
+
+    float current = 150;
+    BatteryModel_t bm;
+    for(int i = 0; i < NUM_SERIES_CELLS; i++)
+    {
+        bm.cells[i].voltage = CHARGED_CELL_V;
+    }
+    bm.cells[NUM_SERIES_CELLS-1].voltage = CHARGED_CELL_V-0.5;
+    bm.smallest_V = CHARGED_CELL_V-0.5;
+
+    CurrentLimitCalculation_getCalculated(&current_limit_1, &bm, &current);
+
+    bm.smallest_V = CHARGED_CELL_V-0.8;
+    bm.cells[NUM_SERIES_CELLS-1].voltage = CHARGED_CELL_V-0.7;
+
+    CurrentLimitCalculation_getCalculated(&current_limit_2, &bm, &current);
+
+    TEST_ASSERT_MESSAGE(current_limit_1 > current_limit_2, "Current limit calculation current limit didn't drop with a drop in voltage.");
 }
 
-//TO DO
+/**
+ * Test to make sure that if the instantaneous current drops and the voltage remains the same, the current
+ * limit will decrease
+ */
+void test_CurrentLimitCalculation_current_drop(void)
+{
+    float current_limit_1;
+    float current_limit_2;
+
+    float current = 150;
+    BatteryModel_t bm;
+    for(int i = 0; i < NUM_SERIES_CELLS; i++)
+    {
+        bm.cells[i].voltage = CHARGED_CELL_V;
+    }
+    bm.cells[NUM_SERIES_CELLS-1].voltage = CHARGED_CELL_V-0.5;
+    bm.smallest_V = CHARGED_CELL_V-0.5;
+
+    CurrentLimitCalculation_getCalculated(&current_limit_1, &bm, &current);
+
+    current = 125;
+
+    CurrentLimitCalculation_getCalculated(&current_limit_2, &bm, &current);
+
+    TEST_ASSERT_MESSAGE(current_limit_1 > current_limit_2, "Current limit calculation current limit didn't drop with a drop in current.");
+}
+
+/**
+ * Test to make sure that if the instantaneous current and the voltage remain the same, the current
+ * limit will stay the same
+ */
+void test_CurrentLimitCalculation_no_change(void)
+{
+    float current_limit_1;
+    float current_limit_2;
+
+    float current = 150;
+    BatteryModel_t bm;
+    for(int i = 0; i < NUM_SERIES_CELLS; i++)
+    {
+        bm.cells[i].voltage = CHARGED_CELL_V;
+    }
+    bm.cells[NUM_SERIES_CELLS-1].voltage = CHARGED_CELL_V-0.5;
+    bm.smallest_V = CHARGED_CELL_V-0.5;
+
+    CurrentLimitCalculation_getCalculated(&current_limit_1, &bm, &current);
+
+    CurrentLimitCalculation_getCalculated(&current_limit_2, &bm, &current);
+
+    TEST_ASSERT_MESSAGE(current_limit_1 == current_limit_2, "Current limit calculation current limit changed when current and voltage stayed the same.");
+}
+
+/**
+ * Test to make sure that if the instantaneoud current is 0, the current limit is set to 
+ * (current voltage-min_voltage)/internal resistance
+ */
+void test_CurrentLimitCalculation_no_current(void)
+{
+    float current_limit;
+
+    float current = 0;
+    BatteryModel_t bm;
+    for(int i = 0; i < NUM_SERIES_CELLS; i++)
+    {
+        bm.cells[i].voltage = CHARGED_CELL_V;
+    }
+    bm.cells[NUM_SERIES_CELLS-1].voltage = CHARGED_CELL_V-0.5;
+    bm.smallest_V = CHARGED_CELL_V-0.5;
+
+    CurrentLimitCalculation_getCalculated(&current_limit, &bm, &current);
+
+    float expected_current_limit = (CHARGED_CELL_V-0.5-MIN_ALLOWED_CELL_V)/internal_resistances[NUM_SERIES_CELLS-1];
+
+    TEST_ASSERT_MESSAGE(current_limit == expected_current_limit, "Current limit calculation current limit incorrect when current = 0.");
+
+}

@@ -1,5 +1,6 @@
 #include "CurrentLimitCorrection.h"
 #include "f29BmsConfig.h"
+#include "CAN.h"
 
 float lastCurrentLimit = CURRENT_IRRATIONAL_A;
 bool lastVoltageLow = false; //True if the current limit was already decreased, used for hysteresis
@@ -16,7 +17,9 @@ void CurrentLimitCorrection_getCorrection(float *currentLimit, float *lowestVolt
             *currentLimit = *current - ACTIVE_CURRENT_CORRECTION_DECREASE_VALUE;
             lastVoltageLow = true;
             numTimesLimited++;
-            //SEND CAN MESSAGE
+            //Send can message alert
+            can_bus.bms_current_limit_correction_count.count_active_correction_count++;
+            CAN_send_message(F29BMS_DBC_ACTIVE_CORRECTION_CURRENT_LIMIT_ALERT_FRAME_ID);
         }
         else
         {

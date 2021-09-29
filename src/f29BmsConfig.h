@@ -74,7 +74,8 @@
  */
 #define CURRENT_LIMIT_THRESHOLD_V 3.2 // the voltage at which the active current limiting will reduce the current limit
 #define ACTIVE_CURRENT_CORRECTION_DECREASE_VALUE 10 // the amount to decrease current limit when voltage drops below threshold
-#define MINIMUN_CURRENT_CURRENT_LIMIT 50 
+#define MIN_ALLOWED_CURRENT_LIMIT 50 //Need to determine correct value
+#define MAX_ALLOWED_CURRENT_LIMIT 230 //Need to get right value
 
 /**
  * Faults
