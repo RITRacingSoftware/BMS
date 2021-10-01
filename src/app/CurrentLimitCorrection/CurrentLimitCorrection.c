@@ -15,6 +15,7 @@ void CurrentLimitCorrection_getCorrection(float *currentLimit, float *lowestVolt
         if(!lastVoltageLow)
         {
             *currentLimit = *current - ACTIVE_CURRENT_CORRECTION_DECREASE_VALUE;
+            lastCurrentLimit = *currentLimit;
             lastVoltageLow = true;
             numTimesLimited++;
             //Send can message alert

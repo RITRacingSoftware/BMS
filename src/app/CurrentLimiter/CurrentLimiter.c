@@ -3,6 +3,9 @@
 #include "CurrentLimitCalculation.h"
 #include "CurrentLimitCorrection.h"
 #include "CAN.h"
+#include "CurrentSense.h"
+
+double lastCurrentLimit = MAX_ALLOWED_CURRENT_LIMIT;
 
 void CurrentLimiter_10Hz(BatteryModel_t* bm)
 {
@@ -17,24 +20,30 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm)
         //Get both current limits
         CurrentLimitCorrection_getCorrection(&currentLimitCorrection, &smallestVoltage, &current);
         CurrentLimitCalculation_getCalculated(&currentLimitCalculated, &smallestVoltage, &current);
-        //Set the lower limit as the limit
-        if(currentLimitCalculated < currentLimitCorrection)
+        //Set the lower limit as the limit, or the previous limit if its lower
+        if((currentLimitCalculated < currentLimitCorrection) && (currentLimitCalculated < lastCurrentLimit))
         {
             currentLimit = (double) currentLimitCalculated;
         }
-        else
+        else if ((currentLimitCorrection <= lastCurrentLimit) && (currentLimitCorrection < lastCurrentLimit))
         {
             currentLimit = (double) currentLimitCorrection;
         }
-        //Make sure current limit isn't below minimum allowed limit
-        if(currentLimit < MIN_ALLOWED_CURRENT_LIMIT)
+        else
         {
-            currentLimit = MIN_ALLOWED_CURRENT_LIMIT;
+            currentLimit = lastCurrentLimit;
         }
+        //Make sure current limit isn't above maximum allowed limit
         if(currentLimit > MAX_ALLOWED_CURRENT_LIMIT)
         {
             currentLimit = MAX_ALLOWED_CURRENT_LIMIT;
         }
+        //Make sure current limit isn't below minimum allowed limit
+        else if(currentLimit < MIN_ALLOWED_CURRENT_LIMIT)
+        {
+            currentLimit = MIN_ALLOWED_CURRENT_LIMIT;
+        }
+        lastCurrentLimit = currentLimit;
         //Set the new limit
         can_bus.bms_current_limit.max_discharge_current = f29bms_dbc_current_limit_max_discharge_current_encode(currentLimit);
     }
