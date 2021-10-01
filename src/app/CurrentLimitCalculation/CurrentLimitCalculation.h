@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include "BatteryModel.h"
 
-const float internal_resistances[NUM_SERIES_CELLS];
 
 /**
  * Caclulates the max current limit that keeps the lowest cell voltage below the minimum
