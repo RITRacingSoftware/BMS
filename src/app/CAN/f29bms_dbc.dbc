@@ -325,9 +325,9 @@ BO_ 187 WatchdogLastBreath: 8 Bms
  SG_ WatchdogLastBreath_1KHZ_TASK_EXPIRED : 2|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ WatchdogLastBreath_CAN_TASK_EXPIRED : 3|1@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 514 CurrentLimit: 8 Bms
- SG_ MaxDischargeCurrent : 0|16@1+ (1,0) [0|65536] "A" Vector__XXX
- SG_ MaxChargeCurrent : 16|16@1+ (1,0) [0|65536] "A" Vector__XXX
+BO_ 514 BmsCurrentLimit: 8 Bms
+ SG_ BmsMaxDischargeCurrent : 0|16@1+ (1,0) [0|65536] "A" Vector__XXX
+ SG_ BmsMaxChargeCurrent : 16|16@1+ (1,0) [0|65536] "A" Vector__XXX
 
 BO_ 514 ActiveCorrectionCurrentLimitAlert: 8 Bms
  SG_ CountActiveCorrectionCount : 0|16@1+ (1,0) [0|65536] "" Vector__XXX
