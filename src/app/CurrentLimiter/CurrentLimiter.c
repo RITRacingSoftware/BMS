@@ -19,7 +19,7 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm)
         float currentLimitCalculated;
         //Get both current limits
         CurrentLimitCorrection_getCorrection(&currentLimitCorrection, &smallestVoltage, &current);
-        CurrentLimitCalculation_getCalculated(&currentLimitCalculated, &smallestVoltage, &current);
+        CurrentLimitCalculation_getCalculated(&currentLimitCalculated, bm, &current);
         //Set the lower limit as the limit, or the previous limit if its lower
         if((currentLimitCalculated < currentLimitCorrection) && (currentLimitCalculated < lastCurrentLimit))
         {
@@ -45,6 +45,6 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm)
         }
         lastCurrentLimit = currentLimit;
         //Set the new limit
-        can_bus.bms_current_limit.max_discharge_current = f29bms_dbc_current_limit_max_discharge_current_encode(currentLimit);
+        can_bus.bms_current_limit.bms_max_discharge_current = f29bms_dbc_bms_current_limit_bms_max_discharge_current_encode(currentLimit);
     }
 }
