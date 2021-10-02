@@ -12,7 +12,7 @@ const float internal_resistances[NUM_SERIES_CELLS] = {.01, .01, .01, .01, .01, .
                         .01, .01, .01, .01, .01, .01, .01, .01, .01, .01};
 float lastLowestVoltage = MAX_CELL_V;
 float lastCurrent = MAX_ALLOWED_CURRENT_LIMIT;
-float lastCurrentLimit = MAX_ALLOWED_CURRENT_LIMIT;
+float lastCurrentLimitCalc = MAX_ALLOWED_CURRENT_LIMIT;
 
 void CurrentLimitCalculation_getCalculated(float *currentLimit, BatteryModel_t* bm, float *current)
 {
@@ -31,7 +31,7 @@ void CurrentLimitCalculation_getCalculated(float *currentLimit, BatteryModel_t* 
         }
         //Calculate current limit
         *currentLimit = ((lowestVoltage - CURRENT_LIMIT_THRESHOLD_V) / internal_resistances[lowestCell]) + *current;
-        lastCurrentLimit = *currentLimit;
+        lastCurrentLimitCalc = *currentLimit;
     //}
     // else
     // {
