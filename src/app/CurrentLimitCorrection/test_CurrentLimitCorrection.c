@@ -16,6 +16,7 @@ void test_CurrentLimitCorrection_not_corrected(void)
     float current_limit;
     BatteryModel_t bm;
     bm.smallest_V = MAX_ALLOWED_CELL_V;
+    // initialize bm.average_V if using it here- currently unused
     
     // set most cells the same, only one with a massive difference
     for (float v = MAX_ALLOWED_CELL_V; v > CURRENT_LIMIT_THRESHOLD_V; v = v - 0.1)
