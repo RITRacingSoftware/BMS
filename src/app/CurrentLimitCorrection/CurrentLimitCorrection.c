@@ -1,8 +1,9 @@
 #include "CurrentLimitCorrection.h"
 #include "f29BmsConfig.h"
 #include "CAN.h"
+#include <stdio.h>
 
-float lastCurrentLimit = CURRENT_IRRATIONAL_A;
+float lastCurrentLimitCorrection = CURRENT_IRRATIONAL_A;
 bool lastVoltageLow = false; //True if the current limit was already decreased, used for hysteresis
 uint16_t numTimesLimited = 0;
 
@@ -15,7 +16,7 @@ void CurrentLimitCorrection_getCorrection(float *currentLimit, float *lowestVolt
         if(!lastVoltageLow)
         {
             *currentLimit = *current - ACTIVE_CURRENT_CORRECTION_DECREASE_VALUE;
-            lastCurrentLimit = *currentLimit;
+            lastCurrentLimitCorrection = *currentLimit;
             lastVoltageLow = true;
             numTimesLimited++;
             //Send can message alert
@@ -24,12 +25,12 @@ void CurrentLimitCorrection_getCorrection(float *currentLimit, float *lowestVolt
         }
         else
         {
-            *currentLimit = lastCurrentLimit;
+            *currentLimit = lastCurrentLimitCorrection;
         }    
     }
     else
     {
-        *currentLimit = lastCurrentLimit;
+        *currentLimit = lastCurrentLimitCorrection;
         lastVoltageLow = false;
     }
 }

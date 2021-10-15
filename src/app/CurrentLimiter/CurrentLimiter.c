@@ -10,7 +10,7 @@ double lastCurrentLimit = MAX_ALLOWED_CURRENT_LIMIT;
 void CurrentLimiter_10Hz(BatteryModel_t* bm)
 {
     float smallestVoltage = bm->smallest_V; //limit current based on lowest cell
-    float current;
+    float current = 10;
     //Only calculate limit if the current reading is valid
     if(CurrentSense_get_current(&current))
     {
@@ -45,6 +45,7 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm)
         }
         lastCurrentLimit = currentLimit;
         //Set the new limit
-        can_bus.bms_current_limit.bms_max_discharge_current = f29bms_dbc_bms_current_limit_bms_max_discharge_current_encode(currentLimit);
+        can_bus.bms_current_limit.bms_max_discharge_current = f29bms_dbc_bms_current_limit_bms_max_discharge_current_encode(currentLimit);   
+        // can_bus.bms_current_limit.bms_max_discharge_current = f29bms_dbc_bms_current_limit_bms_max_discharge_current_encode(80); 
     }
 }

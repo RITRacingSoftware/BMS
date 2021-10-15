@@ -19,6 +19,7 @@ void CAN_init(void)
 {
     message_queue = xQueueCreate(CAN_QUEUE_LEN, sizeof(can_message));
     can_error = false;
+    can_bus.bms_current_limit_correction_count.count_active_correction_count = 0;
 }
 
 static int pack_message(int id, uint8_t* msg_data)
@@ -62,7 +63,9 @@ static int pack_message(int id, uint8_t* msg_data)
             return f29bms_dbc_watchdog_last_breath_pack(msg_data, &can_bus.bms_watchdog_last_breath, 8);
 
         case F29BMS_DBC_BMS_CURRENT_LIMIT_FRAME_ID:
-            return f29bms_dbc_bms_current_limit_unpack(msg_data, &can_bus.bms_current_limit, 8);
+            return f29bms_dbc_bms_current_limit_pack(msg_data, &can_bus.bms_current_limit, 8);
+        case F29BMS_DBC_ACTIVE_CORRECTION_CURRENT_LIMIT_ALERT_FRAME_ID:
+            return f29bms_dbc_active_correction_current_limit_alert_pack(msg_data, &can_bus.bms_current_limit_correction_count, 8);
 
         default:
             printf("f29bms: unknown CAN id: %d\n", id);

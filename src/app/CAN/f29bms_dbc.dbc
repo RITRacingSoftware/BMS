@@ -329,7 +329,7 @@ BO_ 514 BmsCurrentLimit: 8 Bms
  SG_ BmsMaxDischargeCurrent : 0|16@1+ (1,0) [0|65536] "A" Vector__XXX
  SG_ BmsMaxChargeCurrent : 16|16@1+ (1,0) [0|65536] "A" Vector__XXX
 
-BO_ 514 ActiveCorrectionCurrentLimitAlert: 8 Bms
+BO_ 515 ActiveCorrectionCurrentLimitAlert: 8 Bms
  SG_ CountActiveCorrectionCount : 0|16@1+ (1,0) [0|65536] "" Vector__XXX
 
 
