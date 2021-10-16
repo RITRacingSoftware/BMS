@@ -48,7 +48,7 @@ __initial_sp
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Heap_Size       EQU     0x00000200
+Heap_Size       EQU     0x00000400
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base
@@ -113,7 +113,7 @@ __Vectors       DCD     __initial_sp                   ; Top of Stack
                 DCD     USART1_IRQHandler              ; USART1
                 DCD     USART2_IRQHandler              ; USART2
                 DCD     0                              ; Reserved
-                DCD     CEC_IRQHandler                 ; CEC
+                DCD     CEC_CAN_IRQHandler                 ; CEC
                 DCD     0                              ; Reserved
                 
 __Vectors_End

@@ -1,14 +1,26 @@
 #include "HAL_Can.h"
+#include "stm32F0xx.h"
 #include "stm32f0xx_gpio.h"
+#include "stm32f0xx_can.h"
+#include "stm32f0xx_misc.h"
 #include <string.h>
 #include "CAN.h"
 #include "HAL_Gpio.h"
+#include "semphr.h"
+#include "queue.h"
+#include "HAL_Uart.h"
+#include <stdbool.h>
+#include <stdio.h>
 
 #define CAN_PINS (GPIO_Pin_11 | GPIO_Pin_12)
+
+static uint8_t num_filters = 0;
 
 // Must initialize gpio first to read charger line
 void HAL_Can_init(void)
 {
+    num_filters = 0;
+
     // enable GPIOA and CAN peripherals
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN, ENABLE);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
@@ -51,9 +63,60 @@ void HAL_Can_init(void)
     canInit.CAN_SJW = CAN_SJW_1tq;
     canInit.CAN_BS1 = CAN_BS1_13tq;
     canInit.CAN_BS2 = CAN_BS2_2tq;
-    CAN_Init(CAN, &canInit);
+    // CAN_ITConfig(CAN, CAN_IT_FMP0, 1);
+    
+    uint8_t ret = CAN_Init(CAN, &canInit);
+    CAN->IER |= 0x3; //Enable interrupts for FIFO0 message pending and transmit mailbox empty
 
-    NVIC_DisableIRQ(CEC_CAN_IRQn);
+
+    // CAN_SlaveStartBank(1);
+    HAL_Can_init_id_filter_16bit(0x9, 0x23, 0x69, 0x52);
+
+    //Enable interrupts for recieve
+    NVIC_InitTypeDef nvic_init;
+    nvic_init.NVIC_IRQChannel = CEC_CAN_IRQn;
+    nvic_init.NVIC_IRQChannelPriority = 2;
+    nvic_init.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_EnableIRQ(CEC_CAN_IRQn);
+    CAN_FIFORelease(CAN, CAN_FIFO0);
+}
+
+void HAL_Can_init_id_filter_32bit(uint32_t id)
+{
+    if(num_filters < 14)
+    {
+        CAN_FilterInitTypeDef filter;
+        filter.CAN_FilterIdHigh = (uint16_t) ((id & 0xFFFF0000) >> 16);
+        filter.CAN_FilterIdLow = (uint16_t) (id & 0xFFFF);
+        filter.CAN_FilterMaskIdHigh = 0xFFFF;
+        filter.CAN_FilterMaskIdLow = 0xFFFF;
+        filter.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;
+        filter.CAN_FilterNumber = num_filters;
+        filter.CAN_FilterMode = CAN_FilterMode_IdList;
+        filter.CAN_FilterScale = CAN_FilterScale_32bit;
+        filter.CAN_FilterActivation = ENABLE;
+         CAN_FilterInit(&filter);
+        num_filters++;
+    }
+}
+
+void HAL_Can_init_id_filter_16bit(uint16_t id1, uint16_t id2, uint16_t id3, uint16_t id4)
+{
+    if(num_filters < 14)
+    {
+        CAN_FilterInitTypeDef filter;
+        filter.CAN_FilterIdHigh = id1 << 5;
+        filter.CAN_FilterIdLow = id2 << 5;
+        filter.CAN_FilterMaskIdHigh = id3 << 5;
+        filter.CAN_FilterMaskIdLow = id4 << 5;
+        filter.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;
+        filter.CAN_FilterNumber = num_filters;
+        filter.CAN_FilterMode = CAN_FilterMode_IdList;
+        filter.CAN_FilterScale = CAN_FilterScale_16bit;
+        filter.CAN_FilterActivation = ENABLE;
+        CAN_FilterInit(&filter);
+        num_filters++;
+    }
 }
 
 Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data)
@@ -91,7 +154,6 @@ Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data)
         error.active = false;
     }
 
-
     // return error;
     return error;
 }
@@ -112,4 +174,32 @@ uint8_t HAL_number_of_empty_mailboxes(void)
         emptyMailboxes++;
     }
     return emptyMailboxes;
+}
+
+void CEC_CAN_IRQHandler(void)
+{
+    if(CAN_GetITStatus(CAN, CAN_IT_FMP0) == SET)
+    {
+        //Get next message
+        CanRxMsg RxMsg;
+        CAN_Receive(CAN, CAN_FIFO0, &RxMsg);
+
+        //Add message to queue
+        CAN_add_message_rx_queue(RxMsg.StdId, RxMsg.DLC, RxMsg.Data);
+
+        //Unhook can function through sephamore
+        BaseType_t ret = pdFALSE;
+        xSemaphoreGiveFromISR(can_message_recieved_semaphore, &ret);
+
+        portYIELD_FROM_ISR( ret );
+    }
+    if(CAN_GetITStatus(CAN, CAN_IT_TME) == SET)
+    {
+        CAN_ClearITPendingBit(CAN, CAN_IT_TME);
+
+        BaseType_t ret = pdFALSE;
+        xSemaphoreGiveFromISR(can_message_transmit_semaphore, &ret);
+
+        portYIELD_FROM_ISR( ret );
+    }
 }

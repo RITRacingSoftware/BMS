@@ -319,7 +319,7 @@ g_pfnVectors:
   .thumb_set USART2_IRQHandler,Default_Handler
   
   .weak CEC_IRQHandler
-  .thumb_set CEC_IRQHandler,Default_Handler
+  .thumb_set CEC_IRQHandler,CEC_CAN_IRQHandler
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

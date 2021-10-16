@@ -4,6 +4,8 @@
 #include "CAN.h"
 #include "HAL_Can.h"
 #include "common_macros.h"
+#include "HAL_Uart.h"
+
 
 #define TICKS_TO_WAIT_QUEUE_CAN_MESSAGE (0) //Will return immediately if queue is full, not sure if this should be different
 
@@ -13,11 +15,13 @@ CAN_BUS can_bus;
 
 static bool can_error;
 
-static QueueHandle_t message_queue;
+static QueueHandle_t tx_can_message_queue;
+static QueueHandle_t rx_can_message_queue;
 
 void CAN_init(void)
 {
-    message_queue = xQueueCreate(CAN_QUEUE_LEN, sizeof(can_message));
+    tx_can_message_queue = xQueueCreate(CAN_QUEUE_LEN, sizeof(can_message));
+    rx_can_message_queue= xQueueCreate(CAN_QUEUE_LEN, sizeof(can_message));
     can_error = false;
 }
 
@@ -74,7 +78,8 @@ void CAN_send_message(unsigned long int id)
     if (-1 != pack_message(id, (uint8_t*) &msg_data))
     {
         can_message thisMessage = {id, 8, msg_data};
-        xQueueSend(message_queue, &thisMessage, 10);
+        xQueueSend(tx_can_message_queue, &thisMessage, 10);
+        xSemaphoreGive(can_message_transmit_semaphore);
     }
     else
     {
@@ -242,6 +247,65 @@ void CAN_1Hz(void)
     CAN_send_message(F29BMS_DBC_BMS_FAULT_VECTOR_FRAME_ID);
 }
 
+void CAN_process_recieved_messages(void)
+{
+    can_message received_message;
+    //Get all can messages received
+    while (xQueueReceive(rx_can_message_queue, &received_message, TICKS_TO_WAIT_QUEUE_CAN_MESSAGE) == pdTRUE)
+    {
+        uint8_t data[8];
+        for (int i = 0; i < 8; i++)
+        {
+            data[i] = (received_message.data >> (i*8)) & 0xff;
+        }
+        uint8_t print_buffer[50];
+        uint8_t n = sprintf(&print_buffer[0], "ID: %d  Data: %d  %d  %d  %d  %d  %d  %d  %d\n\r", received_message.id, data[0],
+             data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+        HAL_Uart_send(&print_buffer[0], n);
+        //Unpack message recieved
+        switch(received_message.id)
+        {
+            case F29BMS_DBC_BMS_STATUS_FRAME_ID:
+                f29bms_dbc_bms_status_unpack(&can_bus.bms_status, (uint8_t*)&received_message.data, 8);
+
+            case F29BMS_DBC_BMS_FAULT_VECTOR_FRAME_ID:
+                f29bms_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*)&received_message.data, 8);
+
+            case F29BMS_DBC_BMS_FAULT_ALERT_FRAME_ID:
+                f29bms_dbc_bms_fault_alert_unpack(&can_bus.bms_fault_alert, (uint8_t*)&received_message.data, 8);
+
+            case F29BMS_DBC_BMS_VOLTAGES_FRAME_ID:
+                f29bms_dbc_bms_voltages_unpack(&can_bus.bms_voltages, (uint8_t*)&received_message.data, 8);
+            
+            case F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID:
+                f29bms_dbc_bms_thermistor_voltages_unpack(&can_bus.bms_thermistor_voltages, (uint8_t*)&received_message.data, 8);
+            
+            case F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID:
+                f29bms_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&received_message.data, 8);
+
+            case F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID:
+                f29bms_dbc_bms_drain_status_a_unpack(&can_bus.bms_drain_status_a, (uint8_t*)&received_message.data, 8);
+
+            case F29BMS_DBC_BMS_DRAIN_STATUS_B_FRAME_ID:
+                f29bms_dbc_bms_drain_status_b_unpack(&can_bus.bms_drain_status_b, (uint8_t*)&received_message.data, 8);
+
+            case F29BMS_DBC_BMS_CURRENT_FRAME_ID:
+                f29bms_dbc_bms_current_unpack(&can_bus.bms_current, (uint8_t*)&received_message.data, 8);
+            
+            case F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID:
+                f29bms_dbc_bms_charge_request_unpack(&can_bus.bms_charge_request, (uint8_t*)&received_message.data, 8);
+
+            case F29BMS_DBC_BMS_REF_FRAME_ID:
+                f29bms_dbc_bms_ref_unpack(&can_bus.bms_ref, (uint8_t*)&received_message.data, 8);
+            
+            default:
+                // printf("f29bms: unknown CAN id: %d\n", received_message.id);
+                break;
+        }
+
+    }
+}
+
 
 void CAN_send_queued_messages(void)
 {
@@ -250,10 +314,12 @@ void CAN_send_queued_messages(void)
     can_message dequeued_message;
     while (num_free_mailboxes > 0) //Fill all empty mailboxes with messages
     {
-        if (xQueueReceive(message_queue, &dequeued_message, TICKS_TO_WAIT_QUEUE_CAN_MESSAGE) == pdTRUE) //Get next message to send if there is one
+        if (xQueueReceive(tx_can_message_queue, &dequeued_message, TICKS_TO_WAIT_QUEUE_CAN_MESSAGE) == pdTRUE) //Get next message to send if there is one
         {
             Error_t err = HAL_Can_send_message(dequeued_message.id, dequeued_message.dlc, dequeued_message.data);
             can_error = err.active;
+            //Unhook tx task
+            xSemaphoreGive(&can_message_transmit_semaphore);
         }
         else
         {
@@ -261,4 +327,16 @@ void CAN_send_queued_messages(void)
         }   
         num_free_mailboxes--;
     }
+}
+
+void CAN_add_message_rx_queue(uint32_t id, uint8_t dlc, uint8_t *data)
+{
+    uint64_t msg_data = 0x0;
+    memcpy(&msg_data, data, sizeof(msg_data));
+    
+    can_message rx_msg;
+    rx_msg.data = msg_data;
+    rx_msg.id = id;
+    rx_msg.dlc = dlc;
+    xQueueSend(rx_can_message_queue, &rx_msg, 10);
 }
