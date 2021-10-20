@@ -48,6 +48,15 @@ void TASK_1Hz(void *pvParameters)
 
     for (;;)
     {
+        /* Get Run Time Stats Every Second */
+        char stats[ 2048];
+        vTaskGetRunTimeStats(stats);
+        /* Header for the Statistics Table */
+        printf("Task            Abs Time        % Time \n");
+        printf("************************************** \n");
+        /* Print out the actual statistics */
+        printf("%s", stats);
+
         Periodic_1Hz();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
