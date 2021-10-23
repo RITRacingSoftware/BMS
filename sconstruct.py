@@ -472,7 +472,7 @@ vector_blf_so = File('/usr/local/lib/libVector_BLF.so.2')
 vector_blf_lib = Command(
     [vector_blf_so],
     [],
-    ["cd libs/vector_blf && mkdir -p build && cd build && cmake .. && make && make install DESTDIR=.. && make install && /usr/sbin/ldconfig"]
+    ["cd libs/vector_blf && mkdir -p build && cd build && sudo cmake .. && sudo make && sudo make install DESTDIR=.. && sudo make install && sudo /usr/sbin/ldconfig"]
 )
 
 bms_sim_objs['BlfWriter'] = cpp_env.SharedObject(SIM_DIR.File('BlfWriter/BlfWriter.cpp'))

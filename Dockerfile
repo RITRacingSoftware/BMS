@@ -23,7 +23,8 @@ git \
 python3.8-dev \
 cmake \
 doxygen \
-gdb-multiarch
+gdb-multiarch \
+sudo
 
 # 'scons' command uses 'python' not 'python3.8', so make a symlink for it to use
 RUN ln -s /usr/bin/python3.8 /usr/bin/python

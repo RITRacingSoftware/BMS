@@ -2,7 +2,6 @@ pipeline {
     agent { 
         docker { 
             image 'f29bms' 
-            args '-u root:root'
         } 
     }
     stages {
@@ -11,11 +10,6 @@ pipeline {
                 sh './build.sh'
                 archiveArtifacts 'sim_traces/*'
             }
-        }
-    }
-    post { 
-        always { 
-            cleanWs()
         }
     }
 }
