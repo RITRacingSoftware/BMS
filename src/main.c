@@ -36,6 +36,7 @@
 #include "StatusLed.h"
 #include "TempConverter.h"
 #include "TempModel.h"
+#include "HAL_Uart.h"
 
 #define TASK_1Hz_NAME "task_1Hz"
 #define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 3)
@@ -51,11 +52,23 @@ void TASK_1Hz(void *pvParameters)
         /* Get Run Time Stats Every Second */
         char stats[ 2048];
         vTaskGetRunTimeStats(stats);
+
+        /* Print to UART Driver for the stm32 */
+        HAL_Uart_init();
+        int8_t print_buffer[ 41];
+
         /* Header for the Statistics Table */
-        printf("Task            Abs Time        % Time \n");
-        printf("************************************** \n");
+        uint8_t uartStats = sprintf(&print_buffer[0], "Task            Abs Time        % Time \n\r");
+        HAL_Uart_send(&print_buffer[0], uartStats);
+
+        print_buffer[ 41];
+        uartStats = sprintf(&print_buffer[0], "**************************************\n\r");
+        HAL_Uart_send(&print_buffer[0], uartStats);
+        
+        print_buffer[ 100];
         /* Print out the actual statistics */
-        printf("%s", stats);
+        uartStats = sprintf(&print_buffer[0], stats);
+        HAL_Uart_send(&print_buffer[0], uartStats);
 
         Periodic_1Hz();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
