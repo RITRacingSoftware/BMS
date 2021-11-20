@@ -1,6 +1,8 @@
 #include "HAL_Can.h"
 #include "BmsSimClient.h"
 
+SemaphoreHandle_t can_message_recieved_semaphore;
+
 Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data)
 {
     BmsSimClient_send_CAN(id, data);
@@ -28,4 +30,9 @@ uint8_t HAL_number_of_empty_mailboxes(void)
 bool HAL_get_error(void)
 {
     return false;
+}
+
+bool HAL_Can_get_message(can_message *msg)
+{
+    
 }

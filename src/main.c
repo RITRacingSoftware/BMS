@@ -17,6 +17,7 @@
 #include "HAL_EEPROM.h"
 #include "HAL_Watchdog.h"
 #include "HAL_SlaveChips.h"
+#include "HAL_Uart.h"
 
 #include "f29BmsConfig.h"
 
@@ -36,11 +37,17 @@
 #include "StatusLed.h"
 #include "TempConverter.h"
 #include "TempModel.h"
+#include "semphr.h"
+
+#define SEPHAMORE_WAIT 0
+
+SemaphoreHandle_t can_message_recieved_semaphore;
+SemaphoreHandle_t can_message_transmit_semaphore;
 
 #define TASK_1Hz_NAME "task_1Hz"
-#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 3)
+#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_1Hz_PERIOD_MS (1000)
-#define TASK_1Hz_STACK_SIZE_B (1000)
+#define TASK_1Hz_STACK_SIZE_B (2000)
 void TASK_1Hz(void *pvParameters)
 {
     (void) pvParameters;
@@ -54,9 +61,9 @@ void TASK_1Hz(void *pvParameters)
 }
 
 #define TASK_10Hz_NAME "task_10Hz"
-#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 2)
+#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_10Hz_PERIOD_MS (100)
-#define TASK_10Hz_STACK_SIZE_B (2000)
+#define TASK_10Hz_STACK_SIZE_B (1000)
 void task_10Hz(void *pvParameters)
 {
     (void) pvParameters;
@@ -70,7 +77,7 @@ void task_10Hz(void *pvParameters)
 }
 
 #define TASK_1kHz_NAME "task_1kHz"
-#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 1)
+#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 2)
 #define TASK_1kHz_PERIOD_MS (1)
 #define TASK_1kHz_STACK_SIZE_B (1000)
 
@@ -81,8 +88,43 @@ void task_1kHz(void *pvParameters)
     for (;;)
     {
         Periodic_1kHz();
-        CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
+    }
+}
+
+#define TASK_CAN_RX_NAME "task_CAN_RX"
+#define TASK_CAN_RX_PRIORITY (tskIDLE_PRIORITY + 4)
+#define TASK_CAN_RX_PERIOD_MS (1)
+#define TASK_CAN_RX_STACK_SIZE_B (500) 
+
+void task_can_rx(void *pvParameters)
+{
+    (void) pvParameters;
+    // TickType_t next_wake_time = xTaskGetTickCount();
+    for (;;)
+    {
+        if(xSemaphoreTake(can_message_recieved_semaphore, portMAX_DELAY) == pdTRUE)
+        {
+            CAN_process_recieved_messages();
+        }
+    }
+}
+
+#define TASK_CAN_TX_NAME "task_CAN_TX"
+#define TASK_CAN_TX_PRIORITY (tskIDLE_PRIORITY + 4)
+#define TASK_CAN_TX_PERIOD_MS (1)
+#define TASK_CAN_TX_STACK_SIZE_B (500) 
+
+void task_can_tx(void *pvParameters)
+{
+    (void) pvParameters;
+    // TickType_t next_wake_time = xTaskGetTickCount();
+    for (;;)
+    {
+        if(xSemaphoreTake(can_message_transmit_semaphore, portMAX_DELAY) == pdTRUE)
+        {
+            CAN_send_queued_messages();
+        }
     }
 }
 
@@ -120,6 +162,10 @@ void hardfault_handler_routine(void)
     {
         task_id = 3;
     }
+    else if (strcmp(task_name, TASK_CAN_RX_NAME) == 0)
+    {
+        task_id = 4;
+    }
 
     uint8_t data[8];
     can_bus.bms_hard_fault_indicator.bms_hard_fault_indicator_task = task_id;
@@ -131,17 +177,28 @@ int main(int argc, char** argv)
 {
     // initialize all HAL stuff
     HAL_Clock_init();
-
+    
     HAL_Gpio_init(); // must happen before CAN
+    HAL_Uart_init();
+    
+    can_message_recieved_semaphore = xSemaphoreCreateBinary();
+    xSemaphoreGive(can_message_recieved_semaphore);
+    xSemaphoreTake(can_message_recieved_semaphore, SEPHAMORE_WAIT);
+    can_message_transmit_semaphore = xSemaphoreCreateBinary();
+    xSemaphoreGive(can_message_transmit_semaphore);
+    xSemaphoreTake(can_message_transmit_semaphore, SEPHAMORE_WAIT);
+    
     HAL_Can_init();
    
     HAL_CurrentSensor_init();
-    
+   
     HAL_SlaveChips_init();
     // HAL_Watchdog_init();
 
     // initialize all app stuff
     CAN_init();
+
+    
     CellBalancer_init();
     ChargeMonitor_init();
     CurrentMonitor_init();
@@ -153,6 +210,7 @@ int main(int argc, char** argv)
     FaultManager_init();
     StatusLed_init();
     TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
+
 
 #ifdef SIMULATION
     if (BmsSimClient_init())
@@ -173,6 +231,7 @@ int main(int argc, char** argv)
         NULL,
         TASK_1Hz_PRIORITY,
         NULL);
+
     
     xTaskCreate(task_10Hz, 
         TASK_10Hz_NAME, 
@@ -181,12 +240,31 @@ int main(int argc, char** argv)
         TASK_10Hz_PRIORITY,
         NULL);
 
+
+
     xTaskCreate(task_1kHz, 
         TASK_1kHz_NAME, 
         TASK_1kHz_STACK_SIZE_B,
         NULL,
         TASK_1kHz_PRIORITY,
         NULL);
+
+
+    xTaskCreate(task_can_rx, 
+        TASK_CAN_RX_NAME, 
+        TASK_CAN_RX_STACK_SIZE_B,
+        NULL,
+        TASK_CAN_RX_PRIORITY,
+        NULL);
+
+    xTaskCreate(task_can_tx, 
+        TASK_CAN_TX_NAME, 
+        TASK_CAN_TX_STACK_SIZE_B,
+        NULL,
+        TASK_CAN_TX_PRIORITY,
+        NULL);
+
+
    
     vTaskStartScheduler();
 

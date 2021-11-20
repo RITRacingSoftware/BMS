@@ -8,6 +8,7 @@
 #include "TempModel.h"
 #include "FreeRTOS.h"
 #include "queue.h"
+#include "semphr.h"
 
 typedef struct
 {
@@ -16,6 +17,7 @@ typedef struct
     uint64_t data;
 } can_message;
 
+extern SemaphoreHandle_t can_message_transmit_semaphore;
 
 /**
  * Holds the current state of the CAN bus.
@@ -82,8 +84,28 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm);
 void CAN_1Hz(void);
 
 /**
+ * Processes recevied can messages
+ */
+void CAN_process_recieved_messages(void);
+
+/**
+ * Processes recevied can messages
+ */
+void CAN_process_recieved_messages(void);
+
+/**
  * Fills empty transmit mailboxes with CAN messages from the queue
  */
 void CAN_send_queued_messages(void);
+
+/**
+ * Returns whether the transmit queue is empty. Must only be called from an ISR
+ */
+bool CAN_is_transmit_queue_empty_fromISR(void);
+
+/**
+ * Adds a received CAN message to the receive queue
+ */
+void CAN_add_message_rx_queue(uint32_t id, uint8_t dlc, uint8_t *data);
 
 #endif // CAN_H
