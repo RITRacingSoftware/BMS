@@ -37,6 +37,6 @@ uint8_t HAL_number_of_empty_mailboxes(void);
 /**
  * CAN recieve and transmit interrupt handler
  */
-void CEC_CAN_IRQHandler(void);
+void HAL_Can_IRQ_handler(void);
 
 #endif // HAL_CAN_H

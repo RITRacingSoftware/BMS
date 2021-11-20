@@ -99,6 +99,11 @@ void CAN_process_recieved_messages(void);
 void CAN_send_queued_messages(void);
 
 /**
+ * Returns whether the transmit queue is empty. Must only be called from an ISR
+ */
+bool CAN_is_transmit_queue_empty_fromISR(void);
+
+/**
  * Adds a received CAN message to the receive queue
  */
 void CAN_add_message_rx_queue(uint32_t id, uint8_t dlc, uint8_t *data);

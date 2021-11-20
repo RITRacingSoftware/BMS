@@ -258,10 +258,10 @@ void CAN_process_recieved_messages(void)
         {
             data[i] = (received_message.data >> (i*8)) & 0xff;
         }
-        uint8_t print_buffer[50];
-        uint8_t n = sprintf(&print_buffer[0], "ID: %d  Data: %d  %d  %d  %d  %d  %d  %d  %d\n\r", received_message.id, data[0],
-             data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
-        HAL_Uart_send(&print_buffer[0], n);
+        // uint8_t print_buffer[50];
+        // uint8_t n = sprintf(&print_buffer[0], "ID: %d  Data: %d  %d  %d  %d  %d  %d  %d  %d\n\r", received_message.id, data[0],
+        //      data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+        // HAL_Uart_send(&print_buffer[0], n);
         //Unpack message recieved
         switch(received_message.id)
         {
@@ -318,8 +318,6 @@ void CAN_send_queued_messages(void)
         {
             Error_t err = HAL_Can_send_message(dequeued_message.id, dequeued_message.dlc, dequeued_message.data);
             can_error = err.active;
-            //Unhook tx task
-            xSemaphoreGive(&can_message_transmit_semaphore);
         }
         else
         {
@@ -327,6 +325,11 @@ void CAN_send_queued_messages(void)
         }   
         num_free_mailboxes--;
     }
+}
+
+bool CAN_is_transmit_queue_empty_fromISR(void)
+{
+    return xQueueIsQueueEmptyFromISR(tx_can_message_queue) == pdTRUE;
 }
 
 void CAN_add_message_rx_queue(uint32_t id, uint8_t dlc, uint8_t *data)

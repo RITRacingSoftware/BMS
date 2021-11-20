@@ -45,7 +45,7 @@ SemaphoreHandle_t can_message_recieved_semaphore;
 SemaphoreHandle_t can_message_transmit_semaphore;
 
 #define TASK_1Hz_NAME "task_1Hz"
-#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 3)
+#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_1Hz_PERIOD_MS (1000)
 #define TASK_1Hz_STACK_SIZE_B (2000)
 void TASK_1Hz(void *pvParameters)
@@ -61,7 +61,7 @@ void TASK_1Hz(void *pvParameters)
 }
 
 #define TASK_10Hz_NAME "task_10Hz"
-#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 2)
+#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_10Hz_PERIOD_MS (100)
 #define TASK_10Hz_STACK_SIZE_B (1000)
 void task_10Hz(void *pvParameters)
@@ -77,7 +77,7 @@ void task_10Hz(void *pvParameters)
 }
 
 #define TASK_1kHz_NAME "task_1kHz"
-#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 1)
+#define TASK_1kHz_PRIORITY (tskIDLE_PRIORITY + 2)
 #define TASK_1kHz_PERIOD_MS (1)
 #define TASK_1kHz_STACK_SIZE_B (1000)
 

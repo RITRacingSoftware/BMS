@@ -176,7 +176,7 @@ uint8_t HAL_number_of_empty_mailboxes(void)
     return emptyMailboxes;
 }
 
-void CEC_CAN_IRQHandler(void)
+void HAL_Can_IRQ_handler(void)
 {
     if(CAN_GetITStatus(CAN, CAN_IT_FMP0) == SET)
     {
@@ -197,9 +197,12 @@ void CEC_CAN_IRQHandler(void)
     {
         CAN_ClearITPendingBit(CAN, CAN_IT_TME);
 
-        BaseType_t ret = pdFALSE;
-        xSemaphoreGiveFromISR(can_message_transmit_semaphore, &ret);
-
-        portYIELD_FROM_ISR( ret );
+        if(!CAN_is_transmit_queue_empty_fromISR())
+        {
+            BaseType_t ret = pdFALSE;
+            xSemaphoreGiveFromISR(can_message_transmit_semaphore, &ret);  
+            
+            portYIELD_FROM_ISR( ret );
+        }
     }
 }
