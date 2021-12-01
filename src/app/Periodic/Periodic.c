@@ -81,7 +81,6 @@ void Periodic_10Hz(void)
     xSemaphoreTake(mutex_temp, portMAX_DELAY);
     TempConverter_convert(&temp_model);
     xSemaphoreGive(mutex_temp);
-
     // check the new slave board readings for errors
     xSemaphoreTake(mutex_bat, portMAX_DELAY);
     PackMonitor_validate_battery_model_10Hz(&battery_model);
@@ -112,7 +111,6 @@ void Periodic_10Hz(void)
 
     // statuse LED blink algorithm iteration
     StatusLed_10Hz();
-
     xSemaphoreTake(mutex_bat, portMAX_DELAY);
     xSemaphoreTake(mutex_temp, portMAX_DELAY);
     CAN_10Hz(&battery_model, &temp_model);

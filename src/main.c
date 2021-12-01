@@ -55,17 +55,15 @@ void TASK_1Hz(void *pvParameters)
 
         /* Print to UART Driver for the stm32 */
         HAL_Uart_init();
-        int8_t print_buffer[ 41];
+        int8_t print_buffer[ 100];
 
         /* Header for the Statistics Table */
         uint8_t uartStats = sprintf(&print_buffer[0], "Task            Abs Time        % Time \n\r");
         HAL_Uart_send(&print_buffer[0], uartStats);
 
-        print_buffer[ 41];
         uartStats = sprintf(&print_buffer[0], "**************************************\n\r");
         HAL_Uart_send(&print_buffer[0], uartStats);
-        
-        print_buffer[ 100];
+
         /* Print out the actual statistics */
         uartStats = sprintf(&print_buffer[0], stats);
         HAL_Uart_send(&print_buffer[0], uartStats);

@@ -31,6 +31,7 @@
 /* Scheduler includes. */
 #include "FreeRTOS.h"
 #include "task.h"
+#include <sys/times.h>
 
 /* Constants required to manipulate the NVIC. */
 #define portNVIC_SYSTICK_CTRL_REG             ( *( ( volatile uint32_t * ) 0xe000e010 ) )
@@ -394,6 +395,16 @@ __attribute__( ( weak ) ) void vPortSetupTimerInterrupt( void )
     portNVIC_SYSTICK_LOAD_REG = ( configCPU_CLOCK_HZ / configTICK_RATE_HZ ) - 1UL;
     portNVIC_SYSTICK_CTRL_REG = portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT | portNVIC_SYSTICK_ENABLE_BIT;
 }
+
+unsigned long ulPortGetRunTime( void )
+{
+struct tms xTimes;
+
+	times( &xTimes );
+
+	return ( unsigned long ) xTimes.tms_utime;
+}
+
 /*-----------------------------------------------------------*/
 
 #if ( configUSE_TICKLESS_IDLE == 1 )
