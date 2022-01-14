@@ -92,6 +92,10 @@
 #define DRAIN_FAILURE_TOLERANCE_MS NO_SHUTDOWN // not implemented
 
 /**
+ * TODO- add a #define here for manual fault tolerance. Should be 1 so it shuts down the car immediately
+ */
+
+/**
  * MCU
  */
 #define MCU_VCC 3.3 // not used

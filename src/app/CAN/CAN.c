@@ -298,6 +298,10 @@ void CAN_process_recieved_messages(void)
             case F29BMS_DBC_BMS_REF_FRAME_ID:
                 f29bms_dbc_bms_ref_unpack(&can_bus.bms_ref, (uint8_t*)&received_message.data, 8);
             
+            /**
+             * add switch case to set/clear manual fault if the manual fault setting CAN message is received.
+             */
+
             default:
                 // printf("f29bms: unknown CAN id: %d\n", received_message.id);
                 break;
