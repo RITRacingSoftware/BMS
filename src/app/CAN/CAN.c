@@ -299,7 +299,7 @@ void CAN_process_recieved_messages(void)
                 f29bms_dbc_bms_ref_unpack(&can_bus.bms_ref, (uint8_t*)&received_message.data, 8);
             
             /**
-             * add switch case to set/clear manual fault if the manual fault setting CAN message is received.
+             * SHRIYA TODO add switch case to set/clear manual fault if the manual fault setting CAN message is received.
              */
 
             default:
