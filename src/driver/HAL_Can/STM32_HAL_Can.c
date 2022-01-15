@@ -178,6 +178,7 @@ uint8_t HAL_number_of_empty_mailboxes(void)
 
 void HAL_Can_IRQ_handler(void)
 {
+    #ifdef SIMULATION
     if(CAN_GetITStatus(CAN, CAN_IT_FMP0) == SET)
     {
         //Get next message
@@ -205,4 +206,5 @@ void HAL_Can_IRQ_handler(void)
             portYIELD_FROM_ISR( ret );
         }
     }
+    #endif
 }

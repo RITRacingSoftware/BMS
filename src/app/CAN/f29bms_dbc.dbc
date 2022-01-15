@@ -319,6 +319,100 @@ BO_ 951 BmsRef: 8 Bms
  SG_ BmsRef_ref10 m1: 37|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
  SG_ BmsRef_ref11 m1: 46|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
 
+
+BO_ 702 BmsInternalResistances: 8 Bms
+ SG_ BmsResistance_mux M : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ BmsResistance_Cell0 m0 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell1 m0 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell2 m0 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell3 m0 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell4 m0 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell5 m0 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell6 m1 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell7 m1 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell8 m1 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell9 m1 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell10 m1 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX 
+ SG_ BmsResistance_Cell11 m1 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell12 m2 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell13 m2 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell14 m2 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell15 m2 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell16 m2 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell17 m2 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell18 m3 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell19 m3 : 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell20 m3 : 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell21 m3 : 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell22 m3 : 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell23 m3 : 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell24 m4 : 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell25 m4: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell26 m4: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell27 m4: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell28 m4: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell29 m4: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell30 m5: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell31 m5: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell32 m5: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell33 m5: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell34 m5: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell35 m5: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell36 m6: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell37 m6: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell38 m6: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell39 m6: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell40 m6: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell41 m6: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell42 m7: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell43 m7: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell44 m7: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell45 m7: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell46 m7: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell47 m7: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell48 m8: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell49 m8: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell50 m8: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell51 m8: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell52 m8: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell53 m8: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell54 m9: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell55 m9: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell56 m9: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell57 m9: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell58 m9: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell59 m9: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell60 m10: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell61 m10: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell62 m10: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell63 m10: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell64 m10: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell65 m10: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell66 m11: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell67 m11: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell68 m11: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell69 m11: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell70 m11: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell71 m11: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell72 m12: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell73 m12: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell74 m12: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell75 m12: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell76 m12: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell77 m12: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell78 m13: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell79 m13: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell80 m13: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell81 m13: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell82 m13: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell83 m13: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell84 m14: 8|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell85 m14: 17|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell86 m14: 26|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell87 m14: 35|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell88 m14: 44|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+ SG_ BmsResistance_Cell89 m14: 53|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+
 VAL_ 701 BmsFaultAlert_code 0 "FaultCode_SLAVE_COMM_CELLS" 1 "FaultCode_SLAVE_COMM_TEMPS" 2 "FaultCode_SLAVE_COMM_DRAIN_REQUEST" 3 "FaultCode_CURRENT_SENSOR_COMM" 4 "FaultCode_OVER_CURRENT" 5 "FaultCode_CELL_VOLTAGE_IRRATIONAL" 6 "FaultCode_CELL_VOLTAGE_DIFF" 7 "Faultcode_OUT_OF_JUICE" 8 "FaultCode_TEMPERATURE_IRRATIONAL" 9 "FaultCode_OVER_TEMP" 10 "FaultCode_DRAIN_FAILURE";
 VAL_ 600 BmsStatus_ChargeState 0 "ChargeState_DISCONNECTED" 1 "ChargeState_CONNECTED_COMPLETE" 2 "ChargeState_CONNECTED_BALANCING" 3 "ChargeState_CONNECTED_CHARGING" 4 "ChargeState_CONNECTED_BALANCE_SENSING";
 VAL_ 950 BmsHardFaultIndicator_task 0 "unknown" 1 "task_1Hz" 2 "task_10Hz" 3 "task_1kHz" 4 "can_rx_task";
