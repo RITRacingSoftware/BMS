@@ -50,6 +50,9 @@ typedef enum
      * SHRIYA TODO- add a new fault here called FaultCode_MANUAL
      */
 
+    //Manual Fault 
+    FaultCode_MANUAL,
+
     // Number of enumerations
     FaultCode_NUM
 } FaultCode_e;

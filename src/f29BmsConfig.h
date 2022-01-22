@@ -94,6 +94,7 @@
 /**
  * SHRIYA TODO- add a #define here for manual fault tolerance. Should be 1 so it shuts down the car immediately
  */
+ #define MANUAL_FAULT_TOl 1 
 
 /**
  * MCU

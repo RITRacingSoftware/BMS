@@ -82,6 +82,9 @@ void FaultManager_set_fault_active(FaultCode_e code, void* data)
                /**
                 * SHRIYA TODO - add switch case for encoding manual fault
                 */
+            case ManualFault: 
+            
+                break 
 
             default:
                 // send garbage data
