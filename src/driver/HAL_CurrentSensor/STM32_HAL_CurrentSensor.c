@@ -33,7 +33,7 @@ Error_t HAL_CurrentSensor_read_current(float* current)
 {
     ADC1->CHSELR |= CURRENT_SENSOR_ADC_CHANNEL;
     ADC_StartOfConversion(ADC1);
-    //while(!(ADC1->ISR & ADC_ISR_EOC));
+    while(!(ADC1->ISR & ADC_ISR_EOC));
     uint16_t adc_read = ADC_GetConversionValue(ADC1);
     float unshifted_volts = ((float) adc_read / (float) ADC_MAX_VALUE) * (float) Vref;
     float shifted_volts = unshifted_volts - ZERO_AMP_REF_V;

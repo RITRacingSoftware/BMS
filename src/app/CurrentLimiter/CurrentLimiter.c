@@ -25,7 +25,7 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm)
         {
             currentLimit = (double) currentLimitCalculated;
         }
-        else if ((currentLimitCorrection <= lastCurrentLimit) && (currentLimitCorrection < lastCurrentLimit))
+        else if ((currentLimitCorrection < lastCurrentLimit) && (currentLimitCorrection < lastCurrentLimit))
         {
             currentLimit = (double) currentLimitCorrection;
         }
