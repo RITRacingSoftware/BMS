@@ -20,18 +20,6 @@
 
 #include "f29BmsConfig.h"
 
-#include "HAL_Can.h"
-#include "HAL_Gpio.h"
-#include "HAL_CurrentSensor.h"
-#include "HAL_EEPROM.h"
-#include "HAL_Watchdog.h"
-
-#include "HAL_Can.h"
-#include "HAL_Gpio.h"
-#include "HAL_CurrentSensor.h"
-#include "HAL_EEPROM.h"
-#include "HAL_Watchdog.h"
-
 #include "BatteryModel.h"
 #include "CAN.h"
 #include "CellBalancer.h"
