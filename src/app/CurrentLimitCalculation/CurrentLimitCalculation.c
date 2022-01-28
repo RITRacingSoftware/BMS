@@ -10,7 +10,7 @@ const float internal_resistances[NUM_SERIES_CELLS] = {.001, .001, .001, .001, .0
                         .001, .001, .001, .001, .001, .001, .001, .001, .001, .001,
                         .001, .001, .001, .001, .001, .001, .001, .001, .001, .001,
                         .001, .001, .001, .001, .001, .001, .001, .001, .001, .001,
-                        .001, .001, .001, .001, .001, .001, .001, .001, .001, .001,};
+                        .001, .001, .001, .001, .001, .001, .001, .001, .001, .001};
 float lastLowestVoltage = MAX_CELL_V;
 float lastCurrent = MAX_ALLOWED_CURRENT_LIMIT;
 float lastCurrentLimitCalc = MAX_ALLOWED_CURRENT_LIMIT;
