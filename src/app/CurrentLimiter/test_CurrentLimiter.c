@@ -33,7 +33,6 @@ void test_CurrentLimiter_selectMinCurrent(void)
     CurrentLimitCalculation_getCalculated_ReturnThruPtr_currentLimit(&current_calculated);
     CurrentLimitCorrection_getCorrection_ReturnThruPtr_currentLimit(&current_correction);
     CurrentSense_get_current_ExpectAnyArgsAndReturn(true);
-
     CurrentLimiter_10Hz(&bm);
     char err_msg[150];
     sprintf(err_msg, "Current limit set above maximum allowed current limit.(%fA)", f29bms_dbc_bms_current_limit_bms_max_discharge_current_decode(can_bus.bms_current_limit.bms_max_discharge_current));

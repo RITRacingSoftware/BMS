@@ -10,7 +10,7 @@ double lastCurrentLimit = MAX_ALLOWED_CURRENT_LIMIT;
 void CurrentLimiter_10Hz(BatteryModel_t* bm)
 {
     float smallestVoltage = bm->smallest_V; //limit current based on lowest cell
-    float current = 10;
+    float current;
     //Only calculate limit if the current reading is valid
     if(CurrentSense_get_current(&current))
     {

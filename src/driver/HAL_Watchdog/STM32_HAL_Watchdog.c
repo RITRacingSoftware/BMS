@@ -48,16 +48,8 @@ void HAL_Watchdog_pet(){
 }
 
 
-//MAke function for reset handler that sends CAN message and then resets the chip, put in startup_stm32f0xx.s
+//MAke function for reset handler resets the chip, put in startup_stm32f0xx.s
 void HAL_Watchdog_IRQHandler(void){
-    // uint64_t msg_data;
-
-    // // get the message data for the given id
-    // if (-1 != pack_message(F29BMS_DBC_WATCHDOG_LAST_BREATH_FRAME_ID, (uint8_t*) &msg_data))
-    // {
-    //     // can_message thisMessage = {F29BMS_DBC_WATCHDOG_LAST_BREATH_FRAME_ID, 8, msg_data};
-    //     HAL_Can_send_message(F29BMS_DBC_WATCHDOG_LAST_BREATH_FRAME_ID, CAN_RESET_DLC, msg_data); //Send CAN message that resetting
-    // }
 
     
     //MCU Reset
