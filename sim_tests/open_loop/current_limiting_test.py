@@ -58,5 +58,5 @@ def test_current_limiting(sim):
         sim.tick
         current_limit = sim.signals['BmsMaxDischargeCurrent']
 
-    # assert 'CountActiveCorrectionCount' in sim.signals, "CountActiveCorrectionCount never sent"
+    assert 'CountActiveCorrectionCount' in sim.signals, "CountActiveCorrectionCount never sent"
     assert current_limit == min_current_limit, "Current limit isn't set to minimum current limit when cell at very low voltage."

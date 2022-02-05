@@ -3,13 +3,13 @@
 
 #include <stdbool.h>
 
-#define NUM_TASKS 4
+#define NUM_TASKS 3
 
 typedef enum {
     task_id_PERIODIC_1Hz,
     task_id_PERIODIC_10Hz,
     task_id_PERIODIC_1kHz,
-    task_id_CAN
+    // task_id_CAN
 } task_id_E;
 
 
@@ -22,18 +22,13 @@ void TaskWatchdog_init(void);
 void TaskWatchdog_pet(task_id_E task);
 
 /*
- * Decrement the task bucket for the given task.
+ * Decrement the task bucket for the given task. Sets the task to expired if bucket reaches 0
  * Should decrement by less than TaskWatchdog_pet increments.
  * task [in] - the given task
- * return - true if task expired, false otherwise
  */
-bool TaskWatchdog_tick(task_id_E task);
+void TaskWatchdog_tick(task_id_E task);
 
-void task_watchdog_set_expired(task_id_E task);
-
-task_id_E task_watchdog_get_expired_task(void);
-
-int task_watchdog_expired(void);
+bool TaskWatchdog_expired(void);
 
 
 #endif // TASK_WATCHDOG_H

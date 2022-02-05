@@ -90,34 +90,34 @@ void test_SlaveInterface_temp_read(void)
     HAL_SlaveChips_get_all_tm_readings_ExpectAnyArgsAndReturn(err);
     FaultManager_clear_fault_ExpectAnyArgs();
     
-//     HAL_SlaveChips_get_all_tm_readings_ReturnArrayThruPtr_temperatures(mock_therm_V, NUM_THERMISTOR);
+    HAL_SlaveChips_get_all_tm_readings_ReturnArrayThruPtr_temperatures(mock_therm_V, NUM_THERMISTOR);
 
-//     SlaveInterface_read_temperature_info(&tm);
+    SlaveInterface_read_temperature_info(&tm);
 
-//     // simultaneously check for copied data and copy over next data set
-//     for(int i = 0; i < NUM_THERMISTOR; i++)
-//     {
-//         char err_msg[100];
-//         sprintf(err_msg, "no error thermistor %d voltage not expected", i);
-//         //TEST_ASSERT_MESSAGE(tm.tm_readings_V[i] == i, err_msg);
-//         mock_therm_V[i] = i * 10;
-//     }
+    // simultaneously check for copied data and copy over next data set
+    for(int i = 0; i < NUM_THERMISTOR; i++)
+    {
+        char err_msg[100];
+        sprintf(err_msg, "no error thermistor %d voltage not expected", i);
+        TEST_ASSERT_MESSAGE(tm.tm_readings_V[i] == i, err_msg);
+        mock_therm_V[i] = i * 10;
+    }
 
-//     // now run again with an error. Modified voltages from for loop above should NOT appear in temp model
-//     err.active = true;
+    // now run again with an error. Modified voltages from for loop above should NOT appear in temp model
+    err.active = true;
 
-//     HAL_SlaveChips_get_all_tm_readings_ExpectAnyArgsAndReturn(err);
-//     FaultManager_set_fault_active_ExpectAnyArgs();
+    HAL_SlaveChips_get_all_tm_readings_ExpectAnyArgsAndReturn(err);
+    FaultManager_set_fault_active_ExpectAnyArgs();
 
-//     HAL_SlaveChips_get_all_tm_readings_ReturnArrayThruPtr_temperatures(mock_therm_V, NUM_THERMISTOR);
+    HAL_SlaveChips_get_all_tm_readings_ReturnArrayThruPtr_temperatures(mock_therm_V, NUM_THERMISTOR);
 
-//     SlaveInterface_read_temperature_info(&tm);
+    SlaveInterface_read_temperature_info(&tm);
 
-//     // check that nothing changed in the battery model
-//     for(int i = 0; i < NUM_THERMISTOR; i++)
-//     {
-//         char err_msg[100];
-//         sprintf(err_msg, "errored thermistor %d voltage not expected", i);
-//         //TEST_ASSERT_MESSAGE(tm.tm_readings_V[i] == i, err_msg);
-//     }
-// }
+    // check that nothing changed in the battery model
+    for(int i = 0; i < NUM_THERMISTOR; i++)
+    {
+        char err_msg[100];
+        sprintf(err_msg, "errored thermistor %d voltage not expected", i);
+        TEST_ASSERT_MESSAGE(tm.tm_readings_V[i] == i, err_msg);
+    }
+}

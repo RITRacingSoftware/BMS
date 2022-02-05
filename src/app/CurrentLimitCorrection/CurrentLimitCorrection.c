@@ -7,10 +7,6 @@ float lastCurrentLimitCorrection = CURRENT_IRRATIONAL_A;
 bool lastVoltageLow = false; //True if the current limit was already decreased, used for hysteresis
 uint16_t numTimesLimited = 0;
 
-float lastCurrentLimit = CURRENT_IRRATIONAL_A;
-bool lastVoltageLow = false; //True if the current limit was already decreased, used for hysteresis
-uint16_t numTimesLimited = 0;
-
 void CurrentLimitCorrection_getCorrection(float *currentLimit, float *lowestVoltage, float *current)
 {
     //Check if voltage is below threshold and reduce current limit

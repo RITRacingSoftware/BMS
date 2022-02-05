@@ -18,6 +18,9 @@
 #include "HAL_Watchdog.h"
 #include "CurrentLimiter.h"
 
+#include <stdio.h>
+#include "HAL_Uart.h"
+
 // the global battery model!
 static BatteryModel_t battery_model;
 // the global temperature model!

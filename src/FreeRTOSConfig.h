@@ -39,7 +39,7 @@
  *----------------------------------------------------------*/
 
 // Bms stuff
-#define CAN_QUEUE_LEN 15
+#define CAN_QUEUE_LEN 50
 
 #define configCPU_CLOCK_HZ 48000000
 #define configUSE_PREEMPTION					1

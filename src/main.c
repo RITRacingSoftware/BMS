@@ -42,6 +42,8 @@
 
 #define SEPHAMORE_WAIT 0
 
+// #define DISABLE_WATCHDOG
+
 SemaphoreHandle_t can_message_recieved_semaphore;
 SemaphoreHandle_t can_message_transmit_semaphore;
 
@@ -56,11 +58,15 @@ void TASK_1Hz(void *pvParameters)
 
     for (;;)
     {
+        // uint8_t print_buffer1[50];
+        // uint8_t n1 = sprintf(&print_buffer1[0], "1 Hz task\n\r");
+        // HAL_Uart_send(&print_buffer1[0], n1);
         Periodic_1Hz();
         //Don't use watchdog if Disabled
         #ifndef DISABLE_WATCHDOG
             TaskWatchdog_pet(task_id_PERIODIC_1Hz);
         #endif
+        
         // printf("Task 1Hz\n");
         // CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
@@ -77,12 +83,16 @@ void task_10Hz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
+        // uint8_t print_buffer2[50];
+        // uint8_t n2 = sprintf(&print_buffer2[0], "10 Hz task\n\r");
+        // HAL_Uart_send(&print_buffer2[0], n2);
         Periodic_10Hz();
         //Don't use watchdog if Disabled
         #ifndef DISABLE_WATCHDOG
             TaskWatchdog_pet(task_id_PERIODIC_10Hz);
         #endif
         // printf("Task 10Hz\n");
+        
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
 }
@@ -98,13 +108,19 @@ void task_1kHz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
+        // uint8_t print_buffer3[50];
+        // uint8_t n3 = sprintf(&print_buffer3[0], "p");
+        // HAL_Uart_send(&print_buffer3[0], n3);
         Periodic_1kHz();
         //Don't use watchdog if Disabled
         #ifndef DISABLE_WATCHDOG
             TaskWatchdog_pet(task_id_PERIODIC_1kHz);
         #endif
         //printf("Task 1kHz\n");
-        CAN_send_queued_messages();
+        // uint8_t print_buffer8[50];
+        // uint8_t n8 = sprintf(&print_buffer8[0], "m\n\r");
+        // HAL_Uart_send(&print_buffer8[0], n8);
+        // CAN_send_queued_messages();
         vTaskDelayUntil(&next_wake_time, TASK_1kHz_PERIOD_MS);
     }
 }
@@ -147,9 +163,9 @@ void task_can_tx(void *pvParameters)
 
 
 #define WATCHDOG_TASK_NAME ((signed char *) "watchdog_task")
-#define WATCHDOG_TASK_STACK_SIZE (1000)//configMINIMAL_STACK_SIZE) //100
+#define WATCHDOG_TASK_STACK_SIZE (256) //100
 #define WATCHDOG_TASK_PERIOD (1)
-#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+4) //Not sure 
+#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+3) //Not sure 
 void watchdog_task(void *pvParameters)
 {
     (void)pvParameters;
@@ -158,26 +174,13 @@ void watchdog_task(void *pvParameters)
 	{
         //Don't use watchdog if Disabled
         #ifndef DISABLE_WATCHDOG
-		if (!task_watchdog_expired())
+		if (!TaskWatchdog_expired())
 		{
 			HAL_Watchdog_pet();
 
-			if (TaskWatchdog_tick(task_id_PERIODIC_1Hz))
-			{
-				task_watchdog_set_expired(task_id_PERIODIC_1Hz);
-			}
-			else if (TaskWatchdog_tick(task_id_PERIODIC_10Hz))
-			{
-				task_watchdog_set_expired(task_id_PERIODIC_10Hz);
-			}
-            else if (TaskWatchdog_tick(task_id_PERIODIC_1kHz))
-			{
-				task_watchdog_set_expired(task_id_PERIODIC_1kHz);
-			}
-            // else if (TaskWatchdog_tick(task_id_CAN))
-			// {
-			// 	task_watchdog_set_expired(task_id_CAN);
-			// }
+			TaskWatchdog_tick(task_id_PERIODIC_1Hz);
+			TaskWatchdog_tick(task_id_PERIODIC_10Hz);
+            TaskWatchdog_tick(task_id_PERIODIC_1kHz);
 		}
         #endif
 
@@ -202,6 +205,10 @@ void signal_handler(int signo)
 
 void hardfault_handler_routine(void)
 {
+    uint8_t print_buffer4[50];
+    uint8_t n4 = sprintf(&print_buffer4[0], "hard fault\n\r");
+    HAL_Uart_send(&print_buffer4[0], n4);
+
     // shut down car
     HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, 0);
 
@@ -239,6 +246,11 @@ int main(int argc, char** argv)
     
     HAL_Gpio_init(); // must happen before CAN
     HAL_Uart_init();
+
+    uint8_t print_buffer[50];
+    uint8_t n = sprintf(&print_buffer[0], "Starting\n\r");
+    HAL_Uart_send(&print_buffer[0], n);
+
     
     can_message_recieved_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_recieved_semaphore);
@@ -250,6 +262,8 @@ int main(int argc, char** argv)
     HAL_Can_init();
    
     HAL_CurrentSensor_init();
+    n = sprintf(&print_buffer[0], "1\n\r");
+    HAL_Uart_send(&print_buffer[0], n);
    
     HAL_SlaveChips_init();
 
@@ -259,6 +273,9 @@ int main(int argc, char** argv)
 
     // initialize all app stuff
     CAN_init();
+
+    // n = sprintf(&print_buffer[0], "2\n\r");
+    // HAL_Uart_send(&print_buffer[0], n);
 
     
     CellBalancer_init();
@@ -273,6 +290,9 @@ int main(int argc, char** argv)
     StatusLed_init();
     TaskWatchdog_init();
     TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
+
+    n = sprintf(&print_buffer[0], "Init done\n\r");
+    HAL_Uart_send(&print_buffer[0], n);
 
 
 #ifdef SIMULATION
@@ -332,6 +352,9 @@ int main(int argc, char** argv)
         NULL,
         WATCHDOG_TASK_PRIORITY,
         NULL);
+
+    n = sprintf(&print_buffer[0], "Tasks Created\n\r");
+    HAL_Uart_send(&print_buffer[0], n);
     
     vTaskStartScheduler();
 
