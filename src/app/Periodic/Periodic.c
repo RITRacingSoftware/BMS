@@ -57,15 +57,15 @@ void Periodic_1Hz(void)
 void Periodic_10Hz(void)
 {
     // update information from the outside world
-    // SlaveInterface_read_cell_info(&battery_model);
-    // SlaveInterface_read_temperature_info(&temp_model);
+    SlaveInterface_read_cell_info(&battery_model);
+    SlaveInterface_read_temperature_info(&temp_model);
 
     // // convert from thermistor voltage probe readings to temperatures
-    // TempConverter_convert(&temp_model);
+    TempConverter_convert(&temp_model);
    
     // // check the new slave board readings for errors
-    // PackMonitor_validate_battery_model_10Hz(&battery_model);
-    // PackMonitor_validate_temp_model_10Hz(&temp_model);
+    PackMonitor_validate_battery_model_10Hz(&battery_model);
+    PackMonitor_validate_temp_model_10Hz(&temp_model);
 
 
     // stage/unstage cell balancing based on cell voltage differences

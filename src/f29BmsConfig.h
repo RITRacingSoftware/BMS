@@ -146,4 +146,9 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 // how long a temperature fault condition must be present to trigger a fault
 #define TEMPERATURE_FAULT_HYSTERESIS_MS 1000
 
+/**
+ * CAN
+ */
+#define CAN_QUEUE_LEN 50
+
 #endif // F29BMSCONFIG_H

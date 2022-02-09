@@ -22,9 +22,6 @@
 #define PERIODIC_1KHZ_MAX_PERIOD 1
 #define CAN_MAX_PERIOD 1
 
-// leaky bucket for each task
-int task_buckets[NUM_TASKS];
-
 typedef struct
 {
 	int counter;

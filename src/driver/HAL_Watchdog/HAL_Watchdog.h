@@ -9,6 +9,4 @@ void HAL_Watchdog_pet(void);
 
 void HAL_Watchdog_IRQHandler(void);
 
-void HAL_Watchdog_IRQHandler(void);
-
 #endif // HAL_WATCHDOG_H
