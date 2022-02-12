@@ -40,6 +40,8 @@
 #include "TaskWatchdog.h"
 #include "semphr.h"
 
+#define DISABLE_WATCHDOG
+
 #define SEPHAMORE_WAIT 0
 
 // #define DISABLE_WATCHDOG
@@ -151,7 +153,7 @@ void task_can_tx(void *pvParameters)
 #define WATCHDOG_TASK_NAME ((signed char *) "watchdog_task")
 #define WATCHDOG_TASK_STACK_SIZE (256) //100
 #define WATCHDOG_TASK_PERIOD (1)
-#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+3) //Not sure 
+#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY) //Not sure 
 void watchdog_task(void *pvParameters)
 {
     (void)pvParameters;
@@ -191,10 +193,6 @@ void signal_handler(int signo)
 
 void hardfault_handler_routine(void)
 {
-    uint8_t print_buffer4[50];
-    uint8_t n4 = sprintf(&print_buffer4[0], "hard fault\n\r");
-    HAL_Uart_send(&print_buffer4[0], n4);
-
     // shut down car
     HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, 0);
 
@@ -318,12 +316,12 @@ int main(int argc, char** argv)
         TASK_CAN_TX_PRIORITY,
         NULL);
 
-    xTaskCreate(watchdog_task,
-        WATCHDOG_TASK_NAME,
-        WATCHDOG_TASK_STACK_SIZE,
-        NULL,
-        WATCHDOG_TASK_PRIORITY,
-        NULL);
+    // xTaskCreate(watchdog_task,
+    //     WATCHDOG_TASK_NAME,
+    //     WATCHDOG_TASK_STACK_SIZE,
+    //     NULL,
+    //     WATCHDOG_TASK_PRIORITY,
+    //     NULL);
     
     
     vTaskStartScheduler();

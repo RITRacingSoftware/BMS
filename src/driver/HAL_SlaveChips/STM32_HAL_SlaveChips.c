@@ -123,6 +123,7 @@ static void set_adc(uint8_t MD, //ADC Mode
   md_bits = (MD & 0x01) << 7;
   ADAX[1] = md_bits + 0x60 + CHG ;
   
+  ADAX[0] = 0x5;
   ADAX[1] = 0x60;
 }
 

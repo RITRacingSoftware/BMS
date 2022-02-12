@@ -5,19 +5,23 @@
 //#include "CAN.h"
 // #include "MockCAN.h"
 
+SemaphoreHandle_t can_message_recieved_semaphore;
+SemaphoreHandle_t can_message_transmit_semaphore;
 
 int main()
 {
     // TODO- implement
 
-    SemaphoreHandle_t can_message_recieved_semaphore = xSemaphoreCreateBinary();
+    can_message_recieved_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_recieved_semaphore);
     xSemaphoreTake(can_message_recieved_semaphore, 0);
-    SemaphoreHandle_t can_message_transmit_semaphore = xSemaphoreCreateBinary();
+    can_message_transmit_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_transmit_semaphore);
-    xSemaphoreTake(can_message_transmit_semaphore, 0);
+    xSemaphoreTake(can_message_transmit_semaphore, 0); 
+
+
     
-    // HAL_Can_init();
+    HAL_Can_init();
     // can_message message = {0x010, 8, 0x00000000};
     // HAL_Can_send_message(message.id, message.dlc, message.data);
     // HAL_number_of_empty_mailboxes();

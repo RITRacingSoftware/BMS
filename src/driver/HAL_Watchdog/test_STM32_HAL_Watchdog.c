@@ -1,6 +1,12 @@
 #include "HAL_Watchdog.h"
 #include "stm32f0xx_rcc.h"
 
+//Temporary fix to get it to build
+#include "FreeRTOS.h"
+#include "semphr.h"
+SemaphoreHandle_t can_message_recieved_semaphore;
+SemaphoreHandle_t can_message_transmit_semaphore;
+
 #define SYS_CLK 48000000
 #define TIMER_FREQUENCY 1000 //1 KHZ (1 ms period)
 #define DELAY 44 //in ms //35

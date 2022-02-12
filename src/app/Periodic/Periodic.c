@@ -51,7 +51,7 @@ void Periodic_1Hz(void)
     // Request or reject charging
     ChargeMonitor_1Hz(&battery_model);
 
-    CAN_1Hz();
+    CAN_1Hz(&battery_model, &temp_model);
 }
 
 void Periodic_10Hz(void)

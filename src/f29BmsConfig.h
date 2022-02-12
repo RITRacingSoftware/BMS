@@ -149,6 +149,6 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 /**
  * CAN
  */
-#define CAN_QUEUE_LEN 50
+#define CAN_QUEUE_LEN 15
 
 #endif // F29BMSCONFIG_H

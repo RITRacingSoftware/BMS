@@ -84,17 +84,13 @@ void CAN_reset_error(void);
  */
 void CAN_1kHz(void);
 void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm);
-void CAN_1Hz(void);
+void CAN_1Hz(BatteryModel_t* bm, TempModel_t* tm);
 
 /**
  * Processes recevied can messages
  */
 void CAN_process_recieved_messages(void);
 
-/**
- * Processes recevied can messages
- */
-void CAN_process_recieved_messages(void);
 
 /**
  * Fills empty transmit mailboxes with CAN messages from the queue
