@@ -85,8 +85,8 @@ void CAN_send_message(unsigned long int id)
     uint64_t msg_data;
 
     // get the message data for the given id
-    if(id == F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID)
-    {
+    // if(id == F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID)
+    // {
         if (-1 != pack_message(id, (uint8_t*) &msg_data))
         {
             can_message thisMessage = {id, 8, msg_data};
@@ -99,7 +99,7 @@ void CAN_send_message(unsigned long int id)
             can_error = true;
             printf("CAN ERROR: %x\n", id);
         }
-    }
+    // }
 }
 
 bool CAN_get_error(void)

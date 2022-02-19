@@ -40,11 +40,7 @@
 #include "TaskWatchdog.h"
 #include "semphr.h"
 
-#define DISABLE_WATCHDOG
-
 #define SEPHAMORE_WAIT 0
-
-// #define DISABLE_WATCHDOG
 
 SemaphoreHandle_t can_message_recieved_semaphore;
 SemaphoreHandle_t can_message_transmit_semaphore;
@@ -316,12 +312,12 @@ int main(int argc, char** argv)
         TASK_CAN_TX_PRIORITY,
         NULL);
 
-    // xTaskCreate(watchdog_task,
-    //     WATCHDOG_TASK_NAME,
-    //     WATCHDOG_TASK_STACK_SIZE,
-    //     NULL,
-    //     WATCHDOG_TASK_PRIORITY,
-    //     NULL);
+    xTaskCreate(watchdog_task,
+        WATCHDOG_TASK_NAME,
+        WATCHDOG_TASK_STACK_SIZE,
+        NULL,
+        WATCHDOG_TASK_PRIORITY,
+        NULL);
     
     
     vTaskStartScheduler();
