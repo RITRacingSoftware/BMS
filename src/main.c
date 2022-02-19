@@ -143,6 +143,10 @@ void signal_handler(int signo)
 
 void hardfault_handler_routine(void)
 {
+    // uint8_t print_buffer[50];
+    // uint8_t n = sprintf(&print_buffer[0], "hard\r\n");
+    // HAL_Uart_send(&print_buffer[0], n);
+    
     // shut down car
     HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, 0);
 
@@ -180,6 +184,10 @@ int main(int argc, char** argv)
     
     HAL_Gpio_init(); // must happen before CAN
     HAL_Uart_init();
+
+    // uint8_t print_buffer[50];
+    // uint8_t n = sprintf(&print_buffer[0], "start\r\n");
+    // HAL_Uart_send(&print_buffer[0], n);
     
     can_message_recieved_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_recieved_semaphore);
@@ -194,6 +202,9 @@ int main(int argc, char** argv)
    
     HAL_SlaveChips_init();
     // HAL_Watchdog_init();
+
+    // n = sprintf(&print_buffer[0], "1\r\n");
+    // HAL_Uart_send(&print_buffer[0], n);
 
     // initialize all app stuff
     CAN_init();
@@ -210,6 +221,9 @@ int main(int argc, char** argv)
     FaultManager_init();
     StatusLed_init();
     TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
+
+    // n = sprintf(&print_buffer[0], "2\r\n");
+    // HAL_Uart_send(&print_buffer[0], n);
 
 
 #ifdef SIMULATION

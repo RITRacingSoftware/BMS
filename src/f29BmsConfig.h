@@ -7,7 +7,7 @@
  * Cells
  */
 
-#define NUM_BOARDS 5
+#define NUM_BOARDS 1
 #define NUM_CHIPS (NUM_BOARDS*2)
 #define NUM_CELLS_PER_BOARD 18
 #define NUM_THERMISTORS_PER_CHIP 4
@@ -128,7 +128,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
  */
 
 // defined for 2 test segments rn
-#define NUM_THERMISTOR (NUM_BOARDS*3)
+#define NUM_THERMISTOR (NUM_THERMISTORS_PER_CHIP*NUM_CHIPS)
 #define LTC6804_ADC_MAX_VALUE ((float)(1 << 16))
 #define LTC6804_ADC_RANGE_V (5.7)
 #define THERM_INPUT_V (3.0)
