@@ -183,7 +183,7 @@ int main(int argc, char** argv)
     HAL_Clock_init();
     
     HAL_Gpio_init(); // must happen before CAN
-    HAL_Uart_init();
+    // HAL_Uart_init();
 
     // uint8_t print_buffer[50];
     // uint8_t n = sprintf(&print_buffer[0], "start\r\n");
