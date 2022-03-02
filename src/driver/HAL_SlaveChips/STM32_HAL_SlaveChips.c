@@ -938,7 +938,7 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
         // now convert to the pin index on the chip
         // you'd think this is the same as chip_cell_index but its not because there's a few spots on each chip we didn't populate
         int chip_pin_index;
-        if (chip_cell_index > 5)
+        if (chip_cell_index > 4)
         {
             // account for the gap
             chip_pin_index = chip_cell_index + 1;
@@ -992,9 +992,9 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
         tx[chip_base + 6] = (char) ((pec >> 8) & 0xFF);
         tx[chip_base + 7] = (char) (pec & 0xFF);
     }
-char show_tx[100];
-//Transmit the command to all of the chips over SPI
-for (int i = 0; i < sizeof(tx)/sizeof(tx[0]); i++) show_tx[i] = tx[i];
+    char show_tx[100];
+    //Transmit the command to all of the chips over SPI
+    for (int i = 0; i < sizeof(tx)/sizeof(tx[0]); i++) show_tx[i] = tx[i];
     char *rx;
     wakeup_idle();
     wakeup_idle();
