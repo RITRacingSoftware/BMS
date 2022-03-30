@@ -40,7 +40,7 @@
 #include "TaskWatchdog.h"
 #include "semphr.h"
 
-#define DISABLE_WATCHDOG
+// #define DISABLE_WATCHDOG
 
 #define SEPHAMORE_WAIT 0
 
@@ -48,7 +48,7 @@ SemaphoreHandle_t can_message_recieved_semaphore;
 SemaphoreHandle_t can_message_transmit_semaphore;
 
 #define TASK_1Hz_NAME "task_1Hz"
-#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 2)
+#define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_1Hz_PERIOD_MS (1000)
 #define TASK_1Hz_STACK_SIZE_B (1700)
 void TASK_1Hz(void *pvParameters)
@@ -70,7 +70,7 @@ void TASK_1Hz(void *pvParameters)
 }
 
 #define TASK_10Hz_NAME "task_10Hz"
-#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 2)
+#define TASK_10Hz_PRIORITY (tskIDLE_PRIORITY + 1)
 #define TASK_10Hz_PERIOD_MS (100)
 #define TASK_10Hz_STACK_SIZE_B (1000)
 void task_10Hz(void *pvParameters)
@@ -101,9 +101,6 @@ void task_1kHz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-        uint8_t print_buffer[50];
-        uint8_t n = sprintf(print_buffer,"0");
-        HAL_Uart_send(&print_buffer[0], n);
         Periodic_1kHz();
         //Don't use watchdog if Disabled
         #ifndef DISABLE_WATCHDOG
@@ -154,16 +151,13 @@ void task_can_tx(void *pvParameters)
 #define WATCHDOG_TASK_NAME ((signed char *) "watchdog_task")
 #define WATCHDOG_TASK_STACK_SIZE (256) //100
 #define WATCHDOG_TASK_PERIOD (1)
-#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+1) //Not sure 
+#define WATCHDOG_TASK_PRIORITY (tskIDLE_PRIORITY+2) //Not sure 
 void watchdog_task(void *pvParameters)
 {
     (void)pvParameters;
 	TickType_t next_wake_time = xTaskGetTickCount();
 	for(;;)
 	{
-        uint8_t print_buffer[50];
-        uint8_t n = sprintf(print_buffer,"1\n\r");
-        HAL_Uart_send(&print_buffer[0], n);
         //Don't use watchdog if Disabled
         #ifndef DISABLE_WATCHDOG
 		if (!TaskWatchdog_expired())
@@ -233,7 +227,7 @@ int main(int argc, char** argv)
     HAL_Clock_init();
     
     HAL_Gpio_init(); // must happen before CAN
-    HAL_Uart_init();
+    // HAL_Uart_init();
     
     can_message_recieved_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_recieved_semaphore);
