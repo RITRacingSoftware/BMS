@@ -50,11 +50,14 @@ SemaphoreHandle_t can_message_transmit_semaphore;
 #define TASK_1Hz_STACK_SIZE_B (2000)
 void TASK_1Hz(void *pvParameters)
 {
+    
     (void) pvParameters;
     TickType_t next_wake_time = xTaskGetTickCount();
-
     for (;;)
     {
+        // uint8_t print_buffer[50];
+        // uint8_t n = sprintf(&print_buffer[0], "0\r\n");
+        // HAL_Uart_send(&print_buffer[0], n);
         Periodic_1Hz();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
@@ -70,7 +73,9 @@ void task_10Hz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-
+        // uint8_t print_buffer[50];
+        // uint8_t n = sprintf(&print_buffer[0], "1");
+        // HAL_Uart_send(&print_buffer[0], n);
         Periodic_10Hz();
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }

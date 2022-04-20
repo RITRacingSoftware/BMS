@@ -83,7 +83,7 @@ void Periodic_10Hz(void)
 void Periodic_1kHz(void)
 {
     // read and filter a new current value from the sensor
-    CurrentSense_1kHz();
+    // CurrentSense_1kHz();
 
     float filtered_current;
     if (CurrentSense_get_current(&filtered_current))

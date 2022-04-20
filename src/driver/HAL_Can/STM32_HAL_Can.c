@@ -70,7 +70,7 @@ void HAL_Can_init(void)
 
 
     // CAN_SlaveStartBank(1);
-    HAL_Can_init_id_filter_16bit(0x9, 0x23, 0x69, 0x52);
+    // HAL_Can_init_id_filter_16bit(0x9, 0x23, 0x69, 0x52);
 
     //Enable interrupts for recieve
     NVIC_InitTypeDef nvic_init;

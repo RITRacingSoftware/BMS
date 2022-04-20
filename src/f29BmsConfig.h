@@ -12,7 +12,7 @@
 #define NUM_CELLS_PER_BOARD 18
 #define NUM_THERMISTORS_PER_CHIP 4
 #define NUM_SERIES_CELLS (NUM_BOARDS * NUM_CELLS_PER_BOARD)
-#define NUM_PARALLEL_CELLS 3
+#define NUM_PARALLEL_CELLS 2
 
 // NOTE: Be sure to define things here with decimals if you intend to use them as floats
 
