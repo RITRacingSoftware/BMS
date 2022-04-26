@@ -7,7 +7,7 @@
  * Cells
  */
 
-#define NUM_BOARDS 1
+#define NUM_BOARDS 5
 #define NUM_CHIPS (NUM_BOARDS*2)
 #define NUM_CELLS_PER_BOARD 18
 #define NUM_THERMISTORS_PER_CHIP 4

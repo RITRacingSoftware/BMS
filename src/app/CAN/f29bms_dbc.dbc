@@ -176,7 +176,7 @@ BO_ 703 BmsThermistorVoltages: 8 Bms
  SG_ BmsThermistorVoltages_tm19 m3: 11|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
 
 BO_ 704 BmsTemperatures: 8 Bms
- SG_ BmsTemperatures_mux M : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+ SG_ BmsTemperatures_mux M : 0|2@1+ (1,0) [0|5] "" Vector__XXX
  SG_ BmsTemperatures_0 m0: 2|8@1- (1,0) [-128|127] "C" Vector__XXX
  SG_ BmsTemperatures_1 m0: 10|8@1- (1,0) [-128|127] "C" Vector__XXX
  SG_ BmsTemperatures_2 m0: 18|8@1- (1,0) [-128|127] "C" Vector__XXX
@@ -197,6 +197,27 @@ BO_ 704 BmsTemperatures: 8 Bms
  SG_ BmsTemperatures_17 m2: 26|8@1- (1,0) [-128|127] "C" Vector__XXX
  SG_ BmsTemperatures_18 m2: 34|8@1- (1,0) [-128|127] "C" Vector__XXX
  SG_ BmsTemperatures_19 m2: 42|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_20 m3: 2|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_21 m3: 10|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_22 m3: 18|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_23 m3: 26|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_24 m3: 34|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_25 m3: 42|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_26 m3: 50|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_27 m4: 2|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_28 m4: 10|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_29 m4: 18|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_30 m4: 26|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_31 m4: 34|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_32 m4: 42|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_33 m4: 50|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_34 m5: 2|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_35 m5: 10|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_36 m5: 18|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_37 m5: 26|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_38 m5: 34|8@1- (1,0) [-128|127] "C" Vector__XXX
+ SG_ BmsTemperatures_39 m5: 42|8@1- (1,0) [-128|127] "C" Vector__XXX
+ 
 
 BO_ 800 BmsDrainStatusA: 8 Bms
  SG_ BmsDrainStatusA_Cell0: 0|1@1+ (1,0) [0|1] "" Vector__XXX

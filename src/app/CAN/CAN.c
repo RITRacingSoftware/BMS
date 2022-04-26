@@ -161,7 +161,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     }
     f29bms_dbc_bms_thermistor_voltages_unpack(&can_bus.bms_thermistor_voltages, (uint8_t*)&msg_data, 8);
     CAN_send_message(F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID);
-    thermistor_mux = (thermistor_mux + 1) % 4;
+    thermistor_mux = (thermistor_mux + 1) % 6;
 
     msg_data = 0;
     static int temperature_mux = 0;
