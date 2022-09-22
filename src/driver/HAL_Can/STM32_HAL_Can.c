@@ -149,7 +149,7 @@ Error_t HAL_Can_send_message(uint32_t id, int dlc, uint64_t data)
     Error_t error;
     error.active = true;
 
-    if (CAN_GetLastErrorCode(CAN) == 0)
+    if (CAN_GetLastErrorCode(CAN) != CAN_InitStatus_Success)
     {
         error.active = false;
     }

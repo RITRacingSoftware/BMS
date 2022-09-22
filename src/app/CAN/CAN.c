@@ -141,7 +141,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     const int therm_per_message = 6;
     for (int i = 0; i < therm_per_message; i++)
     {
-        const int therm_start_bit = 2;
+        const int therm_start_bit = 3;
         const int therm_len_bits = 9;
         const int therm_mask = 0b111111111;
         const float therm_granularity = 0.01;
@@ -161,7 +161,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     }
     f29bms_dbc_bms_thermistor_voltages_unpack(&can_bus.bms_thermistor_voltages, (uint8_t*)&msg_data, 8);
     CAN_send_message(F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID);
-    thermistor_mux = (thermistor_mux + 1) % 6;
+    thermistor_mux = (thermistor_mux + 1) % 7;
 
     msg_data = 0;
     static int temperature_mux = 0;
@@ -169,7 +169,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     const int temp_per_message = 7;
     for (int i = 0; i < temp_per_message; i++)
     {
-        const int temp_start_bit = 2;
+        const int temp_start_bit = 3;
         const int temp_len_bits = 8;
         const int temp_mask = 0b11111111;
         const float temp_granularity = 1;
@@ -196,7 +196,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 
     f29bms_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&msg_data, 8);
     CAN_send_message(F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID);
-    temperature_mux = (temperature_mux + 1) % 3;
+    temperature_mux = (temperature_mux + 1) % 6;
 
     // drain states
     uint64_t a_drain_states = 0;

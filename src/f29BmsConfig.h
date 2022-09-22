@@ -75,7 +75,7 @@
  */
 // any bits set in this won't get set in the fault vector
 //#define DISABLE_FAULT_MASK ((1 << FaultCode_SLAVE_COMM_TEMPS) | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL) | (1 << FaultCode_TEMPERATURE_IRRATIONAL) | (1 << FaultCode_OVER_TEMPERATURE))
-#define DISABLE_FAULT_MASK ((1 << FaultCode_CELL_VOLTAGE_DIFF) | (1 << FaultCode_DRAIN_FAILURE))// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
+#define DISABLE_FAULT_MASK ((1 << FaultCode_CELL_VOLTAGE_DIFF) | (1 << FaultCode_DRAIN_FAILURE) | (1 << FaultCode_TEMPERATURE_IRRATIONAL))// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
 
 // Fault tolerances are the times a fault is allowed to be continuously active before triggering a shutdown event
 // value a fault tolerance should have if the fault does not cause the car to shutdown

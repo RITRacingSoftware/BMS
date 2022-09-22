@@ -39,6 +39,9 @@
 #include "TempModel.h"
 #include "semphr.h"
 
+
+#include "stm32f0xx_rcc.h" //TEMP
+
 #define SEPHAMORE_WAIT 0
 
 SemaphoreHandle_t can_message_recieved_semaphore;
@@ -182,10 +185,33 @@ void hardfault_handler_routine(void)
     HAL_Can_send_message(F29BMS_DBC_BMS_HARD_FAULT_INDICATOR_FRAME_ID, 8, *((uint64_t*)data)); 
 }
 
+static void delayMSec(uint32_t delay) //TEMP
+{
+  TIM6->ARR = delay;
+  TIM6->EGR |= TIM_EGR_UG;
+  TIM6->SR = 0;
+  TIM6->CR1 |= TIM_CR1_CEN;
+  while(TIM6->SR == 0);
+}
+
 int main(int argc, char** argv)
 {
+
     // initialize all HAL stuff
     HAL_Clock_init();
+
+    //TEMP
+    // Init TIM6
+    // RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
+    // TIM6->PSC = 48;//SYS_CLK/TIMER_FREQUENCY;
+    // TIM6->CR1 |= (TIM_CR1_ARPE | TIM_CR1_URS | TIM_CR1_DIR);
+    // //TEMP
+
+    // // #if FREERTOS_TIMING == 0
+    // delayMSec(5000000); 
+    // #else
+    // vTaskDelay(5000);
+    // #endif
     
     HAL_Gpio_init(); // must happen before CAN
     // HAL_Uart_init();
@@ -193,6 +219,13 @@ int main(int argc, char** argv)
     // uint8_t print_buffer[50];
     // uint8_t n = sprintf(&print_buffer[0], "start\r\n");
     // HAL_Uart_send(&print_buffer[0], n);
+
+    // int lol = 0;
+    // for(int i = 0; i < 5000000; i++)
+    // {
+    //     lol++;
+    // }
+    
     
     can_message_recieved_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_recieved_semaphore);
@@ -200,6 +233,8 @@ int main(int argc, char** argv)
     can_message_transmit_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_transmit_semaphore);
     xSemaphoreTake(can_message_transmit_semaphore, SEPHAMORE_WAIT);
+
+    
     
     HAL_Can_init();
    
