@@ -220,11 +220,11 @@ int main(int argc, char** argv)
     // uint8_t n = sprintf(&print_buffer[0], "start\r\n");
     // HAL_Uart_send(&print_buffer[0], n);
 
-    // int lol = 0;
-    // for(int i = 0; i < 5000000; i++)
-    // {
-    //     lol++;
-    // }
+    int lol = 0;
+    for(int i = 0; i < 7000000; i++) //5000000
+    {
+        lol++;
+    }
     
     
     can_message_recieved_semaphore = xSemaphoreCreateBinary();
