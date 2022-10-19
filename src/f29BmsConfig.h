@@ -16,14 +16,14 @@
 
 // NOTE: Be sure to define things here with decimals if you intend to use them as floats
 
-#define CELL_CAPACITY_Ah 6.950
+#define CELL_CAPACITY_Ah 10.000
 #define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
 
 #define MAX_CELL_V 4.5 // any value above this is considered irrational
 
-#define MAX_ALLOWED_CELL_V 4.3 // any cell above this is considered overcharged and balancing should begin
-#define CHARGED_CELL_V 4.25 // once all cells are above this, charging ends
+#define MAX_ALLOWED_CELL_V 4.2 // any cell above this is considered overcharged and balancing should begin
+#define CHARGED_CELL_V 4.15 // once all cells are above this, charging ends
 
 #define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
 #define MIN_CELL_V 2.0 // cells below this are considered irrational
@@ -63,7 +63,7 @@
 #define CURRENT_SENSOR_ADC_CHANNEL ADC_CHSELR_CHSEL1
 #define ADC_MAX_VALUE 4095.0
 #define Vref 3.3
-#define ZERO_AMP_ADC_CAL 2090.0
+#define ZERO_AMP_ADC_CAL 2054.0
 #define ZERO_AMP_REF_V ((ZERO_AMP_ADC_CAL/ADC_MAX_VALUE) * Vref)
 #define V_PER_A 0.0036168
 

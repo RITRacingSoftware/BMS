@@ -224,6 +224,13 @@ BO_ 311 VcFaultVector: 8 VCU
  
 BO_ 315 VcHardFaultIndicator: 8 Vc
  SG_ VcHardFaultIndicator_task: 0|4@1+ (1,0) [0|15] "" Vector__XXX
+
+BO_ 420 PbxStatus: 8 PBX
+ SG_ PbxStatus_PumpOn: 0|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 514 BMS_Current_Limit: 8 BMS
+ SG_ D1_Max_Discharge_Current : 0|16@1+ (1,0) [0|1000] "A" Vector__XXX
+ SG_ D2_Max_Charge_Current : 16|16@1+ (1,0) [0|1000] "A" Vector__XXX
  
 BO_ 600 BmsStatus: 8  Bms
  SG_ BmsStatus_SOC: 0|8@1+ (1,0) [0|100] "%" Vector__XXX
@@ -564,3 +571,9 @@ VAL_ 301 VcStatus_MCstate 0 "MCstate_DISCONNECTED" 1 "MCstate_DISABLED" 2 "MCsta
 VAL_ 701 BmsFaultAlert_code 0 "FaultCode_SLAVE_COMM_CELLS" 1 "FaultCode_SLAVE_COMM_TEMPS" 2 "FaultCode_SLAVE_COMM_DRAIN_REQUEST" 3 "FaultCode_CURRENT_SENSOR_COMM" 4 "FaultCode_OVER_CURRENT" 5 "FaultCode_CELL_VOLTAGE_IRRATIONAL" 6 "FaultCode_CELL_VOLTAGE_DIFF" 7 "Faultcode_OUT_OF_JUICE" 8 "FaultCode_TEMPERATURE_IRRATIONAL" 9 "FaultCode_OVER_TEMP" 10 "FaultCode_DRAIN_FAILURE";
 VAL_ 600 BmsStatus_ChargeState 0 "ChargeState_DISCONNECTED" 1 "ChargeState_CONNECTED_COMPLETE" 2 "ChargeState_CONNECTED_BALANCING" 3 "ChargeState_CONNECTED_CHARGING" 4 "ChargeState_CONNECTED_BALANCE_SENSING";
 VAL_ 950 BmsHardFaultIndicator_task 0 "unknown" 1 "task_1Hz" 2 "task_10Hz" 3 "task_1kHz" 4 "can_rx_task";
+VAL_ 315 VcHardFaultIndicator_task 0 "unknown" 1 "task_100Hz" ;
+
+VAL_ 192 Direction_Command 0 "CW" 1 "CCW" ;
+VAL_ 192 Inverter_Discharge 0 "Discharge Disable" 1 "Discharge Enable (if EEPROM parameter is set)" ;
+VAL_ 170 D2_Inverter_State 0 "Power up" 1 "Stop" 2 "Open Loop" 3 "Closed Loop" 4 "Internal State" 5 "Internal State" 6 "Internal State" 7 "Internal State" 8 "Idle Run" 9 "Idle Stop" 10 "Internal State" 11 "Intern State" 12 "Internal State" ;
+VAL_ 170 D1_VSM_State 0 "VSM Start State" 1 "Pre-Charge Init state" 2 "pre-charge active state" 3 "pre-charge complete state" 4 "VSM wait state" 5 "VSM ready state" 6 "Motor Running State" 7 "blink fault code state" 14 "Shutdown state for Key Switch Mode 1" 15 "Reset the inverter" ;
