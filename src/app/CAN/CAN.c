@@ -258,56 +258,15 @@ void CAN_process_recieved_messages(void)
         {
             data[i] = (received_message.data >> (i*8)) & 0xff;
         }
-        uint8_t print_buffer[50];
-        uint8_t n = sprintf(&print_buffer[0], "ID: %d  Data: %d  %d  %d  %d  %d  %d  %d  %d\n\r", received_message.id, data[0],
-             data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
-        HAL_Uart_send(&print_buffer[0], n);
+        // uint8_t print_buffer[50];
+        // uint8_t n = sprintf(&print_buffer[0], "ID: %d  Data: %d  %d  %d  %d  %d  %d  %d  %d\n\r", received_message.id, data[0],
+        //      data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+        // HAL_Uart_send(&print_buffer[0], n);
+
         //Unpack message recieved
         switch(received_message.id)
         {
-            // case F29BMS_DBC_BMS_STATUS_FRAME_ID:
-            //     f29bms_dbc_bms_status_unpack(&can_bus.bms_status, (uint8_t*)&received_message.data, 8);
-            //     break;
-
-            // case F29BMS_DBC_BMS_FAULT_VECTOR_FRAME_ID:
-            //     f29bms_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*)&received_message.data, 8);
-            //     break;
-
-            // case F29BMS_DBC_BMS_FAULT_ALERT_FRAME_ID:
-            //     f29bms_dbc_bms_fault_alert_unpack(&can_bus.bms_fault_alert, (uint8_t*)&received_message.data, 8);
-            //     break;
-
-            // case F29BMS_DBC_BMS_VOLTAGES_FRAME_ID:
-            //     f29bms_dbc_bms_voltages_unpack(&can_bus.bms_voltages, (uint8_t*)&received_message.data, 8);
-            //     break;
-            
-            // case F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID:
-            //     f29bms_dbc_bms_thermistor_voltages_unpack(&can_bus.bms_thermistor_voltages, (uint8_t*)&received_message.data, 8);
-            //     break;
-            
-            // case F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID:
-            //     f29bms_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&received_message.data, 8);
-            //     break;
-
-            // case F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID:
-            //     f29bms_dbc_bms_drain_status_a_unpack(&can_bus.bms_drain_status_a, (uint8_t*)&received_message.data, 8);
-            //     break;
-
-            // case F29BMS_DBC_BMS_DRAIN_STATUS_B_FRAME_ID:
-            //     f29bms_dbc_bms_drain_status_b_unpack(&can_bus.bms_drain_status_b, (uint8_t*)&received_message.data, 8);
-            //     break;
-
-            // case F29BMS_DBC_BMS_CURRENT_FRAME_ID:
-            //     f29bms_dbc_bms_current_unpack(&can_bus.bms_current, (uint8_t*)&received_message.data, 8);
-            //     break;
-            
-            // case F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID:
-            //     f29bms_dbc_bms_charge_request_unpack(&can_bus.bms_charge_request, (uint8_t*)&received_message.data, 8);
-            //     break;
-
-            // case F29BMS_DBC_BMS_REF_FRAME_ID:
-            //     f29bms_dbc_bms_ref_unpack(&can_bus.bms_ref, (uint8_t*)&received_message.data, 8);
-            //     break;
+            // Add case if any CAN messages have to be recieved
             
             default:
                 // printf("f29bms: unknown CAN id: %d\n", received_message.id);
