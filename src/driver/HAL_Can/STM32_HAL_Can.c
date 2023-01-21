@@ -66,7 +66,7 @@ void HAL_Can_init(void)
     // CAN_ITConfig(CAN, CAN_IT_FMP0, 1);
     
     uint8_t ret = CAN_Init(CAN, &canInit);
-    CAN->IER |= 0x3; //Enable interrupts for FIFO0 message pending and transmit mailbox empty
+    // CAN->IER |= 0x3; //Enable interrupts for FIFO0 message pending and transmit mailbox empty
 
 
     // CAN_SlaveStartBank(1);

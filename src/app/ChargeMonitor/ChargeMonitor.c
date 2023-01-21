@@ -232,7 +232,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     float current;
     if (CurrentSense_get_current(&current))
     {
-        sm_inputs.charge_current_nominal = (current >= (MAX_CHARGING_CURRENT_A / 10.0));
+        sm_inputs.charge_current_nominal = (fabs(current) >= (MAX_CHARGING_CURRENT_A / 10.0));
     }
     else
     {

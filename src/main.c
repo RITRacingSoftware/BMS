@@ -214,11 +214,11 @@ int main(int argc, char** argv)
     // #endif
     
     HAL_Gpio_init(); // must happen before CAN
-    // HAL_Uart_init();
+    HAL_Uart_init();
 
-    // uint8_t print_buffer[50];
-    // uint8_t n = sprintf(&print_buffer[0], "start\r\n");
-    // HAL_Uart_send(&print_buffer[0], n);
+    uint8_t print_buffer[50];
+    uint8_t n = sprintf(&print_buffer[0], "start\r\n");
+    HAL_Uart_send(&print_buffer[0], n);
 
     int lol = 0;
     for(int i = 0; i < 7000000; i++) //5000000

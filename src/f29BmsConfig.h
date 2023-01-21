@@ -119,7 +119,6 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 #define SOC_75_LIMIT_FOR_TEMP_INDEX(temp_index) temp_lut_V[temp_index][0]
 #define SOC_50_LIMIT_FOR_TEMP_INDEX(temp_index) temp_lut_V[temp_index][1]
 #define SOC_25_LIMIT_FOR_TEMP_INDEX(temp_index) temp_lut_V[temp_index][2]
-
 // how often the SOC is written to flash
 #define SOC_SAVE_PERIOD_MS 10000
 

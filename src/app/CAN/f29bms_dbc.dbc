@@ -24,7 +24,7 @@ NS_ :
 
 BS_:
 
-BU_: Bms INV U2C VCU
+BU_: Bms INV U2C VCU CHGR
 
 BO_ 173 M173_Modulation_And_Flux_Info: 8 INV
  SG_ D4_Iq_Command : 48|16@1- (0.1,0) [-3276.8|3276.7] "A" Vector__XXX
@@ -565,6 +565,14 @@ BO_ 951 BmsRef: 8 Bms
  SG_ BmsRef_ref9 m1: 28|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
  SG_ BmsRef_ref10 m1: 37|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
  SG_ BmsRef_ref11 m1: 46|9@1+ (0.01,0) [0|5.12] "V" Vector__XXX
+
+BO_ 2550588916 ChargerControlSystem: 8 CHGR
+ SG_ OutputVoltage: 0|16@1+ (0.1,0) [0|6553.3] "V" Vector__XXX
+ SG_ OutputCurrent: 16|16@1+ (0.1,0) [0|6553.3] "A" Vector__XXX
+ SG_ StatusFlag_HardwareFailure: 32|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ StatusFlag_TemperatureOfCharger: 33|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ StatusFlag_InputVoltage: 34|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ StatusFlag_CommunicationState: 35|1@1+ (1,0) [0|1] "" Vector__XXX
 
 VAL_ 301 VcStatus_VehicleState 0 "VehicleState_NOT_READY" 1 "VehicleState_STARTUP" 2 "VehicleState_READY_TO_DRIVE" 3 "VehicleState_FAULTED";
 VAL_ 301 VcStatus_MCstate 0 "MCstate_DISCONNECTED" 1 "MCstate_DISABLED" 2 "MCstate_DISABLED_UNLOCKING" 3 "MCstate_ENABLED" 4 "MCstate_READY";
