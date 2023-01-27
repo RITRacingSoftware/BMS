@@ -782,7 +782,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     // uint8_t num_boards = num / cells_per_board;
 
     //Array of cell codes
-    uint16_t AllCellVoltages[NUM_CHIPS][12]; //Make sure if num isn't a multiple of 12, array is big enough
+    uint16_t AllCellVoltages[NUM_CHIPS][12]; //Make sure if num_cells_to_set isn't a multiple of 12, array is big enough
     
     bool AllIsDraining[num_cells_to_set];
 

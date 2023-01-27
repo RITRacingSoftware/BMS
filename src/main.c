@@ -39,9 +39,6 @@
 #include "TempModel.h"
 #include "semphr.h"
 
-
-#include "stm32f0xx_rcc.h" //TEMP
-
 #define SEPHAMORE_WAIT 0
 
 SemaphoreHandle_t can_message_recieved_semaphore;
@@ -58,9 +55,6 @@ void TASK_1Hz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-        // uint8_t print_buffer[50];
-        // uint8_t n = sprintf(&print_buffer[0], "0\r\n");
-        // HAL_Uart_send(&print_buffer[0], n);
         Periodic_1Hz();
         vTaskDelayUntil(&next_wake_time, TASK_1Hz_PERIOD_MS);
     }
@@ -76,9 +70,6 @@ void task_10Hz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-        // uint8_t print_buffer[50];
-        // uint8_t n = sprintf(&print_buffer[0], "1");
-        // HAL_Uart_send(&print_buffer[0], n);
         Periodic_10Hz();
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
@@ -150,11 +141,7 @@ void signal_handler(int signo)
 #endif
 
 void hardfault_handler_routine(void)
-{
-    // uint8_t print_buffer[50];
-    // uint8_t n = sprintf(&print_buffer[0], "hard\r\n");
-    // HAL_Uart_send(&print_buffer[0], n);
-    
+{    
     // shut down car
     HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, 0);
 
@@ -185,43 +172,17 @@ void hardfault_handler_routine(void)
     HAL_Can_send_message(F29BMS_DBC_BMS_HARD_FAULT_INDICATOR_FRAME_ID, 8, *((uint64_t*)data)); 
 }
 
-static void delayMSec(uint32_t delay) //TEMP
-{
-  TIM6->ARR = delay;
-  TIM6->EGR |= TIM_EGR_UG;
-  TIM6->SR = 0;
-  TIM6->CR1 |= TIM_CR1_CEN;
-  while(TIM6->SR == 0);
-}
-
 int main(int argc, char** argv)
 {
 
     // initialize all HAL stuff
     HAL_Clock_init();
-
-    //TEMP
-    // Init TIM6
-    // RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
-    // TIM6->PSC = 48;//SYS_CLK/TIMER_FREQUENCY;
-    // TIM6->CR1 |= (TIM_CR1_ARPE | TIM_CR1_URS | TIM_CR1_DIR);
-    // //TEMP
-
-    // // #if FREERTOS_TIMING == 0
-    // delayMSec(5000000); 
-    // #else
-    // vTaskDelay(5000);
-    // #endif
     
     HAL_Gpio_init(); // must happen before CAN
     // HAL_Uart_init();
 
-    // uint8_t print_buffer[50];
-    // uint8_t n = sprintf(&print_buffer[0], "start\r\n");
-    // HAL_Uart_send(&print_buffer[0], n);
-
     int lol = 0;
-    for(int i = 0; i < 7000000; i++) //5000000
+    for(int i = 0; i < 7000000; i++) //TEMP: delay to make sure other systems are online so CAN can be initialized
     {
         lol++;
     }
@@ -243,9 +204,6 @@ int main(int argc, char** argv)
     HAL_SlaveChips_init();
     // HAL_Watchdog_init();
 
-    // n = sprintf(&print_buffer[0], "1\r\n");
-    // HAL_Uart_send(&print_buffer[0], n);
-
     // initialize all app stuff
     CAN_init();
 
@@ -261,9 +219,6 @@ int main(int argc, char** argv)
     FaultManager_init();
     StatusLed_init();
     TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
-
-    // n = sprintf(&print_buffer[0], "2\r\n");
-    // HAL_Uart_send(&print_buffer[0], n);
 
 
 #ifdef SIMULATION
