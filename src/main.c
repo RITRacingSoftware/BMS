@@ -50,9 +50,9 @@ SemaphoreHandle_t can_message_transmit_semaphore;
 #define TASK_1Hz_STACK_SIZE_B (2000)
 void TASK_1Hz(void *pvParameters)
 {
+    
     (void) pvParameters;
     TickType_t next_wake_time = xTaskGetTickCount();
-
     for (;;)
     {
         Periodic_1Hz();
@@ -70,7 +70,6 @@ void task_10Hz(void *pvParameters)
     TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-
         Periodic_10Hz();
         vTaskDelayUntil(&next_wake_time, TASK_10Hz_PERIOD_MS);
     }
@@ -142,7 +141,7 @@ void signal_handler(int signo)
 #endif
 
 void hardfault_handler_routine(void)
-{
+{    
     // shut down car
     HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, 0);
 
@@ -175,11 +174,19 @@ void hardfault_handler_routine(void)
 
 int main(int argc, char** argv)
 {
+
     // initialize all HAL stuff
     HAL_Clock_init();
     
     HAL_Gpio_init(); // must happen before CAN
-    HAL_Uart_init();
+    // HAL_Uart_init();
+
+    int lol = 0;
+    for(int i = 0; i < 7000000; i++) //TEMP: delay to make sure other systems are online so CAN can be initialized
+    {
+        lol++;
+    }
+    
     
     can_message_recieved_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_recieved_semaphore);
@@ -187,6 +194,8 @@ int main(int argc, char** argv)
     can_message_transmit_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_transmit_semaphore);
     xSemaphoreTake(can_message_transmit_semaphore, SEPHAMORE_WAIT);
+
+    
     
     HAL_Can_init();
    

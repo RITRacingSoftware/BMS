@@ -7,21 +7,23 @@
  * Cells
  */
 
-#define NUM_BOARDS 6
+#define NUM_BOARDS 5
 #define NUM_CHIPS (NUM_BOARDS*2)
-#define NUM_SERIES_CELLS (NUM_BOARDS * 15)
-#define NUM_PARALLEL_CELLS 3
+#define NUM_CELLS_PER_BOARD 18
+#define NUM_THERMISTORS_PER_CHIP 4
+#define NUM_SERIES_CELLS (NUM_BOARDS * NUM_CELLS_PER_BOARD)
+#define NUM_PARALLEL_CELLS 2
 
 // NOTE: Be sure to define things here with decimals if you intend to use them as floats
 
-#define CELL_CAPACITY_Ah 6.950
+#define CELL_CAPACITY_Ah 10.000
 #define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
 
 #define MAX_CELL_V 4.5 // any value above this is considered irrational
 
-#define MAX_ALLOWED_CELL_V 4.3 // any cell above this is considered overcharged and balancing should begin
-#define CHARGED_CELL_V 4.25 // once all cells are above this, charging ends
+#define MAX_ALLOWED_CELL_V 4.2 // any cell above this is considered overcharged and balancing should begin
+#define CHARGED_CELL_V 4.15 // once all cells are above this, charging ends
 
 #define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
 #define MIN_CELL_V 2.0 // cells below this are considered irrational
@@ -61,7 +63,7 @@
 #define CURRENT_SENSOR_ADC_CHANNEL ADC_CHSELR_CHSEL1
 #define ADC_MAX_VALUE 4095.0
 #define Vref 3.3
-#define ZERO_AMP_ADC_CAL 2090.0
+#define ZERO_AMP_ADC_CAL 2054.0
 #define ZERO_AMP_REF_V ((ZERO_AMP_ADC_CAL/ADC_MAX_VALUE) * Vref)
 #define V_PER_A 0.0036168
 
@@ -73,7 +75,7 @@
  */
 // any bits set in this won't get set in the fault vector
 //#define DISABLE_FAULT_MASK ((1 << FaultCode_SLAVE_COMM_TEMPS) | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL) | (1 << FaultCode_TEMPERATURE_IRRATIONAL) | (1 << FaultCode_OVER_TEMPERATURE))
-#define DISABLE_FAULT_MASK ((1 << FaultCode_CELL_VOLTAGE_DIFF) | (1 << FaultCode_DRAIN_FAILURE))// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
+#define DISABLE_FAULT_MASK ((1 << FaultCode_CELL_VOLTAGE_DIFF) | (1 << FaultCode_DRAIN_FAILURE) | (1 << FaultCode_TEMPERATURE_IRRATIONAL))// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
 
 // Fault tolerances are the times a fault is allowed to be continuously active before triggering a shutdown event
 // value a fault tolerance should have if the fault does not cause the car to shutdown
@@ -117,7 +119,6 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 #define SOC_75_LIMIT_FOR_TEMP_INDEX(temp_index) temp_lut_V[temp_index][0]
 #define SOC_50_LIMIT_FOR_TEMP_INDEX(temp_index) temp_lut_V[temp_index][1]
 #define SOC_25_LIMIT_FOR_TEMP_INDEX(temp_index) temp_lut_V[temp_index][2]
-
 // how often the SOC is written to flash
 #define SOC_SAVE_PERIOD_MS 10000
 
@@ -126,7 +127,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
  */
 
 // defined for 2 test segments rn
-#define NUM_THERMISTOR (NUM_BOARDS*3)
+#define NUM_THERMISTOR (NUM_THERMISTORS_PER_CHIP*NUM_CHIPS)
 #define LTC6804_ADC_MAX_VALUE ((float)(1 << 16))
 #define LTC6804_ADC_RANGE_V (5.7)
 #define THERM_INPUT_V (3.0)

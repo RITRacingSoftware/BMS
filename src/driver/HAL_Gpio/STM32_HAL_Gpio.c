@@ -91,6 +91,10 @@ void HAL_Gpio_init(void)
 
     populate_Init_Struct(&gpioInit, BIT(SHUTDOWN_LINE_PIN_POS), GPIO_Mode_OUT, GPIO_Speed_Level_1, GPIO_OType_PP, GPIO_PuPd_NOPULL);
     GPIO_Init(GPIOA, &gpioInit);
+
+
+    //TEMP
+    HAL_Gpio_write(GpioPin_SHUTDOWN_LINE, true);
 }
 
 bool HAL_Gpio_read(GpioPin_e pin)

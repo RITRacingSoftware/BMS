@@ -758,14 +758,14 @@ void HAL_SlaveChips_init(){
 
 //DCC[x]: Discharge cell X, x = 1 - 12, 1->turn on short switching for cell x, 0->turn off short switching for cell x
 //DCC in configuration register group
-Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, unsigned int num)
+Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, unsigned int num_cells_to_set)
 {
     Error_t error;
     error.active = false;
     LTC6804_adcv();
     //LTC6804_adcv();
     
-    //WAIT 2335 us
+    //WAIT 2335 us for ADC conversion
     #if FREERTOS_TIMING == 0
     TIM6->ARR = 2500; //Need to wait 2335 micro seconds, rounded up to 2500 for now
     TIM6->EGR |= TIM_EGR_UG;
@@ -777,16 +777,17 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     #endif
     
 
-    const uint8_t cells_per_board = 15;
-    const uint8_t chips_per_board = 2;
-    uint8_t num_boards = num / cells_per_board;
+    // const uint8_t cells_per_board = 15;
+    const uint8_t chips_per_board = NUM_CHIPS/NUM_BOARDS;
+    // uint8_t num_boards = num / cells_per_board;
 
-    uint16_t AllCellVoltages[num_boards * chips_per_board][12]; //Make sure if num isn't a multiple of 12, array is big enough
+    //Array of cell codes
+    uint16_t AllCellVoltages[NUM_CHIPS][12]; //Make sure if num_cells_to_set isn't a multiple of 12, array is big enough
     
-    bool AllIsDraining[num];
+    bool AllIsDraining[num_cells_to_set];
 
     // TODO- change this to total # of slave chips once on full BMS
-    int pec = LTC6804_rdcv(0, num_boards * chips_per_board, AllCellVoltages);
+    int pec = LTC6804_rdcv(0, NUM_CHIPS, AllCellVoltages);
     // if(read_All_Is_Draining(AllIsDraining, num_boards)){
     //     error.active = true;
     // }
@@ -796,47 +797,47 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     }
    // float oops = (float) AllCellVoltages[0][0] / 10000.0;
 
-    for (int board = 0; board < num_boards; board++)
+    //TODO - Change number of cells for each chip if it changes
+    for (int board = 0; board < NUM_BOARDS; board++)
     { 
         // chip 1
-        for (int cell = 0; cell <= 7; cell++)
+        for (int cell = 0; cell < 9; cell++)
         {
+            //TODO - Adjust cell pins if it changes
             int cell_pin = cell;
-            if (cell > 3)
+            if (cell > 4)
             {
-              cell_pin += 2;
+              cell_pin += 1;
             }
 
-            voltages[board*cells_per_board+cell] = ((float)(AllCellVoltages[board*chips_per_board][cell_pin])) / 10000.0;
+            voltages[board*NUM_CELLS_PER_BOARD+cell] = ((float)(AllCellVoltages[board*chips_per_board][cell_pin])) / 10000.0;
         }
 
         // chip 2
-        for (int cell = 0; cell <= 6; cell++)
+        for (int cell = 0; cell < 9; cell++)
         {
             int cell_pin = cell;
-            if (cell > 3)
+            if (cell > 4)
             {
-                cell_pin += 2;
+                cell_pin += 1;
             }
 
-            voltages[board*cells_per_board+cell+8] = ((float) AllCellVoltages[board*chips_per_board+1][cell_pin]) / 10000.0;
+            voltages[board*NUM_CELLS_PER_BOARD+cell+9] = ((float) AllCellVoltages[board*chips_per_board+1][cell_pin]) / 10000.0;
         }
-
-        
-        
+   
     }
 
     return error;
 }
 
-//Every other LTC has 3 thermistors, 1st,3rd, etc have thermistors
+//Every LTC has 4 thermistors
 Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2s, unsigned int num){
     Error_t error;
     error.active = false;
     //GPIO voltage in Auxilary Register Group A
     LTC6804_adax();
 
-    //WAIT
+    //WAIT for ADC conversion
     #if FREERTOS_TIMING == 0
     TIM6->ARR = 2500; //Need to wait 2335 seconds, rounded up to 2500 for now
     TIM6->EGR |= TIM_EGR_UG;
@@ -852,69 +853,69 @@ Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2s, u
     // if(setsOfTwelve == 0){
     //   setsOfTwelve = 2;
     // }
-    const uint8_t therm_per_board = 3;
-    uint8_t num_boards = num / therm_per_board;
-    uint8_t num_chips = num_boards * 2;
+    
+    // uint8_t num_boards = num / therm_per_board;
+    // uint8_t num_chips = num_boards * 2;
     //NEED TO IMPLEMENT PEC
     //transmitCommand[2] and [3] for PEC0 and PEC1
-    uint16_t tempRecieved[num_chips][6];
-    //Read the Configuration Register Group to get DCC
-    // get temperature readings from every chip (will ignore ones without thermistors later)
-    if(LTC6804_rdaux(0, num_chips, tempRecieved) == -1){
+
+    //Array for the auxilary register codes received back over SPI from the LTC chips
+    uint16_t tempRecieved[NUM_CHIPS][6];
+
+    //Read the Auxilary Register A to get temperature readings from every chip 
+    if(LTC6804_rdaux(0, NUM_CHIPS, tempRecieved) == -1){
         error.active = true;
     }
 
+    //temp_idx keeps track of the thermistor index
     int temp_idx = 0;
-    for (int r = 0; r < num_chips; r++)
+    //Iterate through the data for each chip and set the temperature data from each chip
+    for (int r = 0; r < NUM_CHIPS; r++)
     {
-        // every other chip has thermistors
-        if (r % 2 == 0)
+        for (int c = 0; c < NUM_THERMISTORS_PER_CHIP; c++)
         {
-            for (int c = 0; c < therm_per_board; c++)
-            {
-                temperatures[temp_idx*therm_per_board + c] =  (((float) tempRecieved[r][c]) / LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
-            }
-            temp_idx++;
+            temperatures[temp_idx*NUM_THERMISTORS_PER_CHIP + c] =  (((float) tempRecieved[r][c]) / LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
         }
+        temp_idx++;
         vref2s[r] = (((float)tempRecieved[r][5])/LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
     }
 
     return error;
 }
 
-static uint8_t drain_state_LUT[] = {9, 8, 7, 6, 3, 2, 1, 0};
+// static uint8_t drain_state_LUT[] = {9, 8, 7, 6, 3, 2, 1, 0};
 
 Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
 {
     // Our goal with this function is to go from 'cells', an array of booleans, one for each cell...
     // And construct the dcc bytes for the cell drain request message.
 
-    const int cells_per_seg = 15;
-    int num_seg = num / cells_per_seg; // num better be at least 15 lol
-    const int chips_per_seg = 2;
+    const int chips_per_board = NUM_CHIPS/NUM_BOARDS;
 
     // this is our output
-    uint16_t dcc_regs[num_seg][chips_per_seg];
+    uint16_t dcc_regs[NUM_BOARDS][chips_per_board];
 
-    for (int r = 0; r < num_seg; r++)
+    //Set all to 0
+    for (int r = 0; r < NUM_BOARDS; r++)
     {
-        for (int c = 0; c < chips_per_seg; c++)
+        for (int c = 0; c < chips_per_board; c++)
         {
             dcc_regs[r][c] = 0;
         }
     }
 
+    //Set whether each cell should be draining
     for (int cell_no = 0; cell_no < num; cell_no++)
     {
         // what segment is this cell on?
-        int seg_index = cell_no / 15;
+        int seg_index = cell_no / NUM_CELLS_PER_BOARD;
 
-        // what index cell is this on the given segment? (0-14)
-        int cell_seg_index = cell_no % 15;
+        // what index cell is this on the given segment?
+        int cell_seg_index = cell_no % NUM_CELLS_PER_BOARD;
 
         // which chip of the two on the segment is this cell connected to?
         int chip_index;
-        if (cell_seg_index < 8)
+        if (cell_seg_index < (NUM_CELLS_PER_BOARD/2))
         {
             chip_index = 0;
         }
@@ -923,7 +924,7 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
             chip_index = 1;
         }
 
-        // now get the cell index on the chip, so either 0-6 or 0-7
+        // now get the cell index on the chip
         int chip_cell_index;
         if (chip_index == 0)
         {
@@ -931,16 +932,16 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
         }
         else
         {
-            chip_cell_index = cell_seg_index - 8;
+            chip_cell_index = cell_seg_index - (NUM_CELLS_PER_BOARD/2);
         }
 
         // now convert to the pin index on the chip
         // you'd think this is the same as chip_cell_index but its not because there's a few spots on each chip we didn't populate
         int chip_pin_index;
-        if (chip_cell_index > 3)
+        if (chip_cell_index > 4)
         {
             // account for the gap
-            chip_pin_index = chip_cell_index + 2;
+            chip_pin_index = chip_cell_index + 1;
         }
         else
         {
@@ -957,9 +958,10 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
 
     Error_t error;
     error.active = false;
-    int num_chips = num_seg * 2;
+    // int num_chips = num_seg * 2;
   
-    char tx[4 + ((num_chips) * 8)]; //CMD0, CMD1, PEC0, PEC1, 6 bytes of data and 2 bytes PEC for each set of 12
+    //Construct the needed SPI command structure
+    char tx[4 + ((NUM_CHIPS) * 8)]; //CMD0, CMD1, PEC0, PEC1, 6 bytes of data and 2 bytes PEC for each set of 12
     tx[0] = 0;
     tx[1] = WRITE_CONFIGURATION_REGISTER_GROUP && 0xFF;//(WRITE_CONFIGURATION_REGISTER_GROUP >> 8) && 0xFF;
     tx[2] = WRITE_CONFIGURATION_REGISTER_PEC0;
@@ -970,12 +972,13 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
     char ByteTwo = 0x00; //Under voltage comparison , set to default
     char ByteThree = 0x00; //Under Voltage comparison and over voltage comparison
     char ByteFour = 0x00; //Over Voltage Comparison, set to default
-    
+  
     const int bytes_per_chip = 8;
-    for (int chip_index = 0; chip_index < num_chips; chip_index++)
+    //Put whether each cell should drain in the SPI command
+    for (int chip_index = 0; chip_index < NUM_CHIPS; chip_index++)
     {
         // where the chip specific message begins in the tx buffer
-        int chip_base = 4 + (num_chips-1-chip_index) * bytes_per_chip;
+        int chip_base = 4 + (NUM_CHIPS-1-chip_index) * bytes_per_chip;
         tx[chip_base] = ByteOne;
         tx[chip_base + 1] = ByteTwo;
         tx[chip_base + 2] = ByteThree;
@@ -989,12 +992,13 @@ Error_t HAL_SlaveChips_request_cell_drain_state(bool* cells, unsigned int num)
         tx[chip_base + 6] = (char) ((pec >> 8) & 0xFF);
         tx[chip_base + 7] = (char) (pec & 0xFF);
     }
-char show_tx[100];
-for (int i = 0; i < sizeof(tx)/sizeof(tx[0]); i++) show_tx[i] = tx[i];
+    char show_tx[100];
+    //Transmit the command to all of the chips over SPI
+    for (int i = 0; i < sizeof(tx)/sizeof(tx[0]); i++) show_tx[i] = tx[i];
     char *rx;
     wakeup_idle();
     wakeup_idle();
-    HAL_Spi_transmit_and_receive(tx, 4 + (num_chips * bytes_per_chip), rx, 0);
+    HAL_Spi_transmit_and_receive(tx, 4 + (NUM_CHIPS * bytes_per_chip), rx, 0);
     //TO DO: add error checking
     return error;
 }
