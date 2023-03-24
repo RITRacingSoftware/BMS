@@ -62,6 +62,9 @@ static int pack_message(int id, uint8_t* msg_data)
         case F29BMS_DBC_BMS_REF_FRAME_ID:
             return f29bms_dbc_bms_ref_pack(msg_data, &can_bus.bms_ref, 8);
         
+        case F29BMS_DBC_BMS_CURRENT_LIMIT_FRAME_ID:
+            return f29bms_dbc_bms_current_limit_pack(msg_data, &can_bus.bms_current_limit, 8);
+        
         default:
             printf("f29bms: unknown CAN id: %d\n", id);
             break;
@@ -237,6 +240,8 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     can_bus.bms_ref.bms_ref_ref11 = f29bms_dbc_bms_ref_bms_ref_ref11_encode(tm->vref2s[11]);
     CAN_send_message(F29BMS_DBC_BMS_REF_FRAME_ID);
     bms_ref_mux ^= 1;
+
+     CAN_send_message(F29BMS_DBC_BMS_CURRENT_LIMIT_FRAME_ID);
 }
 
 

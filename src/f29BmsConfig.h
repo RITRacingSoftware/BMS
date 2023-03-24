@@ -139,4 +139,9 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 // how long a temperature fault condition must be present to trigger a fault
 #define TEMPERATURE_FAULT_HYSTERESIS_MS 1000
 
+/**
+ * Power Limiting
+ */
+#define MAX_POWER_LIMIT_KW 80.0
+
 #endif // F29BMSCONFIG_H
