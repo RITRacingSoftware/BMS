@@ -65,7 +65,7 @@
 #define Vref 3.3
 #define ZERO_AMP_ADC_CAL 2054.0
 #define ZERO_AMP_REF_V ((ZERO_AMP_ADC_CAL/ADC_MAX_VALUE) * Vref)
-#define V_PER_A 0.0036168
+#define V_PER_A 0.00264
 
 #define CURRENT_SENSOR_PORT GPIOA
 #define CURRENT_SENSOR_PIN GPIO_Pin_1
