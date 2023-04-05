@@ -97,17 +97,19 @@ void FaultManager_set_fault_active(FaultCode_e code, void* data)
 // TODO- use mutex around faultvector
 void FaultManager_clear_fault(FaultCode_e code)
 {
-    uint64_t temp_fault_vector = fault_vector;
+    //TEMP: Making the faults latch
+    // uint64_t temp_fault_vector = fault_vector;
 
-    // clear the fault bit
-    temp_fault_vector &= ~BIT(code);
+    // // clear the fault bit
+    // temp_fault_vector &= ~BIT(code);
 
-    // atomically? set the fault vector
-    // this is only atomic if the stm32 supports 64 bit instructions...
-    fault_vector = temp_fault_vector;
+    // // atomically? set the fault vector
+    // // this is only atomic if the stm32 supports 64 bit instructions...
+    // fault_vector = temp_fault_vector;
 
-    // update the fault vector CAN message data
-    f29bms_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*)&fault_vector, 8);}
+    // // update the fault vector CAN message data
+    // f29bms_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*)&fault_vector, 8);
+}
 
 bool FaultManager_is_fault_active(FaultCode_e code)
 {
