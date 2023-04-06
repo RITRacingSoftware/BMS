@@ -75,7 +75,7 @@
  */
 // any bits set in this won't get set in the fault vector
 //#define DISABLE_FAULT_MASK ((1 << FaultCode_SLAVE_COMM_TEMPS) | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL) | (1 << FaultCode_TEMPERATURE_IRRATIONAL) | (1 << FaultCode_OVER_TEMPERATURE))
-#define DISABLE_FAULT_MASK (0)// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
+#define DISABLE_FAULT_MASK (FaultCode_DRAIN_FAILURE)// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
 
 // Fault tolerances are the times a fault is allowed to be continuously active before triggering a shutdown event
 // value a fault tolerance should have if the fault does not cause the car to shutdown
@@ -142,6 +142,6 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 /**
  * Power Limiting
  */
-#define MAX_POWER_LIMIT_KW 80.0
+#define MAX_POWER_LIMIT_KW 79.0
 
 #endif // F29BMSCONFIG_H
