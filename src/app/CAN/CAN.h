@@ -46,6 +46,7 @@ typedef struct
     struct f29bms_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
     struct f29bms_dbc_bms_ref_t bms_ref;
     struct f29bms_dbc_bms_current_limit_t bms_current_limit;
+    struct f29bms_dbc_bms_limp_mode_t bms_limp_mode;
 } CAN_BUS;
 
 extern CAN_BUS can_bus;

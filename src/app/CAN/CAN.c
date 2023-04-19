@@ -64,6 +64,9 @@ static int pack_message(int id, uint8_t* msg_data)
         
         case F29BMS_DBC_BMS_CURRENT_LIMIT_FRAME_ID:
             return f29bms_dbc_bms_current_limit_pack(msg_data, &can_bus.bms_current_limit, 8);
+
+        case F29BMS_DBC_BMS_LIMP_MODE_FRAME_ID:
+            return f29bms_dbc_bms_limp_mode_pack(msg_data, &can_bus.bms_limp_mode, 8);
         
         default:
             printf("f29bms: unknown CAN id: %d\n", id);

@@ -19,9 +19,11 @@ void test_CurrentLimiter_current_limit(void)
     BatteryModel_t bm;
     bm.total_V = 375.0;
 
+    TempModel_t tm;
+
     float min_power_limit = MAX_POWER_LIMIT_KW-10; // The current limit shouldn't ever be such that the max power is below this
 
-    CurrentLimiter_10Hz(&bm);
+    CurrentLimiter_10Hz(&bm, &tm);
 
     float max_allowed_current = MAX_POWER_LIMIT_KW / bm.total_V;
     float min_current_limit = min_power_limit / bm.total_V;
@@ -32,7 +34,7 @@ void test_CurrentLimiter_current_limit(void)
 
     bm.total_V = 321.0123;
 
-    CurrentLimiter_10Hz(&bm);
+    CurrentLimiter_10Hz(&bm, &tm);
 
     max_allowed_current = MAX_POWER_LIMIT_KW / bm.total_V;
     min_current_limit = min_power_limit / bm.total_V;

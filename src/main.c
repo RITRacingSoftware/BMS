@@ -29,6 +29,7 @@
 #include "CurrentSense.h"
 #include "DriveMonitor.h"
 #include "FaultManager.h"
+#include "LimpMode.h"
 #include "NTCALUG01T_LUT.h"
 #include "PackMonitor.h"
 #include "Periodic.h"
@@ -217,6 +218,7 @@ int main(int argc, char** argv)
     Periodic_init();
     SOCestimator_init();
     FaultManager_init();
+    LimpMode_init();
     StatusLed_init();
     TempConverter_init(NTCALUG01T_LUT, NTCALUG01T_LUT_LEN, NTCALUG01T_OFFSET, DIVIDER_OHM);
 
