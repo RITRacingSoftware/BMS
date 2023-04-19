@@ -6,6 +6,7 @@
 #include "CAN.h"
 #include "CellBalancer.h"
 #include "ChargeMonitor.h"
+#include "CurrentLimiter.h"
 #include "CurrentMonitor.h"
 #include "CurrentSense.h"
 #include "DriveMonitor.h"

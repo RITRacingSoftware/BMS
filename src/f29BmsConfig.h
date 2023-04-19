@@ -23,12 +23,13 @@
 #define MAX_CELL_V 4.5 // any value above this is considered irrational
 
 #define MAX_ALLOWED_CELL_V 4.2 // any cell above this is considered overcharged and balancing should begin
-#define CHARGED_CELL_V 4.15 // once all cells are above this, charging ends
+#define CHARGED_CELL_V 4.18 // once all cells are above this, charging ends
 
-#define MIN_ALLOWED_CELL_V 3.1 // out of juice fault thrown if cells go below this
+// out of juice fault thrown if cells go below this
+#define MIN_ALLOWED_CELL_V 3 // Datasheet says 3.0  
 #define MIN_CELL_V 2.0 // cells below this are considered irrational
 
-#define BALANCING_HISTERESIS_V .03 // how low a cell must be balanced below CHARGED_CELL_V for balancing to shut off
+#define BALANCING_HISTERESIS_V .02 // how low a cell must be balanced below CHARGED_CELL_V for balancing to shut off
 #define BALANCING_MEASURE_INTERVAL_S 30 // how long to wait in between measuring cell voltages when balancing
 
 // Simply transmitted to the charger.
@@ -52,7 +53,7 @@
  */
 
 #define CURRENT_IRRATIONAL_A 500
-#define OVERCURRENT_A 230
+#define OVERCURRENT_A 350
 #define OVERCURRENT_CHG_A -41
 #define OVERCURRENT_HYST_MS 5
 #define CURRENT_TOLERANCE 0.01
@@ -75,7 +76,7 @@
  */
 // any bits set in this won't get set in the fault vector
 //#define DISABLE_FAULT_MASK ((1 << FaultCode_SLAVE_COMM_TEMPS) | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL) | (1 << FaultCode_TEMPERATURE_IRRATIONAL) | (1 << FaultCode_OVER_TEMPERATURE))
-#define DISABLE_FAULT_MASK (FaultCode_DRAIN_FAILURE)// | (1 << FaultCode_CELL_VOLTAGE_IRRATIONAL))
+#define DISABLE_FAULT_MASK (FaultCode_DRAIN_FAILURE ) // RE-ENABLE SETTING OVER CURRENT FAULT
 
 // Fault tolerances are the times a fault is allowed to be continuously active before triggering a shutdown event
 // value a fault tolerance should have if the fault does not cause the car to shutdown
@@ -142,6 +143,6 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 /**
  * Power Limiting
  */
-#define MAX_POWER_LIMIT_KW 79.0
+#define MAX_POWER_LIMIT_KW 75.0
 
 #endif // F29BMSCONFIG_H

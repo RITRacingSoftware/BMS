@@ -20,7 +20,7 @@ void CurrentMonitor_1kHz(float current_A)
     {
         if (incr_to_limit(&time_overcurrent_ms, OVERCURRENT_HYST_MS, 1))
         {
-            FaultManager_set_fault_active(FaultCode_OVER_CURRENT, &current_A);
+            // FaultManager_set_fault_active(FaultCode_OVER_CURRENT, &current_A); TEMP TODO RE-ENABLE!!!
         }
     }
     else
