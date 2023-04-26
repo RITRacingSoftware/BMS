@@ -245,6 +245,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     bms_ref_mux ^= 1;
 
      CAN_send_message(F29BMS_DBC_BMS_CURRENT_LIMIT_FRAME_ID);
+     CAN_send_message(F29BMS_DBC_BMS_LIMP_MODE_FRAME_ID);
 }
 
 

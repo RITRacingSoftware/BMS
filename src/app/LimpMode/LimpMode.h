@@ -4,6 +4,14 @@
 #include "BatteryModel.h"
 #include "TempModel.h"
 
+typedef enum
+{
+    LimpModeLevel_NO_LIMP,
+    LimpModeLevel_LEVEL_1,
+    LimpModeLevel_LEVEL_2,
+    LimpModeLevel_LEVEL_3
+} LimpModeLevel_e;
+
 /**
  * This is to limit the current to when approaching our lowest allowed voltage or the
  * highest allowed temperature so that the car can drive for longer. 

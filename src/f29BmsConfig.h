@@ -150,9 +150,9 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 */
 
 // These are the different levels of limp mode, with level 1 being the least limiting, and level 3 being the most limiting
-#define LIMP_MODE_LEVEL_1 200.0 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_LEVEL_2 100.0 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_LEVEL_3 50.0 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_LEVEL_1_CURRENT_A 175.0 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_LEVEL_2_CURRENT_A 100.0 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_LEVEL_3_CURRENT_A 50.0 // This is just an initial guess, may need to be changed
 
 // These are the voltages when the levels of limp modes will be entered
 #define LIMP_MODE_VOLTAGE_LEVEL_1 3.5 // This is just an initial guess, may need to be changed
@@ -160,8 +160,8 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 #define LIMP_MODE_VOLTAGE_LEVEL_3 3.25 // This is just an initial guess, may need to be changed
 
 // These are the temperatures when the levels of limp modes will be entered
-#define LIMP_MODE_TEMP_LEVEL_1 53 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_TEMP_LEVEL_2 55 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_TEMP_LEVEL_3 57 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_TEMP_LEVEL_1 53.0 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_TEMP_LEVEL_2 55.0 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_TEMP_LEVEL_3 57.0 // This is just an initial guess, may need to be changed
 
 #endif // F29BMSCONFIG_H
