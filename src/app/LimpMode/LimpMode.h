@@ -9,7 +9,9 @@ typedef enum
     LimpModeLevel_NO_LIMP,
     LimpModeLevel_LEVEL_1,
     LimpModeLevel_LEVEL_2,
-    LimpModeLevel_LEVEL_3
+    LimpModeLevel_LEVEL_3,
+    LimpModeLevel_LEVEL_4,
+    LimpModeLevel_LEVEL_5,
 } LimpModeLevel_e;
 
 /**

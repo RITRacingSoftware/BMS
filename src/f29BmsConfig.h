@@ -63,8 +63,8 @@
  */
 #define CURRENT_SENSOR_ADC_CHANNEL ADC_CHSELR_CHSEL1
 #define ADC_MAX_VALUE 4095.0
-#define Vref 3.3
-#define ZERO_AMP_ADC_CAL 2048.0
+#define Vref 3.33
+#define ZERO_AMP_ADC_CAL 2042.0 //2048.0
 #define ZERO_AMP_REF_V ((ZERO_AMP_ADC_CAL/ADC_MAX_VALUE) * Vref)
 #define V_PER_A 0.00264
 
@@ -150,18 +150,32 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 */
 
 // These are the different levels of limp mode, with level 1 being the least limiting, and level 3 being the most limiting
-#define LIMP_MODE_LEVEL_1_CURRENT_A 175.0 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_LEVEL_2_CURRENT_A 100.0 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_LEVEL_3_CURRENT_A 50.0 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_LEVEL_1_CURRENT_A 175.0
+#define LIMP_MODE_LEVEL_2_CURRENT_A 125.0
+#define LIMP_MODE_LEVEL_3_CURRENT_A 100.0
+#define LIMP_MODE_LEVEL_4_CURRENT_A 75.0
+#define LIMP_MODE_LEVEL_5_CURRENT_A 40.0
 
 // These are the voltages when the levels of limp modes will be entered
-#define LIMP_MODE_VOLTAGE_LEVEL_1 3.5 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_VOLTAGE_LEVEL_2 3.4 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_VOLTAGE_LEVEL_3 3.25 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_VOLTAGE_LEVEL_1 3.7
+#define LIMP_MODE_VOLTAGE_LEVEL_2 3.6
+#define LIMP_MODE_VOLTAGE_LEVEL_3 3.5 
+#define LIMP_MODE_VOLTAGE_LEVEL_4 3.4 
+#define LIMP_MODE_VOLTAGE_LEVEL_5 3.25
+
+// These are the times that the voltage has to be below the threshold before entering the limp mode
+#define LIMP_MODE_VOLTAGE_LEVEL_1_TIME_MS 2500
+#define LIMP_MODE_VOLTAGE_LEVEL_2_TIME_MS 2500
+#define LIMP_MODE_VOLTAGE_LEVEL_3_TIME_MS 2500
+#define LIMP_MODE_VOLTAGE_LEVEL_4_TIME_MS 0
+#define LIMP_MODE_VOLTAGE_LEVEL_5_TIME_MS 0
+
 
 // These are the temperatures when the levels of limp modes will be entered
-#define LIMP_MODE_TEMP_LEVEL_1 53.0 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_TEMP_LEVEL_2 55.0 // This is just an initial guess, may need to be changed
-#define LIMP_MODE_TEMP_LEVEL_3 57.0 // This is just an initial guess, may need to be changed
+#define LIMP_MODE_TEMP_LEVEL_1 48.0 //53.0
+#define LIMP_MODE_TEMP_LEVEL_2 51.0 //54.0
+#define LIMP_MODE_TEMP_LEVEL_3 53.0 //55.0
+#define LIMP_MODE_TEMP_LEVEL_4 55.0 //56.0
+#define LIMP_MODE_TEMP_LEVEL_5 57.0 //57.0
 
 #endif // F29BMSCONFIG_H
