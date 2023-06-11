@@ -54,11 +54,11 @@ void HAL_Can_init(void)
     
     // 1000kbps
     int prescaler = 3;
-    if (HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE) == 1)
-    {
-        // 500 kpbs
-        prescaler = 6;
-    }
+    // if (HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE) == 1) TEMP, should be uncommented
+    // {
+    //     // 500 kpbs
+    //     prescaler = 6;
+    // }
     canInit.CAN_Prescaler = prescaler;
     canInit.CAN_SJW = CAN_SJW_1tq;
     canInit.CAN_BS1 = CAN_BS1_13tq;

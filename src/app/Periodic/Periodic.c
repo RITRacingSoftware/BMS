@@ -75,7 +75,7 @@ void Periodic_10Hz(void)
     SOCestimator_voltage_threshold_update_10Hz(&battery_model, &temp_model);
 
     // set the current limit
-    CurrentLimiter_10Hz(&battery_model);
+    // CurrentLimiter_10Hz(&battery_model);
 
     // statuse LED blink algorithm iteration
     StatusLed_10Hz();
