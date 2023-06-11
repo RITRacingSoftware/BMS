@@ -143,7 +143,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 /**
  * Power Limiting
  */
-#define MAX_POWER_LIMIT_KW 75.0
+#define MAX_POWER_LIMIT_KW 70.0
 
 /**
  * Limp Mode
@@ -164,9 +164,9 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 #define LIMP_MODE_VOLTAGE_LEVEL_5 3.25
 
 // These are the times that the voltage has to be below the threshold before entering the limp mode
-#define LIMP_MODE_VOLTAGE_LEVEL_1_TIME_MS 2500
-#define LIMP_MODE_VOLTAGE_LEVEL_2_TIME_MS 2500
-#define LIMP_MODE_VOLTAGE_LEVEL_3_TIME_MS 2500
+#define LIMP_MODE_VOLTAGE_LEVEL_1_TIME_MS 4000 //Change back to 2500 for Endurance
+#define LIMP_MODE_VOLTAGE_LEVEL_2_TIME_MS 4000 //Change back to 2500 for Endurance
+#define LIMP_MODE_VOLTAGE_LEVEL_3_TIME_MS 4000 //Change back to 2500 for Endurance
 #define LIMP_MODE_VOLTAGE_LEVEL_4_TIME_MS 0
 #define LIMP_MODE_VOLTAGE_LEVEL_5_TIME_MS 0
 

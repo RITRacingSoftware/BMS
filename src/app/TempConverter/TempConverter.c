@@ -99,6 +99,9 @@ void TempConverter_init(float* tlut, int tlut_len, float tlut_offset, float div_
 
 void TempConverter_convert(TempModel_t* tm) 
 {
+    float max_temp = -127.0;
+    float min_temp = 127.0;
+    float temp_accumulator = 0.0; // Used to add all temps together to calculate the average temp
     for (int i = 0; i < NUM_THERMISTOR; i++)
     {
         float temp_V = tm->tm_readings_V[i];
@@ -116,5 +119,20 @@ void TempConverter_convert(TempModel_t* tm)
         float rt = (Vout_over_Vin * divider_ohm) / (1.0 - Vout_over_Vin);
         float ln_rt_r25 = log(rt / TEMP_R25); 
         tm->temps_C[i] = 1.0/(TEMP_A1 + TEMP_B1*ln_rt_r25 + TEMP_C1*SQ(ln_rt_r25) + TEMP_D1 * CUBE(ln_rt_r25)) -273.15;
+
+        if (FLOAT_GT(tm->temps_C[i], max_temp, VOLTAGE_TOLERANCE))
+        {
+            max_temp = tm->temps_C[i];
+        }
+        if (FLOAT_LT(tm->temps_C[i], min_temp, VOLTAGE_TOLERANCE))
+        {
+            min_temp = tm->temps_C[i];
+        }
+        temp_accumulator += tm->temps_C[i];
+
     }
+
+    tm->max_temp_C = max_temp;
+    tm->min_temp_C = min_temp;
+    tm->average_temp_C = (temp_accumulator / ((float)NUM_THERMISTOR));
 }

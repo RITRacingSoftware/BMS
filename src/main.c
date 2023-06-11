@@ -188,7 +188,6 @@ int main(int argc, char** argv)
         lol++;
     }
     
-    
     can_message_recieved_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(can_message_recieved_semaphore);
     xSemaphoreTake(can_message_recieved_semaphore, SEPHAMORE_WAIT);

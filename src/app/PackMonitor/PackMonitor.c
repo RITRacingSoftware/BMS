@@ -39,22 +39,8 @@ static void get_cell_voltage_info(BatteryModel_t* bm)
 
 static void get_temp_info(TempModel_t* tm, float* largest_deg_C, float* smallest_deg_C)
 {
-    *largest_deg_C = -200;
-    *smallest_deg_C = 1000;
-    for (int i = 0; i < NUM_THERMISTOR; i++)
-    {
-        float temp_deg_C = tm->temps_C[i];
-
-        if (FLOAT_GT(temp_deg_C, *largest_deg_C, VOLTAGE_TOLERANCE))
-        {
-            *largest_deg_C = temp_deg_C;
-        }
-        
-        if (FLOAT_LT(temp_deg_C, *smallest_deg_C, VOLTAGE_TOLERANCE))
-        {
-            *smallest_deg_C = temp_deg_C;
-        }
-    }
+    *largest_deg_C = tm->max_temp_C;
+    *smallest_deg_C = tm->min_temp_C;
 }
 
 // voltage fault condition timers
@@ -105,7 +91,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 
     // check for out of charge
     // out of charge should not occur if we're connected to the charger
-    if (FLOAT_LT_EQ(bm->smallest_V, MIN_ALLOWED_CELL_V, VOLTAGE_TOLERANCE) && !ChargeMonitor_charger_available())
+    if (FLOAT_LT_EQ(bm->smallest_V, MIN_ALLOWED_CELL_V, VOLTAGE_TOLERANCE))
     {
         if (incr_to_limit(&low_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
@@ -149,6 +135,10 @@ void PackMonitor_validate_temp_model_10Hz(TempModel_t* tm)
     float largest_deg_C, smallest_deg_C;
 
     get_temp_info(tm, &largest_deg_C, &smallest_deg_C);
+
+    can_bus.bms_status.bms_status_min_temperature = f29bms_dbc_bms_status_bms_status_min_temperature_encode((double)smallest_deg_C);
+    can_bus.bms_status.bms_status_max_temperature = f29bms_dbc_bms_status_bms_status_max_temperature_encode((double)largest_deg_C);
+    can_bus.bms_status.bms_status_average_temperature = f29bms_dbc_bms_status_bms_status_average_temperature_encode((double)tm->average_temp_C);
 
     // check for irrational temp
     if (FLOAT_GT(largest_deg_C, MAX_TEMP_DEG_C, VOLTAGE_TOLERANCE) || FLOAT_LT(smallest_deg_C, MIN_TEMP_DEG_C, VOLTAGE_TOLERANCE))
