@@ -26,7 +26,7 @@
 #define CHARGED_CELL_V 4.18 // once all cells are above this, charging ends
 
 // out of juice fault thrown if cells go below this
-#define MIN_ALLOWED_CELL_V 3 // Datasheet says 3.0  
+#define MIN_ALLOWED_CELL_V 3 // Datasheet says 3.0
 #define MIN_CELL_V 2.0 // cells below this are considered irrational
 
 #define BALANCING_HISTERESIS_V .02 // how low a cell must be balanced below CHARGED_CELL_V for balancing to shut off
@@ -108,7 +108,7 @@
 // rows: average voltage of series cell
 // example: row 0 col 0 means a voltage of 4.0V indicates the battery is at no more than 75% SOC when its <= 5 deg C
 // each index is 0-10 deg C
-static float temp_lut_V[NUM_TEMP_RANGES][3] = 
+static float temp_lut_V[NUM_TEMP_RANGES][3] =
 {//  75%  50%  25%
     {4.0, 3.8, 3.7}, //       t <= 5C
     {3.8, 3.7, 3.6}, //  5C < t <= 15C
@@ -159,8 +159,8 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 // These are the voltages when the levels of limp modes will be entered
 #define LIMP_MODE_VOLTAGE_LEVEL_1 3.7
 #define LIMP_MODE_VOLTAGE_LEVEL_2 3.6
-#define LIMP_MODE_VOLTAGE_LEVEL_3 3.5 
-#define LIMP_MODE_VOLTAGE_LEVEL_4 3.4 
+#define LIMP_MODE_VOLTAGE_LEVEL_3 3.5
+#define LIMP_MODE_VOLTAGE_LEVEL_4 3.4
 #define LIMP_MODE_VOLTAGE_LEVEL_5 3.25
 
 // These are the times that the voltage has to be below the threshold before entering the limp mode
@@ -177,5 +177,18 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 #define LIMP_MODE_TEMP_LEVEL_3 53.0 //55.0
 #define LIMP_MODE_TEMP_LEVEL_4 55.0 //56.0
 #define LIMP_MODE_TEMP_LEVEL_5 57.0 //57.0
+
+
+// Define these options to enable limp mode per-level
+// #define LIMP_MODE_ENABLE_VOLTAGE_LEVEL_1
+// #define LIMP_MODE_ENABLE_VOLTAGE_LEVEL_2
+// #define LIMP_MODE_ENABLE_VOLTAGE_LEVEL_3
+#define LIMP_MODE_ENABLE_VOLTAGE_LEVEL_4
+#define LIMP_MODE_ENABLE_VOLTAGE_LEVEL_5
+#define LIMP_MODE_ENABLE_TEMP_LEVEL_1
+#define LIMP_MODE_ENABLE_TEMP_LEVEL_2
+#define LIMP_MODE_ENABLE_TEMP_LEVEL_3
+#define LIMP_MODE_ENABLE_TEMP_LEVEL_4
+#define LIMP_MODE_ENABLE_TEMP_LEVEL_5
 
 #endif // F29BMSCONFIG_H
