@@ -11,7 +11,7 @@ void CurrentLimiter_init(void)
 
 void CurrentLimiter_10Hz(BatteryModel_t* bm, TempModel_t *tm)
 {
-    // Calculate the current limit to stay under the power
+    // Calculate the current limit to stay under the power limit
     double current_limit;
     current_limit = (MAX_POWER_LIMIT_KW*1000) / (bm->total_V);
 
@@ -26,7 +26,7 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm, TempModel_t *tm)
     // Set the current limit
     can_bus.bms_current_limit.d1_max_discharge_current = f29bms_dbc_bms_current_limit_d1_max_discharge_current_encode(current_limit);
 
-
+    // Charge current should never exceed discharge current, nor the limit defined in f29BmsConfig.h
     double charge_current_limit = MIN(current_limit, MAX_REGEN_CURRENT_A);
-    can_bus.bms_current_limit.d2_max_charge_current = f29bms_dbc_bms_current_limit_d2_max_charge_current_encode(current_limit);
+    can_bus.bms_current_limit.d2_max_charge_current = f29bms_dbc_bms_current_limit_d2_max_charge_current_encode(charge_current_limit);
 }

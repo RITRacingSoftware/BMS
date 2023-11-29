@@ -144,7 +144,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
  * Power Limiting
  */
 #define MAX_POWER_LIMIT_KW 70.0
-#define MAX_REGEN_CURRENT_A 10.0
+#define MAX_REGEN_CURRENT_A 25.0
 
 
 /**
