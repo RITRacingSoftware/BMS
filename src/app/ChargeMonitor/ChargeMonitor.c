@@ -212,8 +212,8 @@ void ChargeMonitor_init(void)
     sm_outputs.allow_balancing = false;
     sm_outputs.request_charge = false;
 
-    can_bus.bms_charge_request.bms_charge_request_max_current = f29bms_dbc_bms_charge_request_bms_charge_request_max_current_encode(MAX_CHARGING_CURRENT_A);
-    can_bus.bms_charge_request.bms_charge_request_max_voltage = f29bms_dbc_bms_charge_request_bms_charge_request_max_voltage_encode(MAX_CHARGING_V);
+    can_bus.bms_charge_request.bms_charge_request_max_current = formula_main_dbc_bms_charge_request_bms_charge_request_max_current_encode(MAX_CHARGING_CURRENT_A);
+    can_bus.bms_charge_request.bms_charge_request_max_voltage = formula_main_dbc_bms_charge_request_bms_charge_request_max_voltage_encode(MAX_CHARGING_V);
 }
 
 /**
@@ -266,7 +266,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     // Actually send the charger control CAN message, if we are connected to the charger
     if (state != ChargeState_DISCONNECTED)
     {
-        CAN_send_message(F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID);
+        CAN_send_message(FORMULA_MAIN_DBC_BMS_CHARGE_REQUEST_FRAME_ID);
     }
 
     can_bus.bms_status.bms_status_charge_state = state;

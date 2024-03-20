@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #include "f29BmsConfig.h"
-#include "f29bms_dbc.h"
+#include "formula_main_dbc.h"
 #include "BatteryModel.h"
 #include "TempModel.h"
 #include "FreeRTOS.h"
@@ -29,24 +29,24 @@ extern SemaphoreHandle_t can_message_transmit_semaphore;
  * So to send a CAN message, update the signals using the encode functions and 
  * then use CAN_send_message with data populated by a pack function.
 */
-// extern can_obj_f29bms_dbc_h_t CAN_BUS;
+// extern can_obj_formula_main_dbc_h_t CAN_BUS;
 
 typedef struct
 {
-    struct f29bms_dbc_bms_status_t bms_status;
-    struct f29bms_dbc_bms_fault_vector_t bms_fault_vector;
-    struct f29bms_dbc_bms_fault_alert_t bms_fault_alert;
-    struct f29bms_dbc_bms_voltages_t bms_voltages;
-    struct f29bms_dbc_bms_thermistor_voltages_t bms_thermistor_voltages;
-    struct f29bms_dbc_bms_temperatures_t bms_temperatures;
-    struct f29bms_dbc_bms_drain_status_a_t bms_drain_status_a;
-    struct f29bms_dbc_bms_drain_status_b_t bms_drain_status_b;
-    struct f29bms_dbc_bms_current_t bms_current;
-    struct f29bms_dbc_bms_charge_request_t bms_charge_request;
-    struct f29bms_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
-    struct f29bms_dbc_bms_ref_t bms_ref;
-    struct f29bms_dbc_bms_current_limit_t bms_current_limit;
-    struct f29bms_dbc_bms_limp_mode_t bms_limp_mode;
+    struct formula_main_dbc_bms_status_t bms_status;
+    struct formula_main_dbc_bms_fault_vector_t bms_fault_vector;
+    struct formula_main_dbc_bms_fault_alert_t bms_fault_alert;
+    struct formula_main_dbc_bms_voltages_t bms_voltages;
+    struct formula_main_dbc_bms_thermistor_voltages_t bms_thermistor_voltages;
+    struct formula_main_dbc_bms_temperatures_t bms_temperatures;
+    struct formula_main_dbc_bms_drain_status_a_t bms_drain_status_a;
+    struct formula_main_dbc_bms_drain_status_b_t bms_drain_status_b;
+    struct formula_main_dbc_bms_current_t bms_current;
+    struct formula_main_dbc_bms_charge_request_t bms_charge_request;
+    struct formula_main_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
+    struct formula_main_dbc_bms_ref_t bms_ref;
+    struct formula_main_dbc_bms_current_limit_t bms_current_limit;
+    struct formula_main_dbc_bms_limp_mode_t bms_limp_mode;
 } CAN_BUS;
 
 extern CAN_BUS can_bus;

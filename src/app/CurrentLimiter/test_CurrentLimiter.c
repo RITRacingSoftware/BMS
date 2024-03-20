@@ -28,9 +28,9 @@ void test_CurrentLimiter_current_limit(void)
     float max_allowed_current = MAX_POWER_LIMIT_KW / bm.total_V;
     float min_current_limit = min_power_limit / bm.total_V;
     char err_msg[150];
-    sprintf(err_msg, "Current limit set above maximum allowed power limit at %fV.(%fA)", bm.total_V, f29bms_dbc_bms_current_limit_bms_max_discharge_current_decode(can_bus.bms_current_limit.bms_max_discharge_current));
-    TEST_ASSERT_MESSAGE(f29bms_dbc_bms_current_limit_bms_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) <= max_allowed_current, err_msg);
-    TEST_ASSERT_MESSAGE(f29bms_dbc_bms_current_limit_bms_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) >= min_power_limit, err_msg);
+    sprintf(err_msg, "Current limit set above maximum allowed power limit at %fV.(%fA)", bm.total_V, formula_main_dbc_bms_current_limit_d1_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current));
+    TEST_ASSERT_MESSAGE(formula_main_dbc_bms_current_limit_d1_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) <= max_allowed_current, err_msg);
+    TEST_ASSERT_MESSAGE(formula_main_dbc_bms_current_limit_d1_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) >= min_power_limit, err_msg);
 
     bm.total_V = 321.0123;
 
@@ -38,9 +38,9 @@ void test_CurrentLimiter_current_limit(void)
 
     max_allowed_current = MAX_POWER_LIMIT_KW / bm.total_V;
     min_current_limit = min_power_limit / bm.total_V;
-    sprintf(err_msg, "Current limit set above maximum allowed power limit at %fV.(%fA)", bm.total_V, f29bms_dbc_bms_current_limit_bms_max_discharge_current_decode(can_bus.bms_current_limit.bms_max_discharge_current));
-    TEST_ASSERT_MESSAGE(f29bms_dbc_bms_current_limit_bms_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) <= max_allowed_current, err_msg);
-    TEST_ASSERT_MESSAGE(f29bms_dbc_bms_current_limit_bms_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) >= min_power_limit, err_msg);
+    sprintf(err_msg, "Current limit set above maximum allowed power limit at %fV.(%fA)", bm.total_V, formula_main_dbc_bms_current_limit_d1_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current));
+    TEST_ASSERT_MESSAGE(formula_main_dbc_bms_current_limit_d1_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) <= max_allowed_current, err_msg);
+    TEST_ASSERT_MESSAGE(formula_main_dbc_bms_current_limit_d1_max_discharge_current_decode(can_bus.bms_current_limit.d1_max_discharge_current) >= min_power_limit, err_msg);
 
 
 }

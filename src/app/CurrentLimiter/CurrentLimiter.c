@@ -24,5 +24,5 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm, TempModel_t *tm)
     current_limit = MIN(current_limit, temp_limp_mode_current);
 
     // Set the current limit
-    can_bus.bms_current_limit.d1_max_discharge_current = f29bms_dbc_bms_current_limit_d1_max_discharge_current_encode(current_limit);
+    can_bus.bms_current_limit.d1_max_discharge_current = formula_main_dbc_bms_current_limit_d1_max_discharge_current_encode(current_limit);
 }

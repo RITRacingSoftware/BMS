@@ -77,7 +77,7 @@ def TOOL_CANTOOLS(env):
     TARGET - c file node that will be generated. The directory of this file will be used in the command.
     """
     dbcc_builder = SCons.Builder.Builder(action=[
-        'cd ${SOURCE.dir.abspath} && cantools generate_c_source ${SOURCE.abspath}' 
+        'cd ${TARGET.dir.abspath} && cantools generate_c_source ${SOURCE.abspath}' 
     ])
 
     env.Append(BUILDERS = {

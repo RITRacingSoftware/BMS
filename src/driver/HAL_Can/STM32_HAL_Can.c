@@ -1,5 +1,5 @@
 #include "HAL_Can.h"
-#include "stm32F0xx.h"
+#include "stm32f0xx.h"
 #include "stm32f0xx_gpio.h"
 #include "stm32f0xx_can.h"
 #include "stm32f0xx_misc.h"

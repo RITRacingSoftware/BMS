@@ -136,9 +136,9 @@ void PackMonitor_validate_temp_model_10Hz(TempModel_t* tm)
 
     get_temp_info(tm, &largest_deg_C, &smallest_deg_C);
 
-    can_bus.bms_status.bms_status_min_temperature = f29bms_dbc_bms_status_bms_status_min_temperature_encode((double)smallest_deg_C);
-    can_bus.bms_status.bms_status_max_temperature = f29bms_dbc_bms_status_bms_status_max_temperature_encode((double)largest_deg_C);
-    can_bus.bms_status.bms_status_average_temperature = f29bms_dbc_bms_status_bms_status_average_temperature_encode((double)tm->average_temp_C);
+    can_bus.bms_status.bms_status_min_temperature = formula_main_dbc_bms_status_bms_status_min_temperature_encode((double)smallest_deg_C);
+    can_bus.bms_status.bms_status_max_temperature = formula_main_dbc_bms_status_bms_status_max_temperature_encode((double)largest_deg_C);
+    can_bus.bms_status.bms_status_average_temperature = formula_main_dbc_bms_status_bms_status_average_temperature_encode((double)tm->average_temp_C);
 
     // check for irrational temp
     if (FLOAT_GT(largest_deg_C, MAX_TEMP_DEG_C, VOLTAGE_TOLERANCE) || FLOAT_LT(smallest_deg_C, MIN_TEMP_DEG_C, VOLTAGE_TOLERANCE))

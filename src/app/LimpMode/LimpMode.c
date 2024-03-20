@@ -121,8 +121,8 @@ double LimpMode_voltage_limit(BatteryModel_t *bm)
 
     // Send the current limit over CAN
     // For some reason when not current limiting, the current limit says -162 on CANalyzer
-    can_bus.bms_limp_mode.bms_limp_mode_voltage_limp_level = f29bms_dbc_bms_limp_mode_bms_limp_mode_voltage_limp_level_encode(voltage_limp_level);
-    can_bus.bms_limp_mode.bms_limp_mode_voltage_current_limit = f29bms_dbc_bms_limp_mode_bms_limp_mode_voltage_current_limit_encode(current_limit);
+    can_bus.bms_limp_mode.bms_limp_mode_voltage_limp_level = formula_main_dbc_bms_limp_mode_bms_limp_mode_voltage_limp_level_encode(voltage_limp_level);
+    can_bus.bms_limp_mode.bms_limp_mode_voltage_current_limit = formula_main_dbc_bms_limp_mode_bms_limp_mode_voltage_current_limit_encode(current_limit);
 
     return current_limit;
 }
@@ -188,8 +188,8 @@ double LimpMode_temperature_limit(TempModel_t *tm)
 
     // Send the current limit over CAN
     // For some reason when not current limiting, the current limit says -162 on CANalyzer
-    can_bus.bms_limp_mode.bms_limp_mode_temp_limp_level = f29bms_dbc_bms_limp_mode_bms_limp_mode_temp_limp_level_encode(temperature_limp_level);
-    can_bus.bms_limp_mode.bms_limp_mode_temp_current_limit = f29bms_dbc_bms_limp_mode_bms_limp_mode_temp_current_limit_encode(current_limit);
+    can_bus.bms_limp_mode.bms_limp_mode_temp_limp_level = formula_main_dbc_bms_limp_mode_bms_limp_mode_temp_limp_level_encode(temperature_limp_level);
+    can_bus.bms_limp_mode.bms_limp_mode_temp_current_limit = formula_main_dbc_bms_limp_mode_bms_limp_mode_temp_current_limit_encode(current_limit);
 
     return current_limit;
 }

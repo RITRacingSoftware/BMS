@@ -169,8 +169,8 @@ void hardfault_handler_routine(void)
 
     uint8_t data[8];
     can_bus.bms_hard_fault_indicator.bms_hard_fault_indicator_task = task_id;
-    f29bms_dbc_bms_hard_fault_indicator_pack(data, &can_bus.bms_hard_fault_indicator, 8);
-    HAL_Can_send_message(F29BMS_DBC_BMS_HARD_FAULT_INDICATOR_FRAME_ID, 8, *((uint64_t*)data)); 
+    formula_main_dbc_bms_hard_fault_indicator_pack(data, &can_bus.bms_hard_fault_indicator, 8);
+    HAL_Can_send_message(FORMULA_MAIN_DBC_BMS_HARD_FAULT_INDICATOR_FRAME_ID, 8, *((uint64_t*)data)); 
 }
 
 int main(int argc, char** argv)

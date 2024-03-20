@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "CAN.h"
 #include "HAL_Can.h"
@@ -9,7 +10,7 @@
 
 #define TICKS_TO_WAIT_QUEUE_CAN_MESSAGE (0) //Will return immediately if queue is full, not sure if this should be different
 
-// can_obj_f29bms_dbc_h_t CAN_BUS;
+// can_obj_formula_main_dbc_h_t CAN_BUS;
 CAN_BUS can_bus;
 
 
@@ -29,44 +30,44 @@ static int pack_message(int id, uint8_t* msg_data)
 {
     switch(id)
     {
-        case F29BMS_DBC_BMS_STATUS_FRAME_ID:
-             return f29bms_dbc_bms_status_pack(msg_data, &can_bus.bms_status, 8);
+        case FORMULA_MAIN_DBC_BMS_STATUS_FRAME_ID:
+             return formula_main_dbc_bms_status_pack(msg_data, &can_bus.bms_status, 8);
 
-        case F29BMS_DBC_BMS_FAULT_VECTOR_FRAME_ID:
-            return f29bms_dbc_bms_fault_vector_pack(msg_data, &can_bus.bms_fault_vector, 8);
+        case FORMULA_MAIN_DBC_BMS_FAULT_VECTOR_FRAME_ID:
+            return formula_main_dbc_bms_fault_vector_pack(msg_data, &can_bus.bms_fault_vector, 8);
 
-        case F29BMS_DBC_BMS_FAULT_ALERT_FRAME_ID:
-            return f29bms_dbc_bms_fault_alert_pack(msg_data, &can_bus.bms_fault_alert, 8);
+        case FORMULA_MAIN_DBC_BMS_FAULT_ALERT_FRAME_ID:
+            return formula_main_dbc_bms_fault_alert_pack(msg_data, &can_bus.bms_fault_alert, 8);
 
-        case F29BMS_DBC_BMS_VOLTAGES_FRAME_ID:
-            return f29bms_dbc_bms_voltages_pack(msg_data, &can_bus.bms_voltages, 8);
+        case FORMULA_MAIN_DBC_BMS_VOLTAGES_FRAME_ID:
+            return formula_main_dbc_bms_voltages_pack(msg_data, &can_bus.bms_voltages, 8);
         
-        case F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID:
-            return f29bms_dbc_bms_thermistor_voltages_pack(msg_data, &can_bus.bms_thermistor_voltages, 8);
+        case FORMULA_MAIN_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID:
+            return formula_main_dbc_bms_thermistor_voltages_pack(msg_data, &can_bus.bms_thermistor_voltages, 8);
         
-        case F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID:
-            return f29bms_dbc_bms_temperatures_pack(msg_data, &can_bus.bms_temperatures, 8);
+        case FORMULA_MAIN_DBC_BMS_TEMPERATURES_FRAME_ID:
+            return formula_main_dbc_bms_temperatures_pack(msg_data, &can_bus.bms_temperatures, 8);
 
-        case F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID:
-            return f29bms_dbc_bms_drain_status_a_pack(msg_data, &can_bus.bms_drain_status_a, 8);
+        case FORMULA_MAIN_DBC_BMS_DRAIN_STATUS_A_FRAME_ID:
+            return formula_main_dbc_bms_drain_status_a_pack(msg_data, &can_bus.bms_drain_status_a, 8);
 
-        case F29BMS_DBC_BMS_DRAIN_STATUS_B_FRAME_ID:
-            return f29bms_dbc_bms_drain_status_b_pack(msg_data, &can_bus.bms_drain_status_b, 8);
+        case FORMULA_MAIN_DBC_BMS_DRAIN_STATUS_B_FRAME_ID:
+            return formula_main_dbc_bms_drain_status_b_pack(msg_data, &can_bus.bms_drain_status_b, 8);
 
-        case F29BMS_DBC_BMS_CURRENT_FRAME_ID:
-            return f29bms_dbc_bms_current_pack(msg_data, &can_bus.bms_current, 8);
+        case FORMULA_MAIN_DBC_BMS_CURRENT_FRAME_ID:
+            return formula_main_dbc_bms_current_pack(msg_data, &can_bus.bms_current, 8);
         
-        case F29BMS_DBC_BMS_CHARGE_REQUEST_FRAME_ID:
-            return f29bms_dbc_bms_charge_request_pack(msg_data, &can_bus.bms_charge_request, 8);
+        case FORMULA_MAIN_DBC_BMS_CHARGE_REQUEST_FRAME_ID:
+            return formula_main_dbc_bms_charge_request_pack(msg_data, &can_bus.bms_charge_request, 8);
 
-        case F29BMS_DBC_BMS_REF_FRAME_ID:
-            return f29bms_dbc_bms_ref_pack(msg_data, &can_bus.bms_ref, 8);
+        case FORMULA_MAIN_DBC_BMS_REF_FRAME_ID:
+            return formula_main_dbc_bms_ref_pack(msg_data, &can_bus.bms_ref, 8);
         
-        case F29BMS_DBC_BMS_CURRENT_LIMIT_FRAME_ID:
-            return f29bms_dbc_bms_current_limit_pack(msg_data, &can_bus.bms_current_limit, 8);
+        case FORMULA_MAIN_DBC_BMS_CURRENT_LIMIT_FRAME_ID:
+            return formula_main_dbc_bms_current_limit_pack(msg_data, &can_bus.bms_current_limit, 8);
 
-        case F29BMS_DBC_BMS_LIMP_MODE_FRAME_ID:
-            return f29bms_dbc_bms_limp_mode_pack(msg_data, &can_bus.bms_limp_mode, 8);
+        case FORMULA_MAIN_DBC_BMS_LIMP_MODE_FRAME_ID:
+            return formula_main_dbc_bms_limp_mode_pack(msg_data, &can_bus.bms_limp_mode, 8);
         
         default:
             printf("f29bms: unknown CAN id: %d\n", id);
@@ -112,7 +113,7 @@ void CAN_reset_error(void)
 
 void CAN_1kHz(void)
 {
-    CAN_send_message(F29BMS_DBC_BMS_CURRENT_FRAME_ID);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_CURRENT_FRAME_ID);
 }
 
 void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
@@ -137,8 +138,8 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         frac_voltage &= voltage_mask;
         msg_data |= (frac_voltage << (voltages_start_bit + i*voltage_len_bits)); 
     }
-    f29bms_dbc_bms_voltages_unpack(&can_bus.bms_voltages, (uint8_t*)(&msg_data), 8);
-    CAN_send_message(F29BMS_DBC_BMS_VOLTAGES_FRAME_ID);
+    formula_main_dbc_bms_voltages_unpack(&can_bus.bms_voltages, (uint8_t*)(&msg_data), 8);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_VOLTAGES_FRAME_ID);
     voltages_mux = (voltages_mux + 1) % (NUM_SERIES_CELLS/6); // mux limits like this are hardcoded according to the DBC maximum mux values (here its m14)
 
     msg_data = 0;
@@ -165,8 +166,8 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 
         }
     }
-    f29bms_dbc_bms_thermistor_voltages_unpack(&can_bus.bms_thermistor_voltages, (uint8_t*)&msg_data, 8);
-    CAN_send_message(F29BMS_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID);
+    formula_main_dbc_bms_thermistor_voltages_unpack(&can_bus.bms_thermistor_voltages, (uint8_t*)&msg_data, 8);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID);
     thermistor_mux = (thermistor_mux + 1) % 7;
 
     msg_data = 0;
@@ -200,8 +201,8 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         }
     }
 
-    f29bms_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&msg_data, 8);
-    CAN_send_message(F29BMS_DBC_BMS_TEMPERATURES_FRAME_ID);
+    formula_main_dbc_bms_temperatures_unpack(&can_bus.bms_temperatures, (uint8_t*)&msg_data, 8);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_TEMPERATURES_FRAME_ID);
     temperature_mux = (temperature_mux + 1) % 6;
 
     // drain states
@@ -221,39 +222,39 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         }
     }
 
-    f29bms_dbc_bms_drain_status_a_unpack(&can_bus.bms_drain_status_a, (uint8_t*)&a_drain_states, 8);
-    f29bms_dbc_bms_drain_status_b_unpack(&can_bus.bms_drain_status_b, (uint8_t*)&b_drain_states, 8);
+    formula_main_dbc_bms_drain_status_a_unpack(&can_bus.bms_drain_status_a, (uint8_t*)&a_drain_states, 8);
+    formula_main_dbc_bms_drain_status_b_unpack(&can_bus.bms_drain_status_b, (uint8_t*)&b_drain_states, 8);
 
-    CAN_send_message(F29BMS_DBC_BMS_DRAIN_STATUS_A_FRAME_ID);
-    CAN_send_message(F29BMS_DBC_BMS_DRAIN_STATUS_B_FRAME_ID);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_DRAIN_STATUS_A_FRAME_ID);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_DRAIN_STATUS_B_FRAME_ID);
 
     static int bms_ref_mux = 0;
     can_bus.bms_ref.bms_ref_mux = bms_ref_mux;
-    can_bus.bms_ref.bms_ref_ref0 = f29bms_dbc_bms_ref_bms_ref_ref0_encode(tm->vref2s[0]);
-    can_bus.bms_ref.bms_ref_ref1 = f29bms_dbc_bms_ref_bms_ref_ref1_encode(tm->vref2s[1]);
-    can_bus.bms_ref.bms_ref_ref2 = f29bms_dbc_bms_ref_bms_ref_ref2_encode(tm->vref2s[2]);
-    can_bus.bms_ref.bms_ref_ref3 = f29bms_dbc_bms_ref_bms_ref_ref3_encode(tm->vref2s[3]);
-    can_bus.bms_ref.bms_ref_ref4 = f29bms_dbc_bms_ref_bms_ref_ref4_encode(tm->vref2s[4]);
-    can_bus.bms_ref.bms_ref_ref5 = f29bms_dbc_bms_ref_bms_ref_ref5_encode(tm->vref2s[5]);
-    can_bus.bms_ref.bms_ref_ref6 = f29bms_dbc_bms_ref_bms_ref_ref6_encode(tm->vref2s[6]);
-    can_bus.bms_ref.bms_ref_ref7 = f29bms_dbc_bms_ref_bms_ref_ref7_encode(tm->vref2s[7]);
-    can_bus.bms_ref.bms_ref_ref8 = f29bms_dbc_bms_ref_bms_ref_ref8_encode(tm->vref2s[8]);
-    can_bus.bms_ref.bms_ref_ref9 = f29bms_dbc_bms_ref_bms_ref_ref9_encode(tm->vref2s[9]);
-    can_bus.bms_ref.bms_ref_ref10 = f29bms_dbc_bms_ref_bms_ref_ref10_encode(tm->vref2s[10]);
-    can_bus.bms_ref.bms_ref_ref11 = f29bms_dbc_bms_ref_bms_ref_ref11_encode(tm->vref2s[11]);
-    CAN_send_message(F29BMS_DBC_BMS_REF_FRAME_ID);
+    can_bus.bms_ref.bms_ref_ref0 = formula_main_dbc_bms_ref_bms_ref_ref0_encode(tm->vref2s[0]);
+    can_bus.bms_ref.bms_ref_ref1 = formula_main_dbc_bms_ref_bms_ref_ref1_encode(tm->vref2s[1]);
+    can_bus.bms_ref.bms_ref_ref2 = formula_main_dbc_bms_ref_bms_ref_ref2_encode(tm->vref2s[2]);
+    can_bus.bms_ref.bms_ref_ref3 = formula_main_dbc_bms_ref_bms_ref_ref3_encode(tm->vref2s[3]);
+    can_bus.bms_ref.bms_ref_ref4 = formula_main_dbc_bms_ref_bms_ref_ref4_encode(tm->vref2s[4]);
+    can_bus.bms_ref.bms_ref_ref5 = formula_main_dbc_bms_ref_bms_ref_ref5_encode(tm->vref2s[5]);
+    can_bus.bms_ref.bms_ref_ref6 = formula_main_dbc_bms_ref_bms_ref_ref6_encode(tm->vref2s[6]);
+    can_bus.bms_ref.bms_ref_ref7 = formula_main_dbc_bms_ref_bms_ref_ref7_encode(tm->vref2s[7]);
+    can_bus.bms_ref.bms_ref_ref8 = formula_main_dbc_bms_ref_bms_ref_ref8_encode(tm->vref2s[8]);
+    can_bus.bms_ref.bms_ref_ref9 = formula_main_dbc_bms_ref_bms_ref_ref9_encode(tm->vref2s[9]);
+    can_bus.bms_ref.bms_ref_ref10 = formula_main_dbc_bms_ref_bms_ref_ref10_encode(tm->vref2s[10]);
+    can_bus.bms_ref.bms_ref_ref11 = formula_main_dbc_bms_ref_bms_ref_ref11_encode(tm->vref2s[11]);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_REF_FRAME_ID);
     bms_ref_mux ^= 1;
 
-     CAN_send_message(F29BMS_DBC_BMS_CURRENT_LIMIT_FRAME_ID);
-     CAN_send_message(F29BMS_DBC_BMS_LIMP_MODE_FRAME_ID);
+     CAN_send_message(FORMULA_MAIN_DBC_BMS_CURRENT_LIMIT_FRAME_ID);
+     CAN_send_message(FORMULA_MAIN_DBC_BMS_LIMP_MODE_FRAME_ID);
 }
 
 
 
 void CAN_1Hz(void)
 {
-    CAN_send_message(F29BMS_DBC_BMS_STATUS_FRAME_ID);
-    CAN_send_message(F29BMS_DBC_BMS_FAULT_VECTOR_FRAME_ID);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_STATUS_FRAME_ID);
+    CAN_send_message(FORMULA_MAIN_DBC_BMS_FAULT_VECTOR_FRAME_ID);
 }
 
 void CAN_process_recieved_messages(void)
