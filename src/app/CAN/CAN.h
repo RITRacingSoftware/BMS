@@ -17,8 +17,6 @@ typedef struct
     uint64_t data;
 } can_message;
 
-extern SemaphoreHandle_t can_message_transmit_semaphore;
-
 /**
  * Holds the current state of the CAN bus.
  * Every signal in the DBC has a field in this.

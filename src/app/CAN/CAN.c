@@ -19,8 +19,20 @@ static bool can_error;
 static QueueHandle_t tx_can_message_queue;
 static QueueHandle_t rx_can_message_queue;
 
+SemaphoreHandle_t can_message_recieved_semaphore;
+SemaphoreHandle_t can_message_transmit_semaphore;
+
+#define SEPHAMORE_WAIT 0
+
 void CAN_init(void)
 {
+    can_message_recieved_semaphore = xSemaphoreCreateBinary();
+    xSemaphoreGive(can_message_recieved_semaphore);
+    xSemaphoreTake(can_message_recieved_semaphore, SEPHAMORE_WAIT);
+    can_message_transmit_semaphore = xSemaphoreCreateBinary();
+    xSemaphoreGive(can_message_transmit_semaphore);
+    xSemaphoreTake(can_message_transmit_semaphore, SEPHAMORE_WAIT);
+
     tx_can_message_queue = xQueueCreate(CAN_QUEUE_LEN, sizeof(can_message));
     rx_can_message_queue= xQueueCreate(CAN_QUEUE_LEN, sizeof(can_message));
     can_error = false;
@@ -259,30 +271,33 @@ void CAN_1Hz(void)
 
 void CAN_process_recieved_messages(void)
 {
-    can_message received_message;
-    //Get all can messages received
-    while (xQueueReceive(rx_can_message_queue, &received_message, TICKS_TO_WAIT_QUEUE_CAN_MESSAGE) == pdTRUE)
+    if(xSemaphoreTake(can_message_recieved_semaphore, portMAX_DELAY) == pdTRUE)
     {
-        uint8_t data[8];
-        for (int i = 0; i < 8; i++)
+        can_message received_message;
+        //Get all can messages received
+        while (xQueueReceive(rx_can_message_queue, &received_message, TICKS_TO_WAIT_QUEUE_CAN_MESSAGE) == pdTRUE)
         {
-            data[i] = (received_message.data >> (i*8)) & 0xff;
-        }
-        // uint8_t print_buffer[50];
-        // uint8_t n = sprintf(&print_buffer[0], "ID: %d  Data: %d  %d  %d  %d  %d  %d  %d  %d\n\r", received_message.id, data[0],
-        //      data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
-        // HAL_Uart_send(&print_buffer[0], n);
+            uint8_t data[8];
+            for (int i = 0; i < 8; i++)
+            {
+                data[i] = (received_message.data >> (i*8)) & 0xff;
+            }
+            // uint8_t print_buffer[50];
+            // uint8_t n = sprintf(&print_buffer[0], "ID: %d  Data: %d  %d  %d  %d  %d  %d  %d  %d\n\r", received_message.id, data[0],
+            //      data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+            // HAL_Uart_send(&print_buffer[0], n);
 
-        //Unpack message recieved
-        switch(received_message.id)
-        {
-            // Add case if any CAN messages have to be recieved
-            
-            default:
-                // printf("f29bms: unknown CAN id: %d\n", received_message.id);
-                break;
-        }
+            //Unpack message recieved
+            switch(received_message.id)
+            {
+                // Add case if any CAN messages have to be recieved
+                
+                default:
+                    // printf("f29bms: unknown CAN id: %d\n", received_message.id);
+                    break;
+            }
 
+        }
     }
 }
 

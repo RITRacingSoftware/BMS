@@ -16,6 +16,9 @@
 
 static uint8_t num_filters = 0;
 
+
+
+
 // Must initialize gpio first to read charger line
 void HAL_Can_init(void)
 {

@@ -38,12 +38,6 @@
 #include "StatusLed.h"
 #include "TempConverter.h"
 #include "TempModel.h"
-#include "semphr.h"
-
-#define SEPHAMORE_WAIT 0
-
-SemaphoreHandle_t can_message_recieved_semaphore;
-SemaphoreHandle_t can_message_transmit_semaphore;
 
 #define TASK_1Hz_NAME "task_1Hz"
 #define TASK_1Hz_PRIORITY (tskIDLE_PRIORITY + 1)
@@ -103,10 +97,8 @@ void task_can_rx(void *pvParameters)
     // TickType_t next_wake_time = xTaskGetTickCount();
     for (;;)
     {
-        if(xSemaphoreTake(can_message_recieved_semaphore, portMAX_DELAY) == pdTRUE)
-        {
-            CAN_process_recieved_messages();
-        }
+        
+        CAN_process_recieved_messages();
     }
 }
 
@@ -188,12 +180,7 @@ int main(int argc, char** argv)
         lol++;
     }
     
-    can_message_recieved_semaphore = xSemaphoreCreateBinary();
-    xSemaphoreGive(can_message_recieved_semaphore);
-    xSemaphoreTake(can_message_recieved_semaphore, SEPHAMORE_WAIT);
-    can_message_transmit_semaphore = xSemaphoreCreateBinary();
-    xSemaphoreGive(can_message_transmit_semaphore);
-    xSemaphoreTake(can_message_transmit_semaphore, SEPHAMORE_WAIT);
+    
 
     
     
