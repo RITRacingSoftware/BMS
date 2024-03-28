@@ -7,7 +7,7 @@
 // used to keep track of drain status.
 static BatteryModel_t prev_model;
 
-bool reading_allowed = false;
+bool reading_allowed = true;
 
 void CellBalancer_init(void)
 {

@@ -814,7 +814,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
         }
 
         // chip 2
-        for (int cell = 0; cell < 9; cell++)
+        for (int cell = 0; cell < 10; cell++)
         {
             int cell_pin = cell;
             if (cell > 4)
