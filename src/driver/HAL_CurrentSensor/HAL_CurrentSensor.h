@@ -7,6 +7,6 @@
 
 void HAL_CurrentSensor_init(void);
 
-Error_t HAL_CurrentSensor_read_current(float* current);
+Error_t HAL_CurrentSensor_read_current(float* outCurrent);
 
 #endif
