@@ -70,6 +70,10 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
         {
             temp_model->tm_readings_V[i] = tm_readings_V[i];
         }
+
+        // Ignore 2 crap thermistors: segment 3, LTC 1, thermistors 1-2
+        temp_model->tm_readings_V[2*8] = 1.1;
+        temp_model->tm_readings_V[2*8+1] = 1.1;
     }
 }
 
