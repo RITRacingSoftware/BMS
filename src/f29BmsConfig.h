@@ -61,7 +61,7 @@
 /**
  * Current Sensor
  */
-#define CURRENT_SENSOR_ADC_CHANNEL ADC_CHSELR_CHSEL1
+#define CURRENT_SENSOR_ADC_CHANNEL ADC_CHSELR_CHSEL0
 #define ADC_MAX_VALUE 4095.0
 #define Vref 3.33
 #define ZERO_AMP_ADC_CAL 2042.0 //2048.0
@@ -69,7 +69,7 @@
 #define V_PER_A 0.00264
 
 #define CURRENT_SENSOR_PORT GPIOA
-#define CURRENT_SENSOR_PIN GPIO_Pin_1
+#define CURRENT_SENSOR_PIN GPIO_Pin_0
 
 /**
  * Faults
