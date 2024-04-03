@@ -43,7 +43,7 @@ void test_FaultManager_fault_and_clear(void)
     for (int code = 0; code < FaultCode_NUM; code++)
     {
         // make sure each fault sets correctly
-        CAN_send_message_Ignore();
+        CAN_send_message_by_id_Ignore();
         FaultManager_set_fault_active(code, &unused_fault_data);
         sprintf(err_msg, "Fault code %d failed to set.", code);
         TEST_ASSERT_MESSAGE(FaultManager_is_fault_active(code) == true || !FaultManager_is_fault_enabled(code),  err_msg);

@@ -27,20 +27,16 @@ extern SemaphoreHandle_t can_message_transmit_semaphore;
  * A packed CAN message can be extracted from this structure by using the pack functions.
  * 
  * So to send a CAN message, update the signals using the encode functions and 
- * then use CAN_send_message with data populated by a pack function.
+ * then use CAN_send_message_by_id with data populated by a pack function.
 */
 // extern can_obj_formula_main_dbc_h_t CAN_BUS;
 
 typedef struct
 {
     struct formula_main_dbc_bms_status_t bms_status;
+    struct formula_main_dbc_bms_cell_overview_t bms_cell_overview;
     struct formula_main_dbc_bms_fault_vector_t bms_fault_vector;
     struct formula_main_dbc_bms_fault_alert_t bms_fault_alert;
-    struct formula_main_dbc_bms_voltages_t bms_voltages;
-    struct formula_main_dbc_bms_thermistor_voltages_t bms_thermistor_voltages;
-    struct formula_main_dbc_bms_temperatures_t bms_temperatures;
-    struct formula_main_dbc_bms_drain_status_a_t bms_drain_status_a;
-    struct formula_main_dbc_bms_drain_status_b_t bms_drain_status_b;
     struct formula_main_dbc_bms_current_t bms_current;
     struct formula_main_dbc_bms_charge_request_t bms_charge_request;
     struct formula_main_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
@@ -61,7 +57,7 @@ void CAN_init(void);
  * Data is automatically retrieved from CAN_BUS.
  * id [in] - 11 bit CAN id- use the generated definitions in can_ids.h
  */
-void CAN_send_message(unsigned long int id);
+void CAN_send_message_by_id(unsigned long int id);
 
 /**
  * Return true if last CAN message could not send, false otherwise.

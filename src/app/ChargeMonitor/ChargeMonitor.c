@@ -266,7 +266,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     // Actually send the charger control CAN message, if we are connected to the charger
     if (state != ChargeState_DISCONNECTED)
     {
-        CAN_send_message(FORMULA_MAIN_DBC_BMS_CHARGE_REQUEST_FRAME_ID);
+        CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_CHARGE_REQUEST_FRAME_ID);
     }
 
     can_bus.bms_status.bms_status_charge_state = state;

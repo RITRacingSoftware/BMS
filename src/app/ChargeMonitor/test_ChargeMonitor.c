@@ -17,7 +17,7 @@ void setUp(void)
 {
     HAL_Gpio_write_Ignore();
     ChargeMonitor_init();
-    CAN_send_message_Ignore();
+    CAN_send_message_by_id_Ignore();
 }
 
 /**

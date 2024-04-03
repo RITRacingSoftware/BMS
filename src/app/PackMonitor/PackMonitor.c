@@ -72,6 +72,17 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 {
     get_cell_voltage_info(bm);
     can_bus.bms_status.bms_status_pack_voltage = (uint16_t) ((((float)bm->total_V))/.1 + .5);
+    can_bus.bms_cell_overview.bms_overview_volt_min = formula_main_dbc_bms_cell_overview_bms_overview_volt_min_encode((double) bm->smallest_V);
+    can_bus.bms_cell_overview.bms_overview_volt_max = formula_main_dbc_bms_cell_overview_bms_overview_volt_max_encode((double) bm->largest_V);
+    can_bus.bms_cell_overview.bms_overview_volt_avg = formula_main_dbc_bms_cell_overview_bms_overview_volt_avg_encode((double) bm->average_V);
+
+    uint32_t num_draining = 0;
+    for (int i = 0; i < NUM_SERIES_CELLS; i++) {
+        if (bm->cells[i].is_draining) {
+            num_draining++;
+        }
+    }
+    can_bus.bms_cell_overview.bms_overview_drains = formula_main_dbc_bms_cell_overview_bms_overview_drains_encode(num_draining);
 
     // check for irrationality
     if (FLOAT_GT(bm->largest_V, MAX_CELL_V, VOLTAGE_TOLERANCE) || FLOAT_LT(bm->smallest_V, MIN_CELL_V, VOLTAGE_TOLERANCE))
@@ -132,13 +143,12 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
  */
 void PackMonitor_validate_temp_model_10Hz(TempModel_t* tm)
 {
+    can_bus.bms_cell_overview.bms_overview_temp_min = formula_main_dbc_bms_cell_overview_bms_overview_temp_min_encode((double) tm->min_temp_C);
+    can_bus.bms_cell_overview.bms_overview_temp_max = formula_main_dbc_bms_cell_overview_bms_overview_temp_max_encode((double) tm->max_temp_C);
+    can_bus.bms_cell_overview.bms_overview_temp_avg = formula_main_dbc_bms_cell_overview_bms_overview_temp_avg_encode((double) tm->average_temp_C);
+
     float largest_deg_C, smallest_deg_C;
-
     get_temp_info(tm, &largest_deg_C, &smallest_deg_C);
-
-    can_bus.bms_status.bms_status_min_temperature = formula_main_dbc_bms_status_bms_status_min_temperature_encode((double)smallest_deg_C);
-    can_bus.bms_status.bms_status_max_temperature = formula_main_dbc_bms_status_bms_status_max_temperature_encode((double)largest_deg_C);
-    can_bus.bms_status.bms_status_average_temperature = formula_main_dbc_bms_status_bms_status_average_temperature_encode((double)tm->average_temp_C);
 
     // check for irrational temp
     if (FLOAT_GT(largest_deg_C, MAX_TEMP_DEG_C, VOLTAGE_TOLERANCE) || FLOAT_LT(smallest_deg_C, MIN_TEMP_DEG_C, VOLTAGE_TOLERANCE))

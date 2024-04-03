@@ -87,7 +87,7 @@ void FaultManager_set_fault_active(FaultCode_e code, void* data)
         // set the mux of the alert message to the fault code
         can_bus.bms_fault_alert.bms_fault_alert_code = formula_main_dbc_bms_fault_alert_bms_fault_alert_code_encode((uint8_t) code);
 
-        CAN_send_message(FORMULA_MAIN_DBC_BMS_FAULT_ALERT_FRAME_ID);
+        CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_FAULT_ALERT_FRAME_ID);
 
         // update the fault vector CAN message data
         formula_main_dbc_bms_fault_vector_unpack(&can_bus.bms_fault_vector, (uint8_t*)&fault_vector, 8);
