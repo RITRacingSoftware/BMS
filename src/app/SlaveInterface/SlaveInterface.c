@@ -71,9 +71,13 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
             temp_model->tm_readings_V[i] = tm_readings_V[i];
         }
 
-        // Ignore 2 crap thermistors: segment 3, LTC 1, thermistors 1-2
-        temp_model->tm_readings_V[2*8] = 1.1;
-        temp_model->tm_readings_V[2*8+1] = 1.1;
+        // Ignore crap thermistors:
+        // segment 2, thermistors 5-8
+        // segment 3, thermistors 1-2
+        const int bad_thermistors[] = {1*8+4, 1*8+5, 1*8+6, 1*8+7, 2*8, 2*8+1};
+        for (int i = 0; i < sizeof(bad_thermistors) / sizeof(int); i++) {
+            temp_model->tm_readings_V[bad_thermistors[i]] = 1.1;
+        }
     }
 }
 
