@@ -173,7 +173,7 @@ static void start_charging(void)
 {
     // set bit in can message
     // yes, according to Elcon its 1 to stop and 0 to start...
-    can_bus.bms_charge_request.bms_charge_request_control = 0;
+    can_bus.chg_charge_request.chg_charge_request_control = 0;
 }
 
 static void close_airs(void)
@@ -186,7 +186,7 @@ static void stop_charging(void)
 {
     // clear bit in can message
     // yes, according to Elcon its 1 to stop and 0 to start...
-    can_bus.bms_charge_request.bms_charge_request_control = 1;
+    can_bus.chg_charge_request.chg_charge_request_control = 1;
 }
 
 static void open_airs(void)
@@ -212,8 +212,8 @@ void ChargeMonitor_init(void)
     sm_outputs.allow_balancing = false;
     sm_outputs.request_charge = false;
 
-    can_bus.bms_charge_request.bms_charge_request_max_current = formula_main_dbc_bms_charge_request_bms_charge_request_max_current_encode(MAX_CHARGING_CURRENT_A);
-    can_bus.bms_charge_request.bms_charge_request_max_voltage = formula_main_dbc_bms_charge_request_bms_charge_request_max_voltage_encode(MAX_CHARGING_V);
+    can_bus.chg_charge_request.chg_charge_request_max_current = formula_main_dbc_chg_charge_request_chg_charge_request_max_current_encode(MAX_CHARGING_CURRENT_A);
+    can_bus.chg_charge_request.chg_charge_request_max_voltage = formula_main_dbc_chg_charge_request_chg_charge_request_max_voltage_encode(MAX_CHARGING_V);
 }
 
 /**
@@ -266,7 +266,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
     // Actually send the charger control CAN message, if we are connected to the charger
     if (state != ChargeState_DISCONNECTED)
     {
-        CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_CHARGE_REQUEST_FRAME_ID);
+        CAN_send_message_by_id(FORMULA_MAIN_DBC_CHG_CHARGE_REQUEST_FRAME_ID);
     }
 
     can_bus.bms_status.bms_status_charge_state = state;

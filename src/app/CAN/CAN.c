@@ -44,9 +44,6 @@ static int pack_message(int id, uint8_t* msg_data)
 
         case FORMULA_MAIN_DBC_BMS_CURRENT_FRAME_ID:
             return formula_main_dbc_bms_current_pack(msg_data, &can_bus.bms_current, 8);
-        
-        case FORMULA_MAIN_DBC_BMS_CHARGE_REQUEST_FRAME_ID:
-            return formula_main_dbc_bms_charge_request_pack(msg_data, &can_bus.bms_charge_request, 8);
 
         case FORMULA_MAIN_DBC_BMS_REF_FRAME_ID:
             return formula_main_dbc_bms_ref_pack(msg_data, &can_bus.bms_ref, 8);
@@ -57,6 +54,9 @@ static int pack_message(int id, uint8_t* msg_data)
         case FORMULA_MAIN_DBC_BMS_LIMP_MODE_FRAME_ID:
             return formula_main_dbc_bms_limp_mode_pack(msg_data, &can_bus.bms_limp_mode, 8);
         
+        case FORMULA_MAIN_DBC_CHG_CHARGE_REQUEST_FRAME_ID:
+            return formula_main_dbc_chg_charge_request_pack(msg_data, &can_bus.chg_charge_request, 8);
+
         default:
             printf("f29bms: unknown CAN id: %d\n", id);
             break;

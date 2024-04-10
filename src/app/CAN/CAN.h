@@ -38,11 +38,11 @@ typedef struct
     struct formula_main_dbc_bms_fault_vector_t bms_fault_vector;
     struct formula_main_dbc_bms_fault_alert_t bms_fault_alert;
     struct formula_main_dbc_bms_current_t bms_current;
-    struct formula_main_dbc_bms_charge_request_t bms_charge_request;
     struct formula_main_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
     struct formula_main_dbc_bms_ref_t bms_ref;
     struct formula_main_dbc_bms_current_limit_t bms_current_limit;
     struct formula_main_dbc_bms_limp_mode_t bms_limp_mode;
+    struct formula_main_dbc_chg_charge_request_t chg_charge_request;
 } CAN_BUS;
 
 extern CAN_BUS can_bus;
