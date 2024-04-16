@@ -160,9 +160,9 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 #define LIMP_MODE_LEVEL_5_CURRENT_A 40.0
 
 // These are the voltages when the levels of limp modes will be entered
-#define LIMP_MODE_VOLTAGE_LEVEL_1 3.7
-#define LIMP_MODE_VOLTAGE_LEVEL_2 3.6
-#define LIMP_MODE_VOLTAGE_LEVEL_3 3.5 
+#define LIMP_MODE_VOLTAGE_LEVEL_1 3.4
+#define LIMP_MODE_VOLTAGE_LEVEL_2 3.4
+#define LIMP_MODE_VOLTAGE_LEVEL_3 3.4
 #define LIMP_MODE_VOLTAGE_LEVEL_4 3.4 
 #define LIMP_MODE_VOLTAGE_LEVEL_5 3.25
 
