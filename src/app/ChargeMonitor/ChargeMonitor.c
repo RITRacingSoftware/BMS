@@ -229,8 +229,8 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
 {
     // first get updated state machine inputs
     sm_inputs.charger_connected = HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE);
-    sm_inputs.cell_left_to_charge = bm->smallest_V < CELL_FULL_MIN;
-    sm_inputs.cell_over_charged = bm->largest_V > CELL_FULL_MAX;
+    sm_inputs.cell_left_to_charge = bm->smallest_V < CELL_FULL_MIN_V;
+    sm_inputs.cell_over_charged = bm->largest_V > CELL_FULL_MAX_V;
     sm_inputs.bms_faulted = FaultManager_is_any_fault_active();
     float current;
     if (CurrentSense_get_current(&current))

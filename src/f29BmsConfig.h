@@ -24,8 +24,8 @@
 // Battery voltage constants
 #define CELL_IRRATIONAL_LOW_V  2.0   // cells below this are considered irrational
 #define CELL_MIN_V             3.002 // cells below this are considered empty, and we throw an out of juice fault
-#define CELL_FULL_MIN          4.148 // } cells in this range are considered fully charged. if all are in this range, stop charging
-#define CELL_FULL_MAX          4.198 // } cells above this are considered overcharged, and we should discharge
+#define CELL_FULL_MIN_V        4.148 // } cells in this range are considered fully charged. if all are in this range, stop charging
+#define CELL_FULL_MAX_V        4.198 // } cells above this are considered overcharged, and we should discharge
 #define CELL_IRRATIONAL_HIGH_V 4.5   // cells above this are considered irrational
 
 #define BALANCING_MEASURE_INTERVAL_S 30 // how long to wait in between measuring cell voltages when balancing
@@ -33,15 +33,15 @@
 // Simply transmitted to the charger.
 // These are NOT the overcurrent limits. See later in this document for those.
 #define MAX_CHARGING_CURRENT_A 15
-#define MAX_CHARGING_V ((float) CELL_FULL_MAX * (float)NUM_SERIES_CELLS)
+#define MAX_CHARGING_V ((float) CELL_FULL_MAX_V * (float)NUM_SERIES_CELLS)
 #define CHARGE_CURRENT_SETTLE_TIME_S 30
 
 // The amount two cell voltages must differ by to be considered different
 #define VOLTAGE_TOLERANCE 0.001
 
-// maxmimum expected difference in cell voltages
-#define MAX_CELL_DIFF_V 0.5
-#define DIFF_CORRECTION_THRESHOLD_V 0.3
+
+#define MAX_CELL_DIFF_V 0.5             // maximimum expected difference in cell voltages. above this, we throw a voltage diff fault
+#define DIFF_CORRECTION_THRESHOLD_V 0.3 // if difference is above this while charging, start balancing
 
 // how long a voltage fault condition must be present to trigger a fault
 #define VOLTAGE_FAULT_HYSTERESIS_MS 500
