@@ -14,17 +14,20 @@ typedef enum
     // The charger is disconnected from the vehicle
     ChargeState_DISCONNECTED,
 
-    // Charging has completed or the BMS faulted and the cable must be cycled to restart charging
-    ChargeState_CONNECTED_COMPLETE,
+    // Charging is occuring
+    ChargeState_CONNECTED_CHARGING,
     
     // Cell balancing is occuring
     ChargeState_CONNECTED_BALANCING,
 
-    // Charging is occuring
-    ChargeState_CONNECTED_CHARGING,
-
     // Balancing Halted to Allow measurement
-    ChargeState_CONNECTED_BALANCE_SENSING
+    ChargeState_CONNECTED_BALANCE_SENSING,
+
+    // Charging has completed
+    ChargeState_CONNECTED_COMPLETE,
+
+    // BMS has faulted and the cable must be cycled to restart charging
+    ChargeState_CONNECTED_FAULTED,
 } ChargeState_e;
 
 typedef struct
@@ -32,11 +35,11 @@ typedef struct
     // is the charging system connected to the BMS?
     bool charger_connected;
 
-    // are any cells still under CHARGED_CELL_V?
+    // are any cells still under CELL_FULL_MIN?
     bool cell_left_to_charge;
 
-    // are any cells at MAX_ALLOWED_CELL_V?
-    bool cell_at_max;
+    // are any cells over charged?
+    bool cell_over_charged;
 
     // is the pack accepting enough current to warrant more charging?
     bool charge_current_nominal;
@@ -44,8 +47,6 @@ typedef struct
     // are there any faults active?
     bool bms_faulted;
 
-    // are any cells eligible for balancing (> CHARGED_CELL_V)? 
-    bool cell_over_charged;
 } ChargeStateInputs_s;
 
 typedef struct
@@ -73,11 +74,20 @@ static void new_state(ChargeState_e next)
 
 static void sm_1Hz(void)
 {
+    if (state != ChargeState_CONNECTED_FAULTED && sm_inputs.bms_faulted) {
+        new_state(ChargeState_CONNECTED_FAULTED);
+    }
+    // If we are faulted, this line will ensure a disconnect/reconnect will reset it
+    else if (state != ChargeState_DISCONNECTED && !sm_inputs.charger_connected) {
+        new_state(ChargeState_DISCONNECTED);
+    }
+    
+
     // printf("ChargingState: ");
     switch(state)
     {
         case ChargeState_DISCONNECTED:
-            // printf("DISCONNECTED");
+        {
             if (sm_inputs.charger_connected)
             {
                 new_state(ChargeState_CONNECTED_BALANCING);
@@ -87,14 +97,32 @@ static void sm_1Hz(void)
             sm_outputs.allow_balancing = false;
             sm_outputs.close_airs = false;
             break;
+        }
         
-        case ChargeState_CONNECTED_BALANCING:
-        // printf("CONNECTED_BALANCING");
-            if (!sm_inputs.charger_connected)
+        case ChargeState_CONNECTED_CHARGING:
+        {
+            if (sm_inputs.cell_over_charged)
             {
-                new_state(ChargeState_DISCONNECTED);
+                new_state(ChargeState_CONNECTED_BALANCING);
             }
-            else if (sm_inputs.bms_faulted || !sm_inputs.cell_left_to_charge)
+            else if (!sm_inputs.cell_left_to_charge)
+            {
+                new_state(ChargeState_CONNECTED_COMPLETE);
+            }
+            else if (!sm_inputs.charge_current_nominal && (state_counter_seconds >= CHARGE_CURRENT_SETTLE_TIME_S))
+            {
+                new_state(ChargeState_CONNECTED_COMPLETE);
+            } 
+
+            sm_outputs.request_charge = true;
+            sm_outputs.allow_balancing = false;
+            sm_outputs.close_airs = true;
+            break;
+        }
+
+        case ChargeState_CONNECTED_BALANCING:
+        {
+            if (!sm_inputs.cell_left_to_charge)
             {
                 new_state(ChargeState_CONNECTED_COMPLETE);
             }
@@ -111,14 +139,10 @@ static void sm_1Hz(void)
             sm_outputs.allow_balancing = true;
             sm_outputs.close_airs = true;
             break;
+        }
         
         case ChargeState_CONNECTED_BALANCE_SENSING:
-        // printf("CONNECTED_BALALNCE_SENSING");
-            if (!sm_inputs.charger_connected)
-            {
-                new_state(ChargeState_DISCONNECTED);
-            }
-
+        {
             if (state_counter_seconds >= 1)
             {
                 new_state(ChargeState_CONNECTED_BALANCING);
@@ -128,42 +152,23 @@ static void sm_1Hz(void)
             sm_outputs.request_charge = false;
             sm_outputs.close_airs = true;
             break;
+        }
 
         case ChargeState_CONNECTED_COMPLETE:
-        // printf("CHARGING_CONNECTED_COMPLETE");
-            if (!sm_inputs.charger_connected)
-            {
-                new_state(ChargeState_DISCONNECTED);
-            }
-
+        {
             sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = false;
             sm_outputs.close_airs = false;
             break;
-        
-        case ChargeState_CONNECTED_CHARGING:
-        // printf("CONNECTED_CHARGING");
-            if (!sm_inputs.charger_connected)
-            {
-                new_state(ChargeState_DISCONNECTED);
-            }
-            else if (!sm_inputs.cell_left_to_charge || sm_inputs.bms_faulted)
-            {
-                new_state(ChargeState_CONNECTED_COMPLETE);
-            }
-            else if (!sm_inputs.charge_current_nominal && (state_counter_seconds >= CHARGE_CURRENT_SETTLE_TIME_S))
-            {
-                new_state(ChargeState_CONNECTED_COMPLETE);
-            }
-            else if (sm_inputs.cell_at_max)
-            {
-                new_state(ChargeState_CONNECTED_BALANCING);
-            }
+        }
 
-            sm_outputs.request_charge = true;
+        case ChargeState_CONNECTED_FAULTED:
+        {
+            sm_outputs.request_charge = false;
             sm_outputs.allow_balancing = false;
-            sm_outputs.close_airs = true;
+            sm_outputs.close_airs = false;
             break;
+        }
     }
     // printf("\r\n");
     state_counter_seconds++;
@@ -203,7 +208,6 @@ void ChargeMonitor_init(void)
     state = ChargeState_DISCONNECTED;
     state_counter_seconds = 0;
     sm_inputs.charger_connected = false;
-    sm_inputs.cell_at_max = false;
     sm_inputs.charge_current_nominal = true;
     sm_inputs.cell_left_to_charge = false;
     sm_inputs.bms_faulted = false;
@@ -225,9 +229,8 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
 {
     // first get updated state machine inputs
     sm_inputs.charger_connected = HAL_Gpio_read(GpioPin_CHARGER_AVAILABLE);
-    sm_inputs.cell_left_to_charge = bm->smallest_V < CHARGED_CELL_V;
-    sm_inputs.cell_at_max = FLOAT_GT_EQ(bm->largest_V, MAX_ALLOWED_CELL_V, VOLTAGE_TOLERANCE);
-    sm_inputs.cell_over_charged = FLOAT_GT(bm->largest_V, CHARGED_CELL_V, VOLTAGE_TOLERANCE);
+    sm_inputs.cell_left_to_charge = bm->smallest_V < CELL_FULL_MIN;
+    sm_inputs.cell_over_charged = bm->largest_V > CELL_FULL_MAX;
     sm_inputs.bms_faulted = FaultManager_is_any_fault_active();
     float current;
     if (CurrentSense_get_current(&current))

@@ -85,7 +85,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
     can_bus.bms_cell_overview.bms_overview_drains = formula_main_dbc_bms_cell_overview_bms_overview_drains_encode(num_draining);
 
     // check for irrationality
-    if (FLOAT_GT(bm->largest_V, MAX_CELL_V, VOLTAGE_TOLERANCE) || FLOAT_LT(bm->smallest_V, MIN_CELL_V, VOLTAGE_TOLERANCE))
+    if (bm->smallest_V < CELL_IRRATIONAL_LOW_V || bm->largest_V > CELL_IRRATIONAL_HIGH_V)
     {
         if (incr_to_limit(&irrational_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
@@ -102,7 +102,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 
     // check for out of charge
     // out of charge should not occur if we're connected to the charger
-    if (FLOAT_LT_EQ(bm->smallest_V, MIN_ALLOWED_CELL_V, VOLTAGE_TOLERANCE))
+    if (bm->smallest_V < CELL_MIN_V, VOLTAGE_TOLERANCE)
     {
         if (incr_to_limit(&low_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {

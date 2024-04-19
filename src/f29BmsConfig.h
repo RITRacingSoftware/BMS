@@ -21,22 +21,19 @@
 #define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
 
-#define MAX_CELL_V 4.5 // any value above this is considered irrational
+// Battery voltage constants
+#define CELL_IRRATIONAL_LOW_V  2.0   // cells below this are considered irrational
+#define CELL_MIN_V             3.002 // cells below this are considered empty, and we throw an out of juice fault
+#define CELL_FULL_MIN          4.148 // } cells in this range are considered fully charged. if all are in this range, stop charging
+#define CELL_FULL_MAX          4.198 // } cells above this are considered overcharged, and we should discharge
+#define CELL_IRRATIONAL_HIGH_V 4.5   // cells above this are considered irrational
 
-#define MAX_ALLOWED_CELL_V 4.2 // any cell above this is considered overcharged and balancing should begin
-#define CHARGED_CELL_V 4.18 // once all cells are above this, charging ends
-
-// out of juice fault thrown if cells go below this
-#define MIN_ALLOWED_CELL_V 3 // Datasheet says 3.0  
-#define MIN_CELL_V 2.0 // cells below this are considered irrational
-
-#define BALANCING_HISTERESIS_V .02 // how low a cell must be balanced below CHARGED_CELL_V for balancing to shut off
 #define BALANCING_MEASURE_INTERVAL_S 30 // how long to wait in between measuring cell voltages when balancing
 
 // Simply transmitted to the charger.
 // These are NOT the overcurrent limits. See later in this document for those.
 #define MAX_CHARGING_CURRENT_A 15
-#define MAX_CHARGING_V ((float)MAX_ALLOWED_CELL_V * (float)NUM_SERIES_CELLS)
+#define MAX_CHARGING_V ((float) CELL_FULL_MAX * (float)NUM_SERIES_CELLS)
 #define CHARGE_CURRENT_SETTLE_TIME_S 30
 
 // The amount two cell voltages must differ by to be considered different

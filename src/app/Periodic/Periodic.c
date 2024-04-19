@@ -27,13 +27,13 @@ void Periodic_init(void)
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
         // start with a cell voltage that shouldn't cause any errors
-        battery_model.cells[i].voltage = MAX_ALLOWED_CELL_V;
+        battery_model.cells[i].voltage = CELL_FULL_MIN;
         // nothing should be draining on startup
         battery_model.cells[i].drain_request = false;
     }
-    battery_model.average_V = MAX_ALLOWED_CELL_V;
-    battery_model.largest_V = MAX_ALLOWED_CELL_V;
-    battery_model.smallest_V = MAX_ALLOWED_CELL_V;
+    battery_model.average_V = CELL_FULL_MIN;
+    battery_model.largest_V = CELL_FULL_MIN;
+    battery_model.smallest_V = CELL_FULL_MIN;
     
     for (int i = 0; i < NUM_THERMISTOR; i++)
     {

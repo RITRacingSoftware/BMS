@@ -30,12 +30,12 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
             float cell_diff_V = bm->cells[i].voltage - bm->smallest_V;
           // bm->cells[i].is_draining = true; 
             //start some cells draining
-            if (FLOAT_GT(cell_diff_V, DIFF_CORRECTION_THRESHOLD_V, VOLTAGE_TOLERANCE))
+            if (cell_diff_V > DIFF_CORRECTION_THRESHOLD_V)
             {
                 // cell voltage is too much higher than lowest, request drain
                 bm->cells[i].drain_request = true;
             }
-            else if (FLOAT_GT_EQ(bm->cells[i].voltage, CHARGED_CELL_V, VOLTAGE_TOLERANCE))
+            else if (bm->cells[i].voltage >= CELL_FULL_MAX)
             {
                 // cell is full or overfull, drain
                 bm->cells[i].drain_request = true;
@@ -45,7 +45,7 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
                 // stop some cells draining
                 if (bm->cells[i].drain_request)
                 {
-                    if (FLOAT_LT_EQ(bm->cells[i].voltage, CHARGED_CELL_V - BALANCING_HISTERESIS_V, VOLTAGE_TOLERANCE))
+                    if (bm->cells[i].voltage < CELL_FULL_MIN)
                     {
                         bm->cells[i].drain_request = false;
                     }
