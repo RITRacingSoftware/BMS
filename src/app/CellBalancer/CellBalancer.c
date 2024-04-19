@@ -4,18 +4,11 @@
 #include "ChargeMonitor.h"
 #include "FaultManager.h"
 
-// used to keep track of drain status.
-static BatteryModel_t prev_model;
-
 bool reading_allowed = true;
 
 void CellBalancer_init(void)
 {
-    // no cells should be draining on startup
-    for (int i = 0; i < NUM_SERIES_CELLS; i++)
-    {
-        prev_model.cells[i].is_draining = false;
-    }
+
 }
 
 void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
@@ -25,8 +18,8 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
 
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
-        // check if this cell should be draining and isnt
-        if (bm->cells[i].is_draining != prev_model.cells[i].is_draining)
+        // check if this cell should be draining and isn't (or vice versa)
+        if (bm->cells[i].drain_request != bm->cells[i].drain_feedback)
         {
             FaultManager_set_fault_active(FaultCode_DRAIN_FAILURE, &i);
             drain_failure = true;
@@ -39,35 +32,36 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
             //start some cells draining
             if (FLOAT_GT(cell_diff_V, DIFF_CORRECTION_THRESHOLD_V, VOLTAGE_TOLERANCE))
             {
-                // cell is falling behind, request drain
-                bm->cells[i].is_draining = true;
+                // cell voltage is too much higher than lowest, request drain
+                bm->cells[i].drain_request = true;
             }
             else if (FLOAT_GT_EQ(bm->cells[i].voltage, CHARGED_CELL_V, VOLTAGE_TOLERANCE))
             {
-                // charging is supposed to happen, but this cell needs to be drained first
-                bm->cells[i].is_draining = true;
+                // cell is full or overfull, drain
+                bm->cells[i].drain_request = true;
             }
             else
             {
                 // stop some cells draining
-                if (bm->cells[i].is_draining)
+                if (bm->cells[i].drain_request)
                 {
                     if (FLOAT_LT_EQ(bm->cells[i].voltage, CHARGED_CELL_V - BALANCING_HISTERESIS_V, VOLTAGE_TOLERANCE))
                     {
-                        bm->cells[i].is_draining = false;
+                        bm->cells[i].drain_request = false;
                     }
                 }
                 else
                 {
-                    bm->cells[i].is_draining = false;      
+                    bm->cells[i].drain_request = false;
                 }
             }
-            //bm->cells[i].is_draining = true;
+
+            // Only read cells while not balancing, to get open-circuit voltage
             reading_allowed = false;
         }
         else
         {
-            bm->cells[i].is_draining = false;
+            bm->cells[i].drain_request = false;
             reading_allowed = true;
         }
     }
@@ -76,9 +70,6 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
     {
         FaultManager_clear_fault(FaultCode_DRAIN_FAILURE);
     }
-
-    // save off the new expected drain states
-    prev_model = *bm;
 }
 
 bool CellBalancer_reading_allowed(void)

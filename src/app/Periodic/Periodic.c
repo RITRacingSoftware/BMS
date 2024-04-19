@@ -29,7 +29,7 @@ void Periodic_init(void)
         // start with a cell voltage that shouldn't cause any errors
         battery_model.cells[i].voltage = MAX_ALLOWED_CELL_V;
         // nothing should be draining on startup
-        battery_model.cells[i].is_draining = false;
+        battery_model.cells[i].drain_request = false;
     }
     battery_model.average_V = MAX_ALLOWED_CELL_V;
     battery_model.largest_V = MAX_ALLOWED_CELL_V;

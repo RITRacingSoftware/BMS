@@ -202,7 +202,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
             if (drain_index >= num_drains) {
                 break;
             }
-            uint64_t draining = bm->cells[drain_index].is_draining ? 1 : 0;
+            uint64_t draining = bm->cells[drain_index].drain_request ? 1 : 0;
             msg_data |= (draining << (drain_start_bit + i));
         }
 

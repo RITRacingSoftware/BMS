@@ -15,16 +15,16 @@ void SlaveInterface_read_cell_info(BatteryModel_t* battery_model)
     if (CellBalancer_reading_allowed())
     {
         float voltages[NUM_SERIES_CELLS];
-        bool is_draining[NUM_SERIES_CELLS];
+        bool drain_feedbacks[NUM_SERIES_CELLS];
         for (int i = 0; i < NUM_SERIES_CELLS; i++)
         {
             voltages[i] = 0;
-            is_draining[i] = 0;
+            drain_feedbacks[i] = 0;
         }
         
         
         // get data from slave boards
-        Error_t err = HAL_SlaveChips_get_all_cell_data(voltages, is_draining, NUM_SERIES_CELLS);
+        Error_t err = HAL_SlaveChips_get_all_cell_data(voltages, drain_feedbacks, NUM_SERIES_CELLS);
 
         // check for comm errors
         if (err.active)
@@ -39,7 +39,7 @@ void SlaveInterface_read_cell_info(BatteryModel_t* battery_model)
             for(int i = 0; i < NUM_SERIES_CELLS; i++)
             {
                 battery_model->cells[i].voltage = voltages[i];
-                battery_model->cells[i].is_draining = is_draining[i];
+                battery_model->cells[i].drain_feedback = drain_feedbacks[i];
             }
         }
     }
@@ -92,7 +92,7 @@ void SlaveInterface_request_cell_draining(BatteryModel_t* battery_model)
 
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
-        requested_drain_states[i] = battery_model->cells[i].is_draining;
+        requested_drain_states[i] = battery_model->cells[i].drain_request;
     }
 
     Error_t err = HAL_SlaveChips_request_cell_drain_state(requested_drain_states, NUM_SERIES_CELLS);

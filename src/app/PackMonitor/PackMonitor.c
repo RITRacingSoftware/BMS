@@ -78,7 +78,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 
     uint32_t num_draining = 0;
     for (int i = 0; i < NUM_SERIES_CELLS; i++) {
-        if (bm->cells[i].is_draining) {
+        if (bm->cells[i].drain_request) {
             num_draining++;
         }
     }
