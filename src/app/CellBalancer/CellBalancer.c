@@ -19,11 +19,12 @@ void CellBalancer_stage_cell_draining(BatteryModel_t* bm)
     for (int i = 0; i < NUM_SERIES_CELLS; i++)
     {
         // check if this cell should be draining and isn't (or vice versa)
-        if (bm->cells[i].drain_request != bm->cells[i].drain_feedback)
+        // drain feedback is currently not implemented
+        /*if (bm->cells[i].drain_request != bm->cells[i].drain_feedback)
         {
             FaultManager_set_fault_active(FaultCode_DRAIN_FAILURE, &i);
             drain_failure = true;
-        }
+        }*/
         
         if (ChargeMonitor_is_balancing_allowed())
         {

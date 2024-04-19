@@ -102,7 +102,7 @@ void PackMonitor_validate_battery_model_10Hz(BatteryModel_t* bm)
 
     // check for out of charge
     // out of charge should not occur if we're connected to the charger
-    if (bm->smallest_V < CELL_MIN_V, VOLTAGE_TOLERANCE)
+    if (bm->smallest_V < CELL_MIN_V)
     {
         if (incr_to_limit(&low_voltage_ms, VOLTAGE_FAULT_HYSTERESIS_MS, 100))
         {
