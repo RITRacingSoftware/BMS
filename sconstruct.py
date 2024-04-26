@@ -172,6 +172,8 @@ stm32_comp_env = Environment(
     CPPDEFINES=['STM32F091', 'USE_STDPERIPH_DRIVER'],
     CCFLAGS=['-ggdb','-mcpu=cortex-m0', '-mthumb', '-lm', '-ffunction-sections', '-fdata-sections'],
     ASFLAGS=['-mthumb', '-I{}'.format(STM32_LIB_DIR.Dir('inc').abspath), '-I{}'.format(STM32_CMSIS_DIR.Dir('Include').abspath)],
+
+    # Linker flags are used in site_scons/site_init.py to link the elf and bin
     LDFLAGS=['-T{}'.format(LINKER_FILE.abspath), '-mcpu=cortex-m0', '-mthumb', '-Wall', '--specs=nosys.specs', '-Wl,--gc-sections'],
     LDFLAGS_END=['-lm'] # Math library needs to be at end to link properly
 )
