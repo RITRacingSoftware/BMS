@@ -143,7 +143,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 /**
  * Power Limiting
  */
-#define MAX_POWER_LIMIT_KW 70.0
+#define MAX_POWER_LIMIT_KW 75.0
 
 
 #endif // F29BMSCONFIG_H

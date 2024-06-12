@@ -12,27 +12,27 @@ static bool first_reading_received;
 // kept track of to prevent application code from using unfiltered current
 static bool filter_valid;
 
-// low pass filter history (only one value for now)
-static float last_current_reading;
+// Smoothing factor for smoothing over 3ms
+// https://en.wikipedia.org/wiki/Exponential_smoothing#Time_constant
+#define CURRENT_AVG_FACTOR 0.283
+
+static float current_A;
 
 static bool did_last_read_error;
 
 void filter_new_current_reading(float new_reading_A)
 {
-    if (first_reading_received)
-    {
-        // dummy simple low pass filter
-        // y[n] = (x[n] + x[n-1]) * CURRENT_SENSE_LPF_COEFF
-        last_current_reading = (last_current_reading + new_reading_A) * CURRENT_SENSE_LPF_COEFF;
-
-        // data in last_current_reading is now filtered, safe to use
-        filter_valid = true;
-    }
-    else
-    {
-        last_current_reading = new_reading_A;
+    if (!first_reading_received) {
+        current_A = new_reading_A;
         first_reading_received = true;
+        return;
     }
+
+    // Exponential smoothing
+    current_A = new_reading_A * CURRENT_AVG_FACTOR + (1-CURRENT_AVG_FACTOR) * current_A;
+
+    // data in last_current_reading is now filtered, safe to use
+    filter_valid = true;
 }
 
 bool current_valid(float new_reading_A)
@@ -81,11 +81,11 @@ void CurrentSense_1kHz(void)
             filter_new_current_reading(raw_current_A);
         }
 
-        can_bus.bms_current.bms_inst_current_filt = formula_main_dbc_bms_current_bms_inst_current_filt_encode(last_current_reading);
+        can_bus.bms_current.bms_inst_current_filt = formula_main_dbc_bms_current_bms_inst_current_filt_encode(current_A);
     }
 }
 
-bool CurrentSense_get_current(float* current_A)
+bool CurrentSense_get_current(float* out_current_A)
 {
     // save this off
     // keeps actions from here till return value consistent in case task is preempted...
@@ -93,7 +93,7 @@ bool CurrentSense_get_current(float* current_A)
 
     if (inst_current_valid)
     {
-        *current_A = last_current_reading;
+        *out_current_A = current_A;
     }
     
     return inst_current_valid;
