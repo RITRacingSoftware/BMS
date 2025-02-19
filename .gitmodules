@@ -7,6 +7,6 @@
 [submodule "libs/vector_blf"]
 	path = libs/vector_blf
 	url = https://bitbucket.org/tobylorenz/vector_blf.git
-[submodule "Formula-DBC"]
-	path = Formula-DBC
+[submodule "libs/Formula-DBC"]
+	path = libs/Formula-DBC
 	url = https://github.com/RITRacingSoftware/Formula-DBC.git
