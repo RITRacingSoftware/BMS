@@ -8,6 +8,7 @@ typedef struct {
     float voltage;
     bool drain_request; // Set to true to request this cell to drain
     bool drain_feedback; // Drain states read back from LTC chips. NOTE: This is never set. Don't ask me why. -Akari
+    bool is_draining;   // Needed to make the code compile. No idea why it wasn't here before
 } SeriesCell_t;
 
 typedef struct {

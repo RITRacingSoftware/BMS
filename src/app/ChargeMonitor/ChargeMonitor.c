@@ -109,10 +109,10 @@ static void sm_1Hz(void)
             {
                 new_state(ChargeState_CONNECTED_COMPLETE);
             }
-            else if (!sm_inputs.charge_current_nominal && (state_counter_seconds >= CHARGE_CURRENT_SETTLE_TIME_S))
-            {
-                new_state(ChargeState_CONNECTED_COMPLETE);
-            } 
+//            else if (!sm_inputs.charge_current_nominal && (state_counter_seconds >= CHARGE_CURRENT_SETTLE_TIME_S))
+//            {
+//                new_state(ChargeState_CONNECTED_COMPLETE);
+//            }
 
             sm_outputs.request_charge = true;
             sm_outputs.allow_balancing = false;

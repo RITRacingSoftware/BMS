@@ -17,7 +17,9 @@ void CurrentLimiter_10Hz(BatteryModel_t* bm, TempModel_t *tm)
 
     //Calculate the current limit for voltages and decrease the limit if needed
     double voltage_limp_mode_current = LimpMode_voltage_limit(bm);
-    current_limit = MIN(current_limit, voltage_limp_mode_current);
+
+    // Disabled voltage limp mode
+//    current_limit = MIN(current_limit, voltage_limp_mode_current);
 
     //Calculate the current limit for temperatures and decrease the limit if needed
     double temp_limp_mode_current = LimpMode_temperature_limit(tm);

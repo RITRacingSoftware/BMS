@@ -8,6 +8,7 @@
 #include "task.h"
 #include "f29BmsConfig.h"
 #include <stdlib.h>
+#include "HAL_Can.h"
 
 // Whether or not vTaskDelay or TIM6 is used to wait for adc conversions/wake ups
 #define FREERTOS_TIMING 0
@@ -406,7 +407,6 @@ static uint8_t LTC6804_rdcv(uint8_t reg, // Controls which cell voltage register
     {
       data_counter = 0;
       LTC6804_rdcv_reg(cell_reg, total_ic,cell_data );								//Reads a single Cell voltage register
-	  
       for (uint8_t current_ic = 0 ; current_ic < total_ic; current_ic++) 			// executes for every LTC6804 in the daisy chain
       {																 	  			// current_ic is used as the IC counter
 	  

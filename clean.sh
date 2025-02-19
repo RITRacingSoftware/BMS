@@ -1,1 +1,3 @@
-`cat build.sh` -c
+#`cat build.sh` -c
+
+rm -rf build/libs build/stm32

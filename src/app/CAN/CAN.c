@@ -138,6 +138,9 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         CAN_send_message(FORMULA_MAIN_DBC_BMS_VOLTAGES_FRAME_ID, msg_data);
     }
 
+    uint64_t msg = (uint64_t)((bm->cells[2].voltage) * 100);
+    CAN_send_message(3, msg);
+
     // Thermistor Voltages
     const int num_therms = NUM_CHIPS * NUM_THERMISTORS_PER_CHIP;
     const int therm_max_mux = 5;
@@ -161,6 +164,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         }
 
         CAN_send_message(FORMULA_MAIN_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID, msg_data);
+//        HAL_Can_send_message(5, 8, msg_data);
     }
 
     // Temperatures

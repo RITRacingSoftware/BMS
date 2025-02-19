@@ -32,7 +32,7 @@
 
 // Simply transmitted to the charger.
 // These are NOT the overcurrent limits. See later in this document for those.
-#define MAX_CHARGING_CURRENT_A 15
+#define MAX_CHARGING_CURRENT_A 20
 #define MAX_CHARGING_V ((float) CELL_FULL_MAX_V * (float)NUM_SERIES_CELLS)
 #define CHARGE_CURRENT_SETTLE_TIME_S 30
 
@@ -143,7 +143,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 /**
  * Power Limiting
  */
-#define MAX_POWER_LIMIT_KW 72.0
+#define MAX_POWER_LIMIT_KW 50.0
 
 
 #endif // F29BMSCONFIG_H
