@@ -163,6 +163,7 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         CAN_send_message(FORMULA_MAIN_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID, msg_data);
     }
 
+//    HAL_Can_send_message(6, 8, (int)(tm->tm_readings_V[0] * 1000));
     /*
      * Testing
      * */

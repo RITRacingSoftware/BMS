@@ -4,6 +4,7 @@
 #include "FaultManager.h"
 #include "ChargeMonitor.h"
 #include "SlaveInterface.h"
+#include "HAL_Can.h"
 
 /**
  * Get the latest voltage and draining information from the slave chips.
@@ -54,7 +55,7 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
     float tm_readings_V[NUM_THERMISTOR];
 
     // get data from slave boards
-    Error_t err = HAL_SlaveChips_get_all_tm_readings(tm_readings_V, temp_model->vref2s, NUM_THERMISTOR);
+    Error_t err = HAL_SlaveChips_get_all_tm_readings(tm_readings_V, temp_model->vref2s, NUM_THERMISTORS_PER_CHIP);
 
     // check for communication errors
     if (err.active)
@@ -70,6 +71,13 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
         {
             temp_model->tm_readings_V[i] = tm_readings_V[i];
         }
+        HAL_Can_send_message(6, 8, (uint64_t)(tm_readings_V[0] * 1000));
+        HAL_Can_send_message(7, 8, (uint64_t)(temp_model->tm_readings_V[0] * 1000));
+    }
+
+    for (int i = 0; i < NUM_THERMISTOR; i++)
+    {
+        temp_model->tm_readings_V[i] = tm_readings_V[i];
     }
 }
 

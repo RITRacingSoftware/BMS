@@ -880,6 +880,8 @@ Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2s, u
         vref2s[r] = (((float)tempRecieved[r][5])/LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
     }
 
+
+
     return error;
 }
 

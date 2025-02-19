@@ -2,6 +2,7 @@
 
 #include "f29BmsConfig.h"
 
+#include "HAL_Can.h"
 #include "BatteryModel.h"
 #include "CAN.h"
 #include "CellBalancer.h"
@@ -55,6 +56,8 @@ void Periodic_10Hz(void)
     // update information from the outside world
     SlaveInterface_read_cell_info(&battery_model);
     SlaveInterface_read_temperature_info(&temp_model);
+
+    HAL_Can_send_message(5, 8, (uint16_t)(temp_model.tm_readings_V[0] * 1000));
 
     // convert from thermistor voltage probe readings to temperatures
     TempConverter_convert(&temp_model);
