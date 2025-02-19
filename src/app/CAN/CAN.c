@@ -171,22 +171,21 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     const int temp_len_bits = 8;
     const uint64_t temp_mask = (1 << temp_len_bits) - 1;
     const float temp_granularity = 1;
-    for (uint8_t mux = 0; mux <= temp_max_mux; mux++) {
-        msg_data = 0;
-        msg_data |= mux;
-
-        for (int i = 0; i < temps_per_message; i++) {
-            int temp_index = mux * temps_per_message + i;
-            if (temp_index >= num_temps) {
-                break;
-            }
-            float temperature = tm->temps_C[temp_index];
-            uint64_t temp_bits = ROUND_INT((temperature / temp_granularity)) & temp_mask;
-            msg_data |= (temp_bits << (temp_start_bit + i*temp_len_bits));
-        }
-
-        CAN_send_message(FORMULA_MAIN_DBC_BMS_TEMPERATURES_FRAME_ID, msg_data);
-    }
+//    for (uint8_t mux = 0; mux <= temp_max_mux; mux++) {
+//        msg_data = 0;
+//        msg_data |= mux;
+//
+//        for (int i = 0; i < temps_per_message; i++) {
+//            int temp_index = mux * temps_per_message + i;
+//            if (temp_index >= num_temps) {
+//                break;
+//            }
+//            float temperature = tm->temps_C[temp_index];
+//            uint64_t temp_bits = ROUND_INT((temperature / temp_granularity)) & temp_mask;
+//            msg_data |= (temp_bits << (temp_start_bit + i*temp_len_bits));
+//        }
+//    }
+    CAN_send_message(5, 3);
 
     // Drain States
     const int num_drains = NUM_SERIES_CELLS;
