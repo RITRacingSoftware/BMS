@@ -8,16 +8,16 @@
  */
 
 // NOTE: If you change these things, you will very likely need to change CAN.c to match
-#define NUM_BOARDS 4
+#define NUM_BOARDS 8
 #define NUM_CHIPS (NUM_BOARDS*2)
-#define NUM_CELLS_PER_BOARD 19
-#define NUM_THERMISTORS_PER_CHIP 4
+#define NUM_CELLS_PER_BOARD 17
+#define NUM_THERMISTORS_PER_CHIP 3
 #define NUM_SERIES_CELLS (NUM_BOARDS * NUM_CELLS_PER_BOARD)
 #define NUM_PARALLEL_CELLS 1
 
 // NOTE: Be sure to define things here with decimals if you intend to use them as floats
 
-#define CELL_CAPACITY_Ah 10.000
+#define CELL_CAPACITY_Ah 11.580
 #define BATTERY_CAPACITY_Ah (((float) NUM_PARALLEL_CELLS) * CELL_CAPACITY_Ah)
 
 

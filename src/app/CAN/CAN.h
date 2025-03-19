@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #include "f29BmsConfig.h"
-#include "formula_main_dbc.h"
+#include "formula_dbc.h"
 #include "BatteryModel.h"
 #include "TempModel.h"
 #include "FreeRTOS.h"
