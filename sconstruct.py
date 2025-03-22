@@ -238,7 +238,7 @@ CAN module depends on generated CAN code.
 This section defines this dependency and provides instructions for generating this code
 using cantools, a python module.
 """
-DBC_NAME = 'formula_dbc'
+DBC_NAME = 'main_dbc'
 DBC_FILE = DBC_DIR.File(DBC_NAME + '.dbc')
 DBC_BUILD_DIR = BUILD_DIR.Dir('libs/Formula-DBC')
 

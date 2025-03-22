@@ -10,7 +10,7 @@
 
 #define TICKS_TO_WAIT_QUEUE_CAN_MESSAGE (0) //Will return immediately if queue is full, not sure if this should be different
 
-// can_obj_formula_main_dbc_h_t CAN_BUS;
+// can_objmain_dbc_h_t CAN_BUS;
 CAN_BUS can_bus;
 
 
@@ -30,32 +30,44 @@ static int pack_message(int id, uint8_t* msg_data)
 {
     switch(id)
     {
-        case FORMULA_MAIN_DBC_BMS_STATUS_FRAME_ID:
-            return formula_main_dbc_bms_status_pack(msg_data, &can_bus.bms_status, 8);
+        case MAIN_DBC_BMS_STATUS_FRAME_ID:
+            return main_dbc_bms_status_pack(msg_data, &can_bus.bms_status, 8);
 
-        case FORMULA_MAIN_DBC_BMS_CELL_OVERVIEW_FRAME_ID:
-            return formula_main_dbc_bms_cell_overview_pack(msg_data, &can_bus.bms_cell_overview, 8);
+        case MAIN_DBC_BMS_CELL_OVERVIEW_FRAME_ID:
+            return main_dbc_bms_cell_overview_pack(msg_data, &can_bus.bms_cell_overview, 8);
 
-        case FORMULA_MAIN_DBC_BMS_FAULT_VECTOR_FRAME_ID:
-            return formula_main_dbc_bms_fault_vector_pack(msg_data, &can_bus.bms_fault_vector, 8);
+        case MAIN_DBC_BMS_FAULT_VECTOR_FRAME_ID:
+            return main_dbc_bms_fault_vector_pack(msg_data, &can_bus.bms_fault_vector, 8);
 
-        case FORMULA_MAIN_DBC_BMS_FAULT_ALERT_FRAME_ID:
-            return formula_main_dbc_bms_fault_alert_pack(msg_data, &can_bus.bms_fault_alert, 8);
+        case MAIN_DBC_BMS_FAULT_ALERT_FRAME_ID:
+            return main_dbc_bms_fault_alert_pack(msg_data, &can_bus.bms_fault_alert, 8);
 
-        case FORMULA_MAIN_DBC_BMS_CURRENT_FRAME_ID:
-            return formula_main_dbc_bms_current_pack(msg_data, &can_bus.bms_current, 8);
+        case MAIN_DBC_BMS_CURRENT_FRAME_ID:
+            return main_dbc_bms_current_pack(msg_data, &can_bus.bms_current, 8);
 
-        case FORMULA_MAIN_DBC_BMS_REF_FRAME_ID:
-            return formula_main_dbc_bms_ref_pack(msg_data, &can_bus.bms_ref, 8);
+        case MAIN_DBC_BMS_REF_FRAME_ID:
+            return main_dbc_bms_ref_pack(msg_data, &can_bus.bms_ref, 8);
         
-        case FORMULA_MAIN_DBC_BMS_CURRENT_LIMIT_FRAME_ID:
-            return formula_main_dbc_bms_current_limit_pack(msg_data, &can_bus.bms_current_limit, 8);
+        case MAIN_DBC_BMS_CURRENT_LIMIT_FRAME_ID:
+            return main_dbc_bms_current_limit_pack(msg_data, &can_bus.bms_current_limit, 8);
 
-        case FORMULA_MAIN_DBC_BMS_LIMP_MODE_FRAME_ID:
-            return formula_main_dbc_bms_limp_mode_pack(msg_data, &can_bus.bms_limp_mode, 8);
+        case MAIN_DBC_BMS_LIMP_MODE_FRAME_ID:
+            return main_dbc_bms_limp_mode_pack(msg_data, &can_bus.bms_limp_mode, 8);
         
-        case FORMULA_MAIN_DBC_CHG_CHARGE_REQUEST_FRAME_ID:
-            return formula_main_dbc_chg_charge_request_pack(msg_data, &can_bus.chg_charge_request, 8);
+        case MAIN_DBC_CHG_CHARGE_REQUEST_FRAME_ID:
+            return main_dbc_chg_charge_request_pack(msg_data, &can_bus.chg_charge_request, 8);
+       
+        case MAIN_DBC_BMS_VOLTAGES_FRAME_ID:
+            return main_dbc_bms_voltages_pack(msg_data, &can_bus.bms_voltages, 8);
+
+        case MAIN_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID:
+            return main_dbc_bms_thermistor_voltages_pack(msg_data, &can_bus.therm_voltages, 8);
+
+        case MAIN_DBC_BMS_TEMPERATURES_FRAME_ID:
+            return main_dbc_bms_temperatures_pack(msg_data, &can_bus.temps, 8);
+
+        case MAIN_DBC_BMS_DRAIN_STATUS_FRAME_ID:
+            return main_dbc_bms_drain_status_pack(msg_data, &can_bus.drain_status, 8);
 
         default:
             printf("f29bms: unknown CAN id: %d\n", id);
@@ -106,7 +118,7 @@ void CAN_reset_error(void)
 
 void CAN_1kHz(void)
 {
-    CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_CURRENT_FRAME_ID);
+    CAN_send_message_by_id(MAIN_DBC_BMS_CURRENT_FRAME_ID);
 }
 
 void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
@@ -114,39 +126,35 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
     // Voltages
     uint64_t msg_data;
     const int num_voltages = NUM_SERIES_CELLS;
-    const int voltage_max_mux = 12;
-    const int voltages_per_mux = 6;
-    const int voltage_start_bit = 8;
+    const int voltage_max_mux = 22;
     const int voltage_len_bits = 9;
+    const int voltage_start_bit = 8;
+    const int voltages_per_mux = (64 - voltage_start_bit)/voltage_len_bits;
     const uint64_t voltage_mask = (1 << voltage_len_bits) - 1;
     const float voltage_granularity = 0.01;
+    
     for (uint8_t mux = 0; mux <= voltage_max_mux; mux++) {
         msg_data = 0;
         msg_data |= mux;
         
         for (int i = 0; i < voltages_per_mux; i++) {
             int cell_index = mux * voltages_per_mux + i;
-            if (cell_index >= num_voltages) {
-                break;
-            }
+            if (cell_index >= num_voltages) break;
             float cell_voltage = bm->cells[cell_index].voltage;
             uint64_t frac_voltage = ROUND_INT((cell_voltage / voltage_granularity));
             frac_voltage &= voltage_mask;
             msg_data |= (frac_voltage << (voltage_start_bit + i*voltage_len_bits)); 
         }
 
-        CAN_send_message(FORMULA_MAIN_DBC_BMS_VOLTAGES_FRAME_ID, msg_data);
+        CAN_send_message(MAIN_DBC_BMS_VOLTAGES_FRAME_ID, msg_data);
     }
-
-    uint64_t msg = (uint64_t)((bm->cells[2].voltage) * 100);
-    CAN_send_message(3, msg);
-
+    
     // Thermistor Voltages
     const int num_therms = NUM_CHIPS * NUM_THERMISTORS_PER_CHIP;
-    const int therm_max_mux = 5;
-    const int therms_per_message = 6;
-    const int therm_start_bit = 3;
+    const int therm_max_mux = 7;
     const int therm_len_bits = 9;
+    const int therm_start_bit = 3;
+    const int therms_per_message = (64 - therm_start_bit) / therm_len_bits;
     const uint64_t therm_mask = (1 << therm_len_bits) - 1;
     const float therm_granularity = 0.01;
     for (uint8_t mux = 0; mux <= therm_max_mux; mux++) {
@@ -155,24 +163,21 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
         
         for (int i = 0; i < therms_per_message; i++) {
             int therm_index = mux * therms_per_message + i;
-            if (therm_index >= num_therms) {
-                break;
-            }
+            if (therm_index >= num_therms) break;
             float therm_voltage = tm->tm_readings_V[therm_index];
             uint64_t frac_voltage = ROUND_INT((therm_voltage / therm_granularity)) & therm_mask;
             msg_data |= (frac_voltage << (therm_start_bit + i*therm_len_bits)); 
         }
 
-        CAN_send_message(FORMULA_MAIN_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID, msg_data);
-//        HAL_Can_send_message(5, 8, msg_data);
+        CAN_send_message(MAIN_DBC_BMS_THERMISTOR_VOLTAGES_FRAME_ID, msg_data);
     }
 
     // Temperatures
     const int num_temps = NUM_CHIPS * NUM_THERMISTORS_PER_CHIP;
-    const int temp_max_mux = 4;
-    const int temps_per_message = 7;
-    const int temp_start_bit = 3;
+    const int temp_max_mux = 6;
     const int temp_len_bits = 8;
+    const int temp_start_bit = 3;
+    const int temps_per_message = (64 - temp_start_bit) / temp_len_bits;
     const uint64_t temp_mask = (1 << temp_len_bits) - 1;
     const float temp_granularity = 1;
     for (uint8_t mux = 0; mux <= temp_max_mux; mux++) {
@@ -181,22 +186,20 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 
         for (int i = 0; i < temps_per_message; i++) {
             int temp_index = mux * temps_per_message + i;
-            if (temp_index >= num_temps) {
-                break;
-            }
+            if (temp_index >= num_temps) break;
             float temperature = tm->temps_C[temp_index];
             uint64_t temp_bits = ROUND_INT((temperature / temp_granularity)) & temp_mask;
             msg_data |= (temp_bits << (temp_start_bit + i*temp_len_bits));
         }
 
-        CAN_send_message(FORMULA_MAIN_DBC_BMS_TEMPERATURES_FRAME_ID, msg_data);
+        CAN_send_message(MAIN_DBC_BMS_TEMPERATURES_FRAME_ID, msg_data);
     }
 
     // Drain States
     const int num_drains = NUM_SERIES_CELLS;
-    const int drain_max_mux = 1;
+    const int drain_max_mux = 2;
     const int drains_per_message = 63;
-    const int drain_start_bit = 1;
+    const int drain_start_bit = 2;
     for (uint8_t mux = 0; mux <= drain_max_mux; mux++) {
         msg_data = 0;
         msg_data |= mux; // 1 bit
@@ -210,38 +213,38 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
             msg_data |= (draining << (drain_start_bit + i));
         }
 
-        CAN_send_message(FORMULA_MAIN_DBC_BMS_DRAIN_STATUS_FRAME_ID, msg_data);
+        CAN_send_message(MAIN_DBC_BMS_DRAIN_STATUS_FRAME_ID, msg_data);
     }
 
     // Ref Values
     static int bms_ref_mux = 0;
     can_bus.bms_ref.bms_ref_mux = bms_ref_mux;
-    can_bus.bms_ref.bms_ref_ref0 = formula_main_dbc_bms_ref_bms_ref_ref0_encode(tm->vref2s[0]);
-    can_bus.bms_ref.bms_ref_ref1 = formula_main_dbc_bms_ref_bms_ref_ref1_encode(tm->vref2s[1]);
-    can_bus.bms_ref.bms_ref_ref2 = formula_main_dbc_bms_ref_bms_ref_ref2_encode(tm->vref2s[2]);
-    can_bus.bms_ref.bms_ref_ref3 = formula_main_dbc_bms_ref_bms_ref_ref3_encode(tm->vref2s[3]);
-    can_bus.bms_ref.bms_ref_ref4 = formula_main_dbc_bms_ref_bms_ref_ref4_encode(tm->vref2s[4]);
-    can_bus.bms_ref.bms_ref_ref5 = formula_main_dbc_bms_ref_bms_ref_ref5_encode(tm->vref2s[5]);
-    can_bus.bms_ref.bms_ref_ref6 = formula_main_dbc_bms_ref_bms_ref_ref6_encode(tm->vref2s[6]);
-    can_bus.bms_ref.bms_ref_ref7 = formula_main_dbc_bms_ref_bms_ref_ref7_encode(tm->vref2s[7]);
-    can_bus.bms_ref.bms_ref_ref8 = formula_main_dbc_bms_ref_bms_ref_ref8_encode(tm->vref2s[8]);
-    can_bus.bms_ref.bms_ref_ref9 = formula_main_dbc_bms_ref_bms_ref_ref9_encode(tm->vref2s[9]);
-    can_bus.bms_ref.bms_ref_ref10 = formula_main_dbc_bms_ref_bms_ref_ref10_encode(tm->vref2s[10]);
-    can_bus.bms_ref.bms_ref_ref11 = formula_main_dbc_bms_ref_bms_ref_ref11_encode(tm->vref2s[11]);
-    CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_REF_FRAME_ID);
+    can_bus.bms_ref.bms_ref_ref0 = main_dbc_bms_ref_bms_ref_ref0_encode(tm->vref2s[0]);
+    can_bus.bms_ref.bms_ref_ref1 = main_dbc_bms_ref_bms_ref_ref1_encode(tm->vref2s[1]);
+    can_bus.bms_ref.bms_ref_ref2 = main_dbc_bms_ref_bms_ref_ref2_encode(tm->vref2s[2]);
+    can_bus.bms_ref.bms_ref_ref3 = main_dbc_bms_ref_bms_ref_ref3_encode(tm->vref2s[3]);
+    can_bus.bms_ref.bms_ref_ref4 = main_dbc_bms_ref_bms_ref_ref4_encode(tm->vref2s[4]);
+    can_bus.bms_ref.bms_ref_ref5 = main_dbc_bms_ref_bms_ref_ref5_encode(tm->vref2s[5]);
+    can_bus.bms_ref.bms_ref_ref6 = main_dbc_bms_ref_bms_ref_ref6_encode(tm->vref2s[6]);
+    can_bus.bms_ref.bms_ref_ref7 = main_dbc_bms_ref_bms_ref_ref7_encode(tm->vref2s[7]);
+    can_bus.bms_ref.bms_ref_ref8 = main_dbc_bms_ref_bms_ref_ref8_encode(tm->vref2s[8]);
+    can_bus.bms_ref.bms_ref_ref9 = main_dbc_bms_ref_bms_ref_ref9_encode(tm->vref2s[9]);
+    can_bus.bms_ref.bms_ref_ref10 = main_dbc_bms_ref_bms_ref_ref10_encode(tm->vref2s[10]);
+    can_bus.bms_ref.bms_ref_ref11 = main_dbc_bms_ref_bms_ref_ref11_encode(tm->vref2s[11]);
+    CAN_send_message_by_id(MAIN_DBC_BMS_REF_FRAME_ID);
     bms_ref_mux ^= 1;
 
-    CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_CURRENT_LIMIT_FRAME_ID);
-    CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_LIMP_MODE_FRAME_ID);
+    CAN_send_message_by_id(MAIN_DBC_BMS_CURRENT_LIMIT_FRAME_ID);
+    CAN_send_message_by_id(MAIN_DBC_BMS_LIMP_MODE_FRAME_ID);
 }
 
 
 
 void CAN_1Hz(void)
 {
-    CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_STATUS_FRAME_ID);
-    CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_CELL_OVERVIEW_FRAME_ID);
-    CAN_send_message_by_id(FORMULA_MAIN_DBC_BMS_FAULT_VECTOR_FRAME_ID);
+    CAN_send_message_by_id(MAIN_DBC_BMS_STATUS_FRAME_ID);
+    CAN_send_message_by_id(MAIN_DBC_BMS_CELL_OVERVIEW_FRAME_ID);
+    CAN_send_message_by_id(MAIN_DBC_BMS_FAULT_VECTOR_FRAME_ID);
 }
 
 void CAN_process_recieved_messages(void)

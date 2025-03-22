@@ -31,8 +31,8 @@ double LimpMode_voltage_limit(BatteryModel_t *bm)
     }
 
     // Send the current limit over CAN
-    // can_bus.bms_limp_mode.bms_limp_mode_voltage_limp_level = formula_main_dbc_bms_limp_mode_bms_limp_mode_voltage_limp_level_encode(voltage_limp_level);
-    can_bus.bms_limp_mode.bms_limp_mode_voltage_current_limit = formula_main_dbc_bms_limp_mode_bms_limp_mode_voltage_current_limit_encode(current_limit);
+    // can_bus.bms_limp_mode.bms_limp_mode_voltage_limp_level = main_dbc_bms_limp_mode_bms_limp_mode_voltage_limp_level_encode(voltage_limp_level);
+    can_bus.bms_limp_mode.bms_limp_mode_voltage_current_limit = main_dbc_bms_limp_mode_bms_limp_mode_voltage_current_limit_encode(current_limit);
 
     return current_limit;
 }
@@ -45,8 +45,8 @@ double LimpMode_temperature_limit(TempModel_t *tm)
     double current_limit = -0.1999*max_T*max_T + 8.5934*max_T + 203.91;
 
     // Send the current limit over CAN
-    //can_bus.bms_limp_mode.bms_limp_mode_temp_limp_level = formula_main_dbc_bms_limp_mode_bms_limp_mode_temp_limp_level_encode(temperature_limp_level);
-    can_bus.bms_limp_mode.bms_limp_mode_temp_current_limit = formula_main_dbc_bms_limp_mode_bms_limp_mode_temp_current_limit_encode(current_limit);
+    //can_bus.bms_limp_mode.bms_limp_mode_temp_limp_level = main_dbc_bms_limp_mode_bms_limp_mode_temp_limp_level_encode(temperature_limp_level);
+    can_bus.bms_limp_mode.bms_limp_mode_temp_current_limit = main_dbc_bms_limp_mode_bms_limp_mode_temp_current_limit_encode(current_limit);
 
     return current_limit;
 }

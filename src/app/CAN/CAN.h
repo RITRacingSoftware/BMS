@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #include "f29BmsConfig.h"
-#include "formula_dbc.h"
+#include "c_files/main_dbc.h"
 #include "BatteryModel.h"
 #include "TempModel.h"
 #include "FreeRTOS.h"
@@ -33,16 +33,20 @@ extern SemaphoreHandle_t can_message_transmit_semaphore;
 
 typedef struct
 {
-    struct formula_main_dbc_bms_status_t bms_status;
-    struct formula_main_dbc_bms_cell_overview_t bms_cell_overview;
-    struct formula_main_dbc_bms_fault_vector_t bms_fault_vector;
-    struct formula_main_dbc_bms_fault_alert_t bms_fault_alert;
-    struct formula_main_dbc_bms_current_t bms_current;
-    struct formula_main_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
-    struct formula_main_dbc_bms_ref_t bms_ref;
-    struct formula_main_dbc_bms_current_limit_t bms_current_limit;
-    struct formula_main_dbc_bms_limp_mode_t bms_limp_mode;
-    struct formula_main_dbc_chg_charge_request_t chg_charge_request;
+    struct main_dbc_bms_status_t bms_status;
+    struct main_dbc_bms_cell_overview_t bms_cell_overview;
+    struct main_dbc_bms_fault_vector_t bms_fault_vector;
+    struct main_dbc_bms_fault_alert_t bms_fault_alert;
+    struct main_dbc_bms_current_t bms_current;
+    struct main_dbc_bms_hard_fault_indicator_t bms_hard_fault_indicator;
+    struct main_dbc_bms_ref_t bms_ref;
+    struct main_dbc_bms_current_limit_t bms_current_limit;
+    struct main_dbc_bms_limp_mode_t bms_limp_mode;
+    struct main_dbc_chg_charge_request_t chg_charge_request;
+    struct main_dbc_bms_voltages_t bms_voltages;
+    struct main_dbc_bms_thermistor_voltages_t therm_voltages;
+    struct main_dbc_bms_temperatures_t temps;
+    struct main_dbc_bms_drain_status_t drain_status;
 } CAN_BUS;
 
 extern CAN_BUS can_bus;

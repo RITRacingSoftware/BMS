@@ -73,7 +73,6 @@ void SlaveInterface_read_temperature_info(TempModel_t* temp_model)
             temp_model->tm_readings_V[i] = tm_readings_V[i];
         }
     }
-    HAL_Can_send_message(5, 8, (int)(tm_readings_V[0] * 1000));
 }
 
 /**
