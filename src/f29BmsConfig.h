@@ -9,9 +9,12 @@
 
 // NOTE: If you change these things, you will very likely need to change CAN.c to match
 #define NUM_BOARDS 8
-#define NUM_CHIPS (NUM_BOARDS*2)
+#define NUM_CHIPS_PER_BOARD 2
+#define NUM_CHIPS (NUM_BOARDS * NUM_CHIPS_PER_BOARD)
 #define NUM_CELLS_PER_BOARD 17
 #define NUM_THERMISTORS_PER_CHIP 3
+#define NUM_CELLS_CHIP_1 9
+#define NUM_CELLS_CHIP_2 8
 #define NUM_SERIES_CELLS (NUM_BOARDS * NUM_CELLS_PER_BOARD)
 #define NUM_PARALLEL_CELLS 1
 

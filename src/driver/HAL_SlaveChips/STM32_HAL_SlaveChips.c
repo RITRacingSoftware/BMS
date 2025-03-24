@@ -778,7 +778,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     
 
     // const uint8_t cells_per_board = 15;
-    const uint8_t chips_per_board = NUM_CHIPS/NUM_BOARDS;
+    const uint8_t chips_per_board = NUM_CHIPS_PER_BOARD;
     // uint8_t num_boards = num / cells_per_board;
 
     //Array of cell codes
@@ -787,7 +787,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     bool AllIsDraining[num_cells_to_set];
 
     // TODO- change this to total # of slave chips once on full BMS
-    int pec = LTC6804_rdcv(0, NUM_CHIPS, AllCellVoltages);
+    int pec = LTC6804_rdcv(1, NUM_CHIPS, AllCellVoltages);
     // if(read_All_Is_Draining(AllIsDraining, num_boards)){
     //     error.active = true;
     // }
@@ -801,7 +801,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     for (int board = 0; board < NUM_BOARDS; board++)
     { 
         // chip 1
-        for (int cell = 0; cell < 9; cell++)
+        for (int cell = 0; cell < NUM_CELLS_CHIP_1; cell++)
         {
             //TODO - Adjust cell pins if it changes
             int cell_pin = cell;
@@ -814,12 +814,12 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
         }
 
         // chip 2
-        for (int cell = 0; cell < 10; cell++)
+        for (int cell = 0; cell < NUM_CELLS_CHIP_2; cell++)
         {
             int cell_pin = cell;
-            if (cell > 4)
+            if (cell > 3)
             {
-                cell_pin += 1;
+                cell_pin += 2;
             }
 
             voltages[board*NUM_CELLS_PER_BOARD+cell+9] = ((float) AllCellVoltages[board*chips_per_board+1][cell_pin]) / 10000.0;
@@ -827,10 +827,12 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
    
     }
 
+    
+
     return error;
 }
 
-//Every LTC has 4 thermistors
+//Every LTC has 3 thermistors
 Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2s, unsigned int num){
     Error_t error;
     error.active = false;
@@ -867,16 +869,13 @@ Error_t HAL_SlaveChips_get_all_tm_readings(float* temperatures, float* vref2s, u
         error.active = true;
     }
 
-    //temp_idx keeps track of the thermistor index
-    int temp_idx = 0;
     //Iterate through the data for each chip and set the temperature data from each chip
     for (int r = 0; r < NUM_CHIPS; r++)
     {
         for (int c = 0; c < NUM_THERMISTORS_PER_CHIP; c++)
         {
-            temperatures[temp_idx*NUM_THERMISTORS_PER_CHIP + c] =  (((float) tempRecieved[r][c]) / LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
+            temperatures[r*NUM_THERMISTORS_PER_CHIP + c] =  (((float) tempRecieved[r][c]) / LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
         }
-        temp_idx++;
         vref2s[r] = (((float)tempRecieved[r][5])/LTC6804_ADC_MAX_VALUE) * LTC6804_ADC_RANGE_V;
     }
 

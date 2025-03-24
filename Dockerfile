@@ -18,6 +18,7 @@ git \
 python3.8-dev \
 cmake \
 doxygen \
+vim \
 gdb-multiarch && \
 rm -rf /var/lib/apt/lists/*
 
