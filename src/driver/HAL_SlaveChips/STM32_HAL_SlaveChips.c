@@ -787,10 +787,11 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
     bool AllIsDraining[num_cells_to_set];
 
     // TODO- change this to total # of slave chips once on full BMS
-    int pec = LTC6804_rdcv(1, NUM_CHIPS, AllCellVoltages);
+    int pec = LTC6804_rdcv(0, NUM_CHIPS, AllCellVoltages);
     // if(read_All_Is_Draining(AllIsDraining, num_boards)){
     //     error.active = true;
     // }
+
     if (pec == 1)
     {
         error.active = true;
@@ -822,7 +823,7 @@ Error_t HAL_SlaveChips_get_all_cell_data(float* voltages, bool* is_draining, uns
                 cell_pin += 2;
             }
 
-            voltages[board*NUM_CELLS_PER_BOARD+cell+9] = ((float) AllCellVoltages[board*chips_per_board+1][cell_pin]) / 10000.0;
+            voltages[board*NUM_CELLS_PER_BOARD+cell+NUM_CELLS_CHIP_1] = ((float) AllCellVoltages[board*chips_per_board+1][cell_pin]) / 10000.0;
         }
    
     }
