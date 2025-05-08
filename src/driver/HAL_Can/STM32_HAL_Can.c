@@ -49,7 +49,7 @@ void HAL_Can_init(void)
     canInit.CAN_TXFP = DISABLE;
     // http://www.bittiming.can-wiki.info/
     // bxcan and 48mhz clock
-    // 1000kbps = car baud rate => CAN_Prescaler = 12
+    // 1000kbps = car baud rate => CAN_Prescaler = 3
     // 500kbps = charger baud rate => CAN_Prescaler = 6
     
     // 1000kbps

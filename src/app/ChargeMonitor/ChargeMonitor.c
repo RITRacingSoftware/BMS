@@ -1,5 +1,6 @@
 #include "ChargeMonitor.h"
 #include "CAN.h"
+#include "HAL_Can.h"
 #include "common_macros.h"
 #include "CurrentSense.h"
 #include "f29BmsConfig.h"
@@ -259,6 +260,7 @@ void ChargeMonitor_1Hz(BatteryModel_t* bm)
 
     if (sm_outputs.close_airs)
     {
+        HAL_Can_send_message(4, 8, (uint64_t)0xfa55);
         close_airs();
     }
     else

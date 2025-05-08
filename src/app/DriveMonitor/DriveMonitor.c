@@ -88,7 +88,7 @@ void DriveMonitor_1kHz(void)
                 // fault is active, increment counter + check for expiration
                 if (incr_to_limit(&active_fault_timers[code], fault_tolerances[code], 1))
                 {
-                    driving_allowed = false;
+                    if (code != FaultCode_TEMPERATURE_IRRATIONAL) driving_allowed = false;
                 }
             }
         }

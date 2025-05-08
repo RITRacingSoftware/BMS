@@ -37,6 +37,7 @@ static int pack_message(int id, uint8_t* msg_data)
             return main_dbc_bms_cell_overview_pack(msg_data, &can_bus.bms_cell_overview, 8);
 
         case MAIN_DBC_BMS_FAULT_VECTOR_FRAME_ID:
+            can_bus.bms_fault_vector.bms_fault_vector_temperature_irrational = 0;
             return main_dbc_bms_fault_vector_pack(msg_data, &can_bus.bms_fault_vector, 8);
 
         case MAIN_DBC_BMS_FAULT_ALERT_FRAME_ID:

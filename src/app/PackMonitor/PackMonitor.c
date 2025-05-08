@@ -165,7 +165,7 @@ void PackMonitor_validate_temp_model_10Hz(TempModel_t* tm)
                 bad_temp = smallest_deg_C;
             }
             
-            FaultManager_set_fault_active(FaultCode_TEMPERATURE_IRRATIONAL, &bad_temp);
+//            FaultManager_set_fault_active(FaultCode_TEMPERATURE_IRRATIONAL, &bad_temp);
         }
     }
     else
