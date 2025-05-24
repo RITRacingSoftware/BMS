@@ -175,12 +175,12 @@ void CAN_10Hz(BatteryModel_t* bm, TempModel_t* tm)
 
     // Temperatures
     const int num_temps = NUM_CHIPS * NUM_THERMISTORS_PER_CHIP;
-    const int temp_max_mux = 6;
-    const int temp_len_bits = 8;
+    const int temp_max_mux = 7;
+    const int temp_len_bits = 10;
     const int temp_start_bit = 3;
     const int temps_per_message = (64 - temp_start_bit) / temp_len_bits;
     const uint64_t temp_mask = (1 << temp_len_bits) - 1;
-    const float temp_granularity = 1;
+    const float temp_granularity = 0.1;
     for (uint8_t mux = 0; mux <= temp_max_mux; mux++) {
         msg_data = 0;
         msg_data |= mux;

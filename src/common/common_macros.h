@@ -6,6 +6,7 @@
 
 #define SQ(x) ((x)*(x))
 #define CUBE(x) ((x)*(x)*(x))
+#define FOURTH(x) ((x)*(x)*(x)*(x))
 
 // units
 #define MS_TO_HR (1.0 / ((float)(1000 * 60 * 60)))
