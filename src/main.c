@@ -178,9 +178,10 @@ int main(int argc, char** argv)
 
     // initialize all HAL stuff
     HAL_Clock_init();
-    
     HAL_Gpio_init(); // must happen before CAN
     // HAL_Uart_init();
+
+    HAL_Gpio_write(GpioPin_STATUS_LED, true);
 
     int lol = 0;
     for(int i = 0; i < 7000000; i++) //TEMP: delay to make sure other systems are online so CAN can be initialized

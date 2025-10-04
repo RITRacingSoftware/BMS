@@ -78,7 +78,7 @@ static int pack_message(int id, uint8_t* msg_data)
     return -1;
 }
 
-static void CAN_send_message(uint32_t id, uint64_t data)
+void CAN_send_message(uint32_t id, uint64_t data)
 {
     can_message thisMessage = {id, 8, data};
     xQueueSend(tx_can_message_queue, &thisMessage, 10);

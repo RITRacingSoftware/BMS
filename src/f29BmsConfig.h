@@ -26,7 +26,7 @@
 
 // Battery voltage constants
 #define CELL_IRRATIONAL_LOW_V  2.0   // cells below this are considered irrational
-#define CELL_MIN_V             3.100 // cells below this are considered empty, and we throw an out of juice fault
+#define CELL_MIN_V             3.000 // cells below this are considered empty, and we throw an out of juice fault
 #define CELL_FULL_MIN_V        4.340 // } cells in this range are considered fully charged. if all are in this range, stop charging
 #define CELL_FULL_MAX_V        4.350 // } cells above this are considered overcharged, and we should discharge
 #define CELL_IRRATIONAL_HIGH_V 4.5   // cells above this are considered irrational
@@ -146,7 +146,7 @@ static float temp_lut_V[NUM_TEMP_RANGES][3] =
 /**
  * Power Limiting
  */
-#define MAX_POWER_LIMIT_KW 50.0
+#define MAX_POWER_LIMIT_KW 75.0
 
 
 #endif // F29BMSCONFIG_H

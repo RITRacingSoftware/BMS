@@ -57,6 +57,12 @@ extern CAN_BUS can_bus;
 void CAN_init(void);
 
 /**
+ * Send raw message
+ */
+
+void CAN_send_message(uint32_t id, uint64_t data);
+
+/**
  * Attempt to send a CAN message with a given id.
  * Data is automatically retrieved from CAN_BUS.
  * id [in] - 11 bit CAN id- use the generated definitions in can_ids.h

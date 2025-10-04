@@ -24,10 +24,8 @@ double LimpMode_voltage_limit(BatteryModel_t *bm)
 
     min_V_avg = VOLTAGE_AVERAGE_FACTOR * min_V + (1-VOLTAGE_AVERAGE_FACTOR) * min_V_avg;
 
-    // F32 Voltage Limit
-    //double current_limit = -222*min_V_avg*min_V_avg + 1845.9*min_V_avg - 3538.8;
-    
-    double current_limit = (-87.341*FOURTH(min_V_avg)) + (1407.9 * CUBE(min_V_avg)) - (8545.9 * SQ(min_V_avg)) + (23174 * min_V_avg) - (23547);
+    double current_limit = (-35.431*FOURTH(min_V)) + (563.33*CUBE(min_V)) - (3359*SQ(min_V)) + (8907.7*min_V) - (8832.2);
+
 
     if (current_limit < 0.0) {
         current_limit = 0.0;
@@ -45,10 +43,8 @@ double LimpMode_temperature_limit(TempModel_t *tm)
 {
     double max_T = tm->max_temp_C;
 
-    // F32 Temp Limit
-    // double current_limit = -0.1999*max_T*max_T + 8.5934*max_T + 203.91;
-    
-    double current_limit = (-0.0044*CUBE(max_T)) + (0.3438*SQ(max_T)) - (8.875*max_T) + (240);
+    double current_limit = (0.00004*FOURTH(max_T)) - (0.0066*CUBE(max_T)) + (0.3708*SQ(max_T)) - (8.5571*max_T) + (108.66);
+
 
     // Send the current limit over CAN
     //can_bus.bms_limp_mode.bms_limp_mode_temp_limp_level = main_dbc_bms_limp_mode_bms_limp_mode_temp_limp_level_encode(temperature_limp_level);
